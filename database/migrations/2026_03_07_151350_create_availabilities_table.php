@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('availabilities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('psychologist_id')->constrained()->cascadeOnDelete();
-            $table->dateTime('date');
+            $table->date('date');
             $table->time('start_time');
             $table->time('end_time');
             $table->timestamps();
