@@ -39,7 +39,7 @@
 
                 <div class="hidden lg:flex items-center space-x-6 text-sm font-semibold text-gray-700 dark:text-gray-200">
                     <a href="/" class="hover:text-nafssiti-blue transition border-b-2 border-transparent hover:border-nafssiti-blue py-1">Accueil</a>
-                    <a href="/psychologues" class="hover:text-nafssiti-blue transition border-b-2 border-transparent hover:border-nafssiti-blue py-1">Psychologues</a>
+                    <a href="{{ route('psychologue.allPsychologues') }}" class="hover:text-nafssiti-blue transition border-b-2 border-transparent hover:border-nafssiti-blue py-1">Psychologues</a>
                     <a href="/a-propos" class="hover:text-nafssiti-blue transition border-b-2 border-transparent hover:border-nafssiti-blue py-1">À propos</a>
                     <a href="/comment-ca-marche" class="hover:text-nafssiti-blue transition border-b-2 border-transparent hover:border-nafssiti-blue py-1">Comment ça marche ?</a>
                     <a href="/contact" class="hover:text-nafssiti-blue transition border-b-2 border-transparent hover:border-nafssiti-blue py-1">Contact</a>
@@ -63,7 +63,7 @@
                     <div class="hidden md:block h-6 border-l border-gray-200 dark:border-gray-700 mx-2"></div>
 
                     <div class="hidden md:flex items-center space-x-3">
-                        <a  href="{{ route('login') }}" class="text-gray-600 dark:text-gray-300 hover:text-nafssiti-blue font-bold px-3 py-2 transition">
+                        <a href="{{ route('login') }}" class="text-gray-600 dark:text-gray-300 hover:text-nafssiti-blue font-bold px-3 py-2 transition">
                             Connexion
                         </a>
 
@@ -74,7 +74,7 @@
                             </button>
 
                             <div class="absolute right-0 w-48 mt-2 py-2 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 hidden group-hover:block animate-fade-in">
-                                <a href="{{ route('register.user') }}" class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <a href="{{ route('show.register.patient') }}" class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                     <i class="fas fa-user-circle mr-2 text-nafssiti-blue"></i> Je suis un Patient
                                 </a>
                                 <div class="border-t border-gray-100 dark:border-gray-700"></div>
@@ -112,12 +112,12 @@
                 </p>
 
                 <div class="flex flex-wrap gap-4 pt-4">
-                    <a href="/psychologues" class="bg-nafssiti-blue text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:bg-opacity-90 hover:-translate-y-1 transition-all flex items-center group">
+                    <a href="{{ route('psychologue.allPsychologues') }}" class="bg-nafssiti-blue text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:bg-opacity-90 hover:-translate-y-1 transition-all flex items-center group">
                         <i class="fas fa-search mr-2 group-hover:scale-110 transition"></i>
                         Trouver un psychologue
                     </a>
 
-                    <a href="/register/psychologue" class="bg-white text-nafssiti-green border-2 border-nafssiti-green px-8 py-4 rounded-xl font-bold hover:bg-nafssiti-green hover:-translate-y-1 transition-all flex items-center group">
+                    <a href="{{ route('register.psychologue') }}" class="bg-white text-nafssiti-green border-2 border-nafssiti-green px-8 py-4 rounded-xl font-bold hover:bg-nafssiti-green hover:-translate-y-1 transition-all flex items-center group">
                         <i class="fas fa-user-md mr-2 group-hover:scale-110 transition"></i>
                         Devenir psychologue
                     </a>
@@ -241,7 +241,7 @@
             </div>
 
             <div class="mt-12 text-center">
-                <a href="/register" class="inline-flex items-center px-3 py-2 rounded-full font-bold text-white transition-all duration-300 bg-[#d62828] shadow-lg  transform hover:-translate-y-1">
+                <a href="{{ route('show.register.patient') }}" class="inline-flex items-center px-3 py-2 rounded-full font-bold text-white transition-all duration-300 bg-[#d62828] shadow-lg  transform hover:-translate-y-1">
                     <span class="flex items-center tracking-wide">
                         Commencer L'aventure
                         <i class="fas fa-arrow-right ml-3"></i>
@@ -316,7 +316,7 @@
                 </div>
             </div>
             <div class="mt-12 text-center">
-                <a href="/psychologues" class="group relative inline-flex items-center px-10 py-4 bg-[#96d14b] text-black font-black tracking-widest uppercase text-xs rounded-full shadow-[0_10px_20px_rgba(150,209,75,0.3)] hover:shadow-[0_15px_30px_rgba(150,209,75,0.5)] transition-all duration-300 transform hover:-translate-y-1">
+                <a href="{{ route('psychologue.allPsychologues') }}" class="group relative inline-flex items-center px-10 py-4 bg-[#96d14b] text-black font-black tracking-widest uppercase text-xs rounded-full shadow-[0_10px_20px_rgba(150,209,75,0.3)] hover:shadow-[0_15px_30px_rgba(150,209,75,0.5)] transition-all duration-300 transform hover:-translate-y-1">
                     <span class="relative flex items-center">
                         Explorer plus de psychologues
                         <div class="ml-3 relative">
@@ -348,7 +348,7 @@
             </p>
 
             <div class="flex flex-col items-center gap-6">
-                <a href="/register" class="group inline-flex items-center px-12 py-5 rounded-full font-black text-white transition-all duration-300 bg-[#e63946] hover:bg-[#d62828] shadow-xl shadow-red-100 transform hover:-translate-y-1">
+                <a href="{{ route('show.register.patient') }}" class="group inline-flex items-center px-12 py-5 rounded-full font-black text-white transition-all duration-300 bg-[#e63946] hover:bg-[#d62828] shadow-xl shadow-red-100 transform hover:-translate-y-1">
                     <span class="tracking-widest uppercase text-sm">
                         S’inscrire maintenant
                     </span>

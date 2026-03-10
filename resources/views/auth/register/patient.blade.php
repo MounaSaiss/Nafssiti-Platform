@@ -51,8 +51,8 @@
             </a>
         </div>
         <div class="bg-white dark:bg-gray-800 py-8 px-4 shadow-xl border border-gray-100 dark:border-gray-700 sm:rounded-2xl sm:px-10">
-            <form class="space-y-5" action="#" method="POST">
-
+            <form class="space-y-5" action="{{ route('register.patient') }}" method="POST">
+                @csrf
                 <input type="hidden" name="role" value="user">
 
                 <div>
@@ -63,7 +63,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-user text-gray-400 text-sm"></i>
                         </div>
-                        <input id="name" name="name" type="text" placeholder="Nom complet" required
+                        <input id="name" name="name" type="text" placeholder="Nom complet" value="{{ old('name') }}" required
                             class="appearance-none block w-full pl-10 px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-nafssiti-blue focus:border-nafssiti-blue dark:bg-gray-700 dark:text-white sm:text-sm transition">
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-envelope text-gray-400 text-sm"></i>
                         </div>
-                        <input id="email" name="email" type="email" placeholder="email@mail.com" required
+                        <input id="email" name="email" type="email" placeholder="email@mail.com" value="{{ old('email') }}" required
                             class="appearance-none block w-full pl-10 px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-nafssiti-blue focus:border-nafssiti-blue dark:bg-gray-700 dark:text-white sm:text-sm transition">
                     </div>
                 </div>
@@ -122,6 +122,15 @@
                         S'inscrire en tant que Patient
                     </button>
                 </div>
+
+            {{-- validation errors --}}
+            @if($errors->any())
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li class="my-2 text-red-500">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            @endif
             </form>
 
             <div class="mt-6 text-center">

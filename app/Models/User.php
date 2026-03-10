@@ -24,6 +24,9 @@ class User extends Authenticatable
         'phone',
         'role_id',
     ];
+    public function role(){
+        return $this->belongsTo(Role::class);
+    }
 
 
     /**

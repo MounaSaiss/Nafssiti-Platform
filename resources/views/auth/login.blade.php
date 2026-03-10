@@ -26,10 +26,13 @@
         }
     </style>
 </head>
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors duration-300">
+<div
+    class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors duration-300">
     <div class="absolute top-4 left-4 sm:top-8 sm:left-8">
-        <a href="/" class="flex items-center text-gray-500 hover:text-nafssiti-blue dark:text-gray-400 dark:hover:text-white transition-colors group">
-            <div class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-sm border border-gray-100 dark:border-gray-700 mr-3 group-hover:shadow-md transition-all">
+        <a href="/"
+            class="flex items-center text-gray-500 hover:text-nafssiti-blue dark:text-gray-400 dark:hover:text-white transition-colors group">
+            <div
+                class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-sm border border-gray-100 dark:border-gray-700 mr-3 group-hover:shadow-md transition-all">
                 <i class="fas fa-arrow-left text-sm"></i>
             </div>
             <span class="text-xs font-bold uppercase tracking-widest hidden sm:inline">Accueil</span>
@@ -50,9 +53,10 @@
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div class="bg-white dark:bg-gray-800 py-8 px-4 shadow-xl border border-gray-100 dark:border-gray-700 sm:rounded-2xl sm:px-10">
-            <form class="space-y-6" action="#" method="POST">
-
+        <div
+            class="bg-white dark:bg-gray-800 py-8 px-4 shadow-xl border border-gray-100 dark:border-gray-700 sm:rounded-2xl sm:px-10">
+            <form class="space-y-6" action="{{ route('login') }}" method="POST">
+                @csrf
                 <div>
                     <label for="email" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
                         Adresse e-mail
@@ -61,7 +65,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-envelope text-gray-400 text-sm"></i>
                         </div>
-                        <input id="email" name="email" type="email" required
+                        <input id="email" name="email" type="email" value="{{ old('email') }}" required
                             class="appearance-none block w-full pl-10 px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-nafssiti-blue focus:border-nafssiti-blue dark:bg-gray-700 dark:text-white sm:text-sm transition">
                     </div>
                 </div>
@@ -83,7 +87,8 @@
                     <div class="flex items-center">
                         <input id="remember-me" name="remember-me" type="checkbox"
                             class="h-4 w-4 text-nafssiti-blue focus:ring-nafssiti-blue border-gray-300 dark:border-gray-600 rounded transition cursor-pointer">
-                        <label for="remember-me" class="ml-2 block text-sm text-gray-700 dark:text-gray-400 cursor-pointer">
+                        <label for="remember-me"
+                            class="ml-2 block text-sm text-gray-700 dark:text-gray-400 cursor-pointer">
                             Se souvenir de moi
                         </label>
                     </div>
@@ -101,6 +106,14 @@
                         Se connecter
                     </button>
                 </div>
+                {{-- validation errors --}}
+                @if ($errors->any())
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li class="my-2 text-red-500">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                @endif
             </form>
         </div>
     </div>
