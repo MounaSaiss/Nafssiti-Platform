@@ -23,9 +23,22 @@ class User extends Authenticatable
         'password',
         'phone',
         'role_id',
+        'status',
     ];
     public function role(){
         return $this->belongsTo(Role::class);
+    }
+
+    public function psychologist(){
+        return $this->hasOne(Psychologist::class);
+    }
+
+    public function patient(){
+        return $this->hasOne(Patient::class);
+    }
+
+    public function isAdmin(){
+        return $this->role_id == 3;
     }
 
 

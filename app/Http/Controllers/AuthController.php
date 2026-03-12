@@ -41,9 +41,7 @@ class AuthController extends Controller
             'user_id' => $user->id,
         ]);
 
-        Auth::login($user);
-
-        return redirect()->route('home');
+        return redirect()->route('show.login')->with('success', 'Votre compte a été créé avec succès. Veuillez attendre la validation de l\'administrateur avant de vous connecter.');
     }
 
     public function registerPsychologue(Request $request)
@@ -86,9 +84,7 @@ class AuthController extends Controller
             'certificate' => $certificatePath,
             'photo' => $photoPath,
         ]);
-        Auth::login($user);
-
-        return redirect()->route('home');
+        return redirect()->route('show.login')->with('success', 'Votre compte praticien a été créé. Veuillez attendre la validation de l\'administrateur.');
     }
 
     public function login(Request $request)
@@ -99,16 +95,32 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'))) {
+            $user = Auth::user();
+
+            if ($user->status !== 'actif') {
+                $statusMessage = $user->status === 'banni' 
+                    ? 'Votre compte a été banni.' 
+                    : 'Votre compte est en attente de validation par l\'administrateur.';
+
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()->back()->withErrors([
+                    'credentials' => $statusMessage,
+                ]);
+            }
+
             $request->session()->regenerate();
 
-            $roleId = Auth::user()->role_id;
+            $roleId = $user->role_id;
 
             if ($roleId == 1) {
-                return redirect('/patient/dashboard'); // Modifiez par votre nom de route si vous la nommez autrement, ex: redirect()->route('patient.dashboard')
+                return redirect('/patient/dashboard');
             } elseif ($roleId == 2) {
-                return redirect('/psychologue/dashboard'); // Modifiez par votre nom de route si vous la nommez autrement, ex: redirect()->route('psychologue.dashboard')
+                return redirect('/psychologue/dashboard');
             } elseif ($roleId == 3) {
-                return redirect('/admin/dashboard'); // Modifiez par votre nom de route si vous la nommez autrement, ex: redirect()->route('admin.dashboard')
+                return redirect('/admin/dashboard');
             }
 
             return redirect()->route('home');
