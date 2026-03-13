@@ -50,7 +50,7 @@ class UserGestionController extends Controller
      }
      $user->status = 'actif';
      $user->save();
-     return redirect()->route('admin.userGestion')->with('success', 'Utilisateur débanni avec succès.');
+     return redirect()->route('admin.userGestion')->with('success', 'Utilisateur activé avec succès.');
     }
 }
 

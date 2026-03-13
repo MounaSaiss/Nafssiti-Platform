@@ -25,13 +25,6 @@
             class="flex items-center px-6 py-3 transition-all {{ request()->routeIs('admin.appointmentsGestion') ? 'sidebar-item-active text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
             <i class="fas fa-calendar-alt w-6"></i> <span>Rendez-vous</span>
         </a>
-
-        <div class="px-6 py-6 text-[11px] font-bold uppercase tracking-widest text-slate-500">Système</div>
-
-        <a href="#"
-            class="flex items-center px-6 py-3 text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
-            <i class="fas fa-cog w-6"></i> <span>Paramètres</span>
-        </a>
     </nav>
 
     <div class="p-4 bg-slate-950/50">

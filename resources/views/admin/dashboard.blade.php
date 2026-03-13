@@ -10,7 +10,7 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Utilisateurs actifs</p>
-                    <h3 class="text-2xl font-bold mt-1 tracking-tight">{{ $users->count() }}</h3>
+                    <h3 class="text-2xl font-bold mt-1 tracking-tight">{{ $users->count() - 1 }}</h3>
                 </div>
                 <div class="p-2 bg-slate-50 rounded border border-slate-100 text-nafssiti-primary">
                     <i class="fas fa-users"></i>

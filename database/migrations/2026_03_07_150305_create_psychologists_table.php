@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('consultationType');
             $table->string('certificate')->nullable();
             $table->string('photo')->nullable();
-            $table->boolean('validationStatus')->default(false);
+            $table->enum('validationStatus', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }

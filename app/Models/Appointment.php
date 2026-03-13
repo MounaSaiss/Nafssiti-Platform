@@ -25,7 +25,7 @@ class Appointment extends Model
 
     public function psychologist()
     {
-        return $this->belongsTo(Psychologist::class);
+        return $this->belongsTo(User::class, 'psychologist_id');
     }
 
     public function availability()

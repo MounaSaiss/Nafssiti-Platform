@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone')->nullable();
             $table->foreignId('role_id')->constrained()->cascadeOnDelete();
+            $table->enum('status', ['actif', 'banni', 'en attente'])->default('en attente');
             $table->timestamps();
         });
 

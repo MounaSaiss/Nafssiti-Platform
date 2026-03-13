@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('availability_id')->constrained()->cascadeOnDelete();
             $table->date('appointmentDate');
             $table->time('appointmentTime');
-            $table->string('status')->default('pending');
+            $table->enum('status', ['pending', 'confirmed', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }
