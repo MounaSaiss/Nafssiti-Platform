@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Patient;
 use App\Models\Psychologist;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\patient;
 
 class AuthController extends Controller
 {
@@ -37,7 +37,7 @@ class AuthController extends Controller
         $validated['role_id'] = 1;
 
         $user = User::create($validated);
-        patient::create([
+        Patient::create([
             'user_id' => $user->id,
         ]);
 
@@ -84,6 +84,7 @@ class AuthController extends Controller
             'certificate' => $certificatePath,
             'photo' => $photoPath,
         ]);
+
         return redirect()->route('show.login')->with('success', 'Votre compte praticien a été créé. Veuillez attendre la validation de l\'administrateur.');
     }
 
@@ -98,8 +99,8 @@ class AuthController extends Controller
             $user = Auth::user();
 
             if ($user->status !== 'actif') {
-                $statusMessage = $user->status === 'banni' 
-                    ? 'Votre compte a été banni.' 
+                $statusMessage = $user->status === 'banni'
+                    ? 'Votre compte a été banni.'
                     : 'Votre compte est en attente de validation par l\'administrateur.';
 
                 Auth::logout();
@@ -116,19 +117,20 @@ class AuthController extends Controller
             $roleId = $user->role_id;
 
             if ($roleId == 1) {
-                return redirect('/patient/dashboard');
+                return redirect()->route('patient.dashboard');
             } elseif ($roleId == 2) {
-                return redirect('/psychologue/dashboard');
+                return redirect()->route('psychologue.dashboard');
             } elseif ($roleId == 3) {
-                return redirect('/admin/dashboard');
+                return redirect()->route('admin.dashboard');
             }
 
             return redirect()->route('home');
-        }
+        } else {
 
-        return redirect()->back()->withErrors([
-            'credentials' => 'Email ou mot de passe incorrect',
-        ]);
+            return redirect()->back()->withErrors([
+                'credentials' => 'Email ou mot de passe incorrect',
+            ]);
+        }
     }
 
     public function logout(Request $request)
