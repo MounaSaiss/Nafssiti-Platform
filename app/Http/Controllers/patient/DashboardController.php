@@ -3,12 +3,23 @@
 namespace App\Http\Controllers\patient;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function index(){
-        return view("patient.dashboard");
+    public function index()
+    {
+        $user = Auth::user();
+        $appointmentsCount = $user->appointments()->count();
+        
+        $nextAppointment = $user->appointments()
+            ->with('psychologist.user')
+            ->where('appointmentDate', '>=', now()->toDateString())
+            ->orderBy('appointmentDate')
+            ->orderBy('appointmentTime')
+            ->first();
+
+        return view("patient.dashboard", compact('appointmentsCount', 'nextAppointment'));
     }
     public function reservation(){
         return view("patient.reservation");

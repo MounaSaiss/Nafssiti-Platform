@@ -37,6 +37,11 @@ class User extends Authenticatable
         return $this->hasOne(Patient::class);
     }
 
+    public function appointments()
+    {
+        return $this->hasManyThrough(Appointment::class, Patient::class);
+    }
+
     public function isAdmin(){
         return $this->role_id == 3;
     }

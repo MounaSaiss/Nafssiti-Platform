@@ -16,7 +16,7 @@
             </div>
             <div>
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Nombre de rendez-vous</p>
-                <p class="text-2xl font-bold text-slate-900">12</p>
+                <p class="text-2xl font-bold text-slate-900">{{ $appointmentsCount }}</p>
             </div>
         </div>
 
@@ -26,14 +26,22 @@
             </div>
             <div class="flex-1">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Prochain rendez-vous</p>
-                <div class="flex flex-wrap items-center gap-4 mt-1">
-                    <p class="text-lg font-bold text-slate-800">15 Mars 2026 à 14:30</p>
-                    <span class="text-xs px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-medium border border-slate-200">
-                        <i class="fas fa-video mr-1"></i> Dr. Sara Mansouri
-                    </span>
-                </div>
+                @if($nextAppointment)
+                    <div class="flex flex-wrap items-center gap-4 mt-1">
+                        <p class="text-lg font-bold text-slate-800">
+                            {{ \Carbon\Carbon::parse($nextAppointment->appointmentDate)->translatedFormat('d M Y') }} à {{ \Carbon\Carbon::parse($nextAppointment->appointmentTime)->format('H:i') }}
+                        </p>
+                        <span class="text-xs px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-medium border border-slate-200">
+                            <i class="fas fa-video mr-1"></i> {{ $nextAppointment->psychologist->user->name ?? 'Psychologue' }}
+                        </span>
+                    </div>
+                @else
+                    <p class="text-lg font-bold text-slate-400 mt-1">Aucun rendez-vous prévu</p>
+                @endif
             </div>
-            <button class="hidden md:block text-xs font-bold text-nafssiti-primary uppercase hover:underline">Détails</button>
+            @if($nextAppointment)
+                <button class="hidden md:block text-xs font-bold text-nafssiti-primary uppercase hover:underline">Détails</button>
+            @endif
         </div>
     </div>
 
