@@ -2,12 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Psychologist;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function allPsychologues()
+    public function allPsychologues(Request $request)
     {
-        return view('psychologue.allPsychologues');
+        $query = Psychologist::with('user')->where('validationStatus', 'approved');
+
+        if ($request->filled('specialty')) {
+            $query->where('specialization', $request->specialty);
+        }
+
+        if ($request->filled('city')) {
+            $query->where('city', $request->city);
+        }
+
+        $psychologues = $query->get();
+        
+        $cities = Psychologist::where('validationStatus', 'approved')
+            ->distinct()
+            ->pluck('city');
+            
+        $specialties = Psychologist::where('validationStatus', 'approved')
+            ->distinct()
+            ->pluck('specialization');
+
+        return view('psychologue.allPsychologues', compact('psychologues', 'specialties', 'cities'));
     }
 }

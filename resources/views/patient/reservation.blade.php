@@ -48,7 +48,7 @@
                             </div>
                             <div class="absolute top-2 right-2 w-3 h-3 border border-slate-300 rounded-full peer-checked:bg-nafssiti-primary peer-checked:border-nafssiti-primary transition"></div>
                         </label>
-
+                    
                         <label class="relative cursor-pointer group">
                             <input type="radio" name="psychologist_id" class="peer sr-only">
                             <div class="p-3 border border-slate-100 rounded-sm bg-slate-50 peer-checked:bg-white peer-checked:border-nafssiti-primary peer-checked:ring-1 peer-checked:ring-nafssiti-primary transition-all flex items-center gap-3">
