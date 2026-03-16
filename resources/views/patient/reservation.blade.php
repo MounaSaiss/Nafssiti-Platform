@@ -37,41 +37,24 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 max-h-64 overflow-y-auto pr-2 psy-list">
+                        @forelse($psychologues as $psychologue)
                         <label class="relative cursor-pointer group">
-                            <input type="radio" name="psychologist_id" class="peer sr-only" checked>
+                            <input type="radio" name="psychologist_id" value="{{ $psychologue->id }}" class="peer sr-only" {{ $loop->first ? 'checked' : '' }}>
                             <div class="p-3 border border-slate-100 rounded-sm bg-slate-50 peer-checked:bg-white peer-checked:border-nafssiti-primary peer-checked:ring-1 peer-checked:ring-nafssiti-primary transition-all flex items-center gap-3">
-                                <img src="https://ui-avatars.com/api/?name=Mouna+Tazi&background=4dbfbf&color=fff" class="w-9 h-9 rounded-sm">
+                                <img src="{{ $psychologue->photo ? asset('storage/' . $psychologue->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($psychologue->user->name) . '&background=4dbfbf&color=fff' }}" class="w-9 h-9 rounded-sm object-cover">
                                 <div>
-                                    <p class="text-[11px] font-bold text-slate-800">Dr. Mouna Tazi</p>
-                                    <p class="text-[9px] text-slate-400 font-medium uppercase tracking-tighter">Psychologue clinicienne</p>
+                                    <p class="text-[11px] font-bold text-slate-800">{{ $psychologue->user->name }}</p>
+                                    <p class="text-[9px] text-slate-400 font-medium uppercase tracking-tighter">{{ $psychologue->specialization }}</p>
                                 </div>
                             </div>
                             <div class="absolute top-2 right-2 w-3 h-3 border border-slate-300 rounded-full peer-checked:bg-nafssiti-primary peer-checked:border-nafssiti-primary transition"></div>
                         </label>
-                    
-                        <label class="relative cursor-pointer group">
-                            <input type="radio" name="psychologist_id" class="peer sr-only">
-                            <div class="p-3 border border-slate-100 rounded-sm bg-slate-50 peer-checked:bg-white peer-checked:border-nafssiti-primary peer-checked:ring-1 peer-checked:ring-nafssiti-primary transition-all flex items-center gap-3">
-                                <img src="https://ui-avatars.com/api/?name=Amine+B&background=96d14b&color=fff" class="w-9 h-9 rounded-sm">
-                                <div>
-                                    <p class="text-[11px] font-bold text-slate-800">Dr. Amine Bennani</p>
-                                    <p class="text-[9px] text-slate-400 font-medium uppercase tracking-tighter">Thérapeute TCC</p>
-                                </div>
-                            </div>
-                            <div class="absolute top-2 right-2 w-3 h-3 border border-slate-300 rounded-full peer-checked:bg-nafssiti-primary peer-checked:border-nafssiti-primary transition"></div>
-                        </label>
-
-                        <label class="relative cursor-pointer group">
-                            <input type="radio" name="psychologist_id" class="peer sr-only">
-                            <div class="p-3 border border-slate-100 rounded-sm bg-slate-50 peer-checked:bg-white peer-checked:border-nafssiti-primary peer-checked:ring-1 peer-checked:ring-nafssiti-primary transition-all flex items-center gap-3">
-                                <img src="https://ui-avatars.com/api/?name=Sara+M&background=0f172a&color=fff" class="w-9 h-9 rounded-sm">
-                                <div>
-                                    <p class="text-[11px] font-bold text-slate-800">Dr. Sara Mansouri</p>
-                                    <p class="text-[9px] text-slate-400 font-medium uppercase tracking-tighter">Couple & Famille</p>
-                                </div>
-                            </div>
-                            <div class="absolute top-2 right-2 w-3 h-3 border border-slate-300 rounded-full peer-checked:bg-nafssiti-primary peer-checked:border-nafssiti-primary transition"></div>
-                        </label>
+                        @empty
+                        <div class="col-span-3 py-10 text-center bg-slate-50 rounded-sm border border-slate-100">
+                            <i class="fas fa-user-md text-slate-300 mb-2"></i>
+                            <p class="text-[10px] text-slate-400 font-medium">Aucun psychologue disponible pour le moment.</p>
+                        </div>
+                        @endforelse
                     </div>
                 </section>
 
@@ -81,7 +64,7 @@
                             <span class="w-6 h-6 bg-nafssiti-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center">2</span>
                             <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-600">Choisir la date</h3>
                         </div>
-                        <input type="date" name="date"
+                        <input type="date" name="date" min="{{ date('Y-m-d') }}"
                             class="w-full bg-slate-50 border border-slate-200 rounded-sm px-4 py-3 text-xs outline-none focus:border-nafssiti-primary transition">
                     </section>
 

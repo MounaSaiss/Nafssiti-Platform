@@ -59,5 +59,7 @@ Route::get('/patient/profil', [PatientDashboardController::class, 'profil'])->na
 Route::get('/psychologue/dashboard', [PsychologueDashboardController::class, 'index'])->name('psychologue.dashboard');
 Route::get('/psychologue/profil', [PsychologueDashboardController::class, 'profil'])->name('psychologue.profil');
 Route::get('/psychologue/disponabilite', [PsychologueDashboardController::class, 'disponabilite'])->name('psychologue.disponabilite');
+Route::post('/psychologue/disponabilite', [PsychologueDashboardController::class, 'storeDisponabilite'])->name('psychologue.storeDisponabilite');
+Route::delete('/psychologue/disponabilite/{id}', [PsychologueDashboardController::class, 'destroyDisponabilite'])->name('psychologue.destroyDisponabilite');
 Route::get('/psychologue/rendezVous', [PsychologueDashboardController::class, 'rendezVous'])->name('psychologue.rendezVous');
 Route::get('/psychologue/historique', [PsychologueDashboardController::class, 'historique'])->name('psychologue.historique');
