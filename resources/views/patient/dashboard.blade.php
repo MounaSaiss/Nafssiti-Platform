@@ -39,9 +39,6 @@
                     <p class="text-lg font-bold text-slate-400 mt-1">Aucun rendez-vous prévu</p>
                 @endif
             </div>
-            @if($nextAppointment)
-                <button class="hidden md:block text-xs font-bold text-nafssiti-primary uppercase hover:underline">Détails</button>
-            @endif
         </div>
     </div>
 
