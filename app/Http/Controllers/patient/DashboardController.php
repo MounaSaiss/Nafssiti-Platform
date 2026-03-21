@@ -5,11 +5,13 @@ namespace App\Http\Controllers\patient;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\patient\PatientAppointmentsFilterRequest;
+use App\Http\Requests\patient\StoreReservationRequest;
+use App\Http\Requests\patient\UpdatePatientProfilRequest;
 use App\Models\Psychologist;
 use App\Models\Availability;
 use App\Models\Appointment;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -87,14 +89,8 @@ class DashboardController extends Controller
         return response()->json($slots);
     }
 
-    public function storeReservation(Request $request)
+    public function storeReservation(StoreReservationRequest $request)
     {
-        $request->validate([
-            'psychologist_id' => 'required|exists:psychologists,id',
-            'availability_id' => 'required|exists:availabilities,id',
-            'appointment_time' => 'required',
-        ]);
-
         $availability = Availability::findOrFail($request->availability_id);
 
         // NEW: Double check if the time hasn't passed if the date is today
@@ -170,18 +166,11 @@ class DashboardController extends Controller
         return view("patient.profil");
     }
 
-    public function updateProfil(Request $request)
+    public function updateProfil(UpdatePatientProfilRequest $request)
     {
         $user = Auth::user();
         
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:20',
-            'city' => 'nullable|string|max:100',
-            'password' => 'nullable|string|min:8|confirmed',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        $validated = $request->validated();
 
         $data = [
             'name' => $validated['name'],
@@ -197,7 +186,7 @@ class DashboardController extends Controller
         if ($request->hasFile('avatar')) {
             // Delete old avatar if exists
             if ($user->avatar) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->avatar);
+                Storage::disk('public')->delete($user->avatar);
             }
             $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
         }
