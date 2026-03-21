@@ -16,6 +16,8 @@ class Psychologist extends Model
         'consultationType',
         'certificate',
         'photo',
+        'description',
+        'education',
         'validationStatus',
     ];
 
