@@ -7,18 +7,18 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-6 border-b-4 border-nafssiti-primary rounded-sm shadow-sm">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Rendez-vous</p>
-                <h3 class="text-3xl font-bold text-slate-800 mt-2">128</h3>
-                <p class="text-[10px] text-nafssiti-secondary font-bold mt-1">+12% ce mois</p>
+                <h3 class="text-3xl font-bold text-slate-800 mt-2">{{ $totalAppointments }}</h3>
+                <p class="text-[10px] text-nafssiti-secondary font-bold mt-1">Historique complet</p>
             </div>
             <div class="bg-white p-6 border-b-4 border-nafssiti-secondary rounded-sm shadow-sm">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Aujourd'hui</p>
-                <h3 class="text-3xl font-bold text-slate-800 mt-2">4</h3>
-                <p class="text-[10px] text-slate-400 font-medium mt-1 text-italic italic">Prochaine à 14:00</p>
+                <h3 class="text-3xl font-bold text-slate-800 mt-2">{{ $appointmentsToday }}</h3>
+                <p class="text-[10px] text-slate-400 font-medium mt-1 italic">Séances prévues aujourd'hui</p>
             </div>
             <div class="bg-white p-6 border-b-4 border-nafssiti-dark rounded-sm shadow-sm">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Séances Passées</p>
-                <h3 class="text-3xl font-bold text-slate-800 mt-2">114</h3>
-                <p class="text-[10px] text-slate-400 font-medium mt-1 italic">Taux de présence: 98%</p>
+                <h3 class="text-3xl font-bold text-slate-800 mt-2">{{ $pastAppointments }}</h3>
+                <p class="text-[10px] text-slate-400 font-medium mt-1 italic">Terminées ou déjà passées</p>
             </div>
         </div>
 
@@ -29,32 +29,23 @@
                     <a href="{{ route('psychologue.rendezVous') }}" class="text-[9px] font-bold text-nafssiti-primary uppercase hover:underline">Voir tout</a>
                 </div>
                 <div class="p-6 space-y-6">
+                    @forelse($upcomingUpcoming as $apt)
                     <div class="flex items-center justify-between group">
                         <div class="flex items-center gap-4">
-                            <img src="https://ui-avatars.com/api/?name=Karim+I&background=f1f5f9&color=4dbfbf" class="w-9 h-9 rounded-sm">
+                            <img src="{{ $apt->patient->photo ? asset('storage/' . $apt->patient->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($apt->patient->user->name) . '&background=f1f5f9&color=4dbfbf' }}" class="w-9 h-9 rounded-sm">
                             <div>
-                                <p class="text-xs font-bold text-slate-800">Karim Idrissi</p>
-                                <p class="text-[10px] text-slate-400 font-medium italic">Anxiété sociale</p>
+                                <p class="text-xs font-bold text-slate-800">{{ $apt->patient->user->name }}</p>
+                                <p class="text-[10px] text-slate-400 font-medium italic">{{ \Carbon\Carbon::parse($apt->appointmentDate)->translatedFormat('d F Y') }}</p>
                             </div>
                         </div>
                         <div class="text-right">
-                            <p class="text-xs font-bold text-nafssiti-primary">14:00</p>
-                            <p class="text-[9px] text-slate-300 font-bold uppercase">Aujourd'hui</p>
+                            <p class="text-xs font-bold text-nafssiti-primary">{{ \Carbon\Carbon::parse($apt->appointmentTime)->format('H:i') }}</p>
+                            <p class="text-[9px] text-slate-300 font-bold uppercase">{{ $apt->status === 'confirmed' ? 'Confirmé' : 'En attente' }}</p>
                         </div>
                     </div>
-                    <div class="flex items-center justify-between group">
-                        <div class="flex items-center gap-4">
-                            <img src="https://ui-avatars.com/api/?name=Sara+L&background=f1f5f9&color=4dbfbf" class="w-9 h-9 rounded-sm">
-                            <div>
-                                <p class="text-xs font-bold text-slate-800">Sara Lemrani</p>
-                                <p class="text-[10px] text-slate-400 font-medium italic">Suivi thérapie</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-xs font-bold text-slate-800">16:30</p>
-                            <p class="text-[9px] text-slate-300 font-bold uppercase">Aujourd'hui</p>
-                        </div>
-                    </div>
+                    @empty
+                    <p class="text-[10px] text-slate-400 italic text-center py-4">Aucune séance prévue prochainement.</p>
+                    @endforelse
                 </div>
             </section>
 

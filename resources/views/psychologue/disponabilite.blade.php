@@ -18,6 +18,11 @@
                             {{ session('success') }}
                         </div>
                     @endif
+                    @if(session('error'))
+                        <div class="bg-red-50 border border-red-100 text-red-500 text-[10px] font-bold p-3 rounded-sm">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     @if($errors->any())
                         <div class="bg-red-50 border border-red-100 text-red-500 text-[10px] font-bold p-3 rounded-sm">
                             <ul class="list-disc pl-4">
