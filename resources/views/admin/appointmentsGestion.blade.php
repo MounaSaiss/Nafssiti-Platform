@@ -66,7 +66,7 @@
                         <td class="px-6 py-4">
                             <div class="flex flex-col">
                                 <span
-                                    class="font-bold text-nafssiti-primary uppercase">{{ $appointment->psychologist->name ?? 'Psychologue Inconnu' }}</span>
+                                    class="font-bold text-nafssiti-primary uppercase">{{ $appointment->psychologist->user->name ?? 'Psychologue Inconnu' }}</span>
                             </div>
                         </td>
                         <td class="px-6 py-4">

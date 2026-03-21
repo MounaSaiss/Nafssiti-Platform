@@ -10,7 +10,7 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Utilisateurs actifs</p>
-                    <h3 class="text-2xl font-bold mt-1 tracking-tight">{{ $users->count() - 1 }}</h3>
+                    <h3 class="text-2xl font-bold mt-1 tracking-tight">{{ $activeUsersCount }}</h3>
                 </div>
                 <div class="p-2 bg-slate-50 rounded border border-slate-100 text-nafssiti-primary">
                     <i class="fas fa-users"></i>
@@ -22,7 +22,7 @@
             <div class="flex justify-between items-start">
                 <div>
                     <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Psychologues</p>
-                    <h3 class="text-2xl font-bold mt-1 tracking-tight">{{ $psychologists->count() }}</h3>
+                    <h3 class="text-2xl font-bold mt-1 tracking-tight">{{ $totalPsychologistsCount }}</h3>
                 </div>
                 <div class="p-2 bg-slate-50 rounded border border-slate-100 text-nafssiti-secondary">
                     <i class="fas fa-user-md"></i>
@@ -59,8 +59,10 @@
 
     <div class="bg-white border border-slate-200 shadow-sm overflow-hidden">
         <div class="p-6 border-b border-slate-100 flex items-center justify-between">
-            <h3 class="font-bold text-slate-800 uppercase tracking-widest text-sm italic">Validation des nouveaux praticiens
-            </h3>
+            <div>
+                <h3 class="font-bold text-slate-800 uppercase tracking-widest text-sm italic">Validation des nouveaux praticiens</h3>
+                <p class="text-[10px] text-slate-400 mt-1 uppercase tracking-tighter">Une fois validé ou refusé, le praticien disparaît de cette liste et peut être géré via la page <a href="{{ route('admin.userGestion') }}" class="text-nafssiti-primary hover:underline">Utilisateurs</a>.</p>
+            </div>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -73,8 +75,8 @@
                         <th class="px-6 py-4 font-bold border-b border-slate-200 text-right">Statut & Actions</th>
                     </tr>
                 </thead>
-                @foreach ($psychologists as $psychologist)
-                    <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-slate-100">
+                    @forelse ($psychologists as $psychologist)
                         <tr>
                             <td class="px-6 py-4 font-mono text-slate-400">{{ $psychologist->id }}</td>
                             <td class="px-6 py-4">
@@ -90,43 +92,35 @@
                                 <div class="flex items-center justify-end gap-4">
                                     <!-- Badge de Statut -->
                                     <div>
-                                        @if ($psychologist->validationStatus === 'approved')
-                                            <span
-                                                class="bg-green-100 text-green-800 text-[10px] font-bold px-2.5 py-1 rounded shadow-sm border border-green-200 uppercase tracking-widest"><i
-                                                    class="fas fa-check-circle mr-1"></i>Approuvé</span>
-                                        @elseif($psychologist->validationStatus === 'rejected')
-                                            <span
-                                                class="bg-red-100 text-red-800 text-[10px] font-bold px-2.5 py-1 rounded shadow-sm border border-red-200 uppercase tracking-widest"><i
-                                                    class="fas fa-times-circle mr-1"></i>Refusé</span>
-                                        @else
-                                            <span
-                                                class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-1 rounded shadow-sm border border-amber-200 uppercase tracking-widest"><i
-                                                    class="fas fa-hourglass-half mr-1"></i>En attente</span>
-                                        @endif
+                                        <span
+                                            class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-1 rounded shadow-sm border border-amber-200 uppercase tracking-widest"><i
+                                                class="fas fa-hourglass-half mr-1"></i>En attente</span>
                                     </div>
 
                                     <!-- Actions -->
                                     <div class="flex justify-end gap-2 border-l border-slate-200 pl-4">
-                                        @if ($psychologist->validationStatus !== 'approved')
-                                            <a href="{{ route('admin.approvePsychologist', $psychologist->id) }}"
-                                                class="flex items-center justify-center w-8 h-8 rounded-sm bg-slate-50 text-green-600 hover:bg-green-600 hover:text-white border border-slate-200 hover:border-green-600 shadow-sm transition-all"
-                                                title="Approuver">
-                                                <i class="fas fa-check"></i>
-                                            </a>
-                                        @endif
-                                        @if ($psychologist->validationStatus !== 'rejected')
-                                            <a href="{{ route('admin.rejectPsychologist', $psychologist->id) }}"
-                                                class="flex items-center justify-center w-8 h-8 rounded-sm bg-slate-50 text-red-500 hover:bg-red-600 hover:text-white border border-slate-200 hover:border-red-600 shadow-sm transition-all"
-                                                title="Refuser">
-                                                <i class="fas fa-times"></i>
-                                            </a>
-                                        @endif
+                                        <a href="{{ route('admin.approvePsychologist', $psychologist->id) }}"
+                                            class="flex items-center justify-center w-8 h-8 rounded-sm bg-slate-50 text-green-600 hover:bg-green-600 hover:text-white border border-slate-200 hover:border-green-600 shadow-sm transition-all"
+                                            title="Approuver">
+                                            <i class="fas fa-check"></i>
+                                        </a>
+                                        <a href="{{ route('admin.rejectPsychologist', $psychologist->id) }}"
+                                            class="flex items-center justify-center w-8 h-8 rounded-sm bg-slate-50 text-red-500 hover:bg-red-600 hover:text-white border border-slate-200 hover:border-red-600 shadow-sm transition-all"
+                                            title="Refuser">
+                                            <i class="fas fa-times"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                    </tbody>
-                @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-10 text-center text-slate-400 italic">
+                                Aucun nouveau praticien en attente de validation.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
             </table>
         </div>
     </div>

@@ -25,6 +25,11 @@
             class="flex items-center px-6 py-3 transition-all {{ request()->routeIs('admin.appointmentsGestion') ? 'sidebar-item-active text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
             <i class="fas fa-calendar-alt w-6"></i> <span>Rendez-vous</span>
         </a>
+
+        <a href="{{ route('admin.speciality.index') }}"
+            class="flex items-center px-6 py-3 transition-all {{ request()->routeIs('admin.speciality.index') ? 'sidebar-item-active text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+            <i class="fas fa-tags w-6"></i> <span>Spécialités</span>
+        </a>
     </nav>
 
     <div class="p-4 bg-slate-950/50">
