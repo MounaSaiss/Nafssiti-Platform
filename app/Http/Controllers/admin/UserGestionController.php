@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\admin\UserFilterRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class UserGestionController extends Controller
 {
-    public function userGestion(Request $request)
+    public function userGestion(UserFilterRequest $request)
     {
         $roleFilter = $request->query('role');
         $search = $request->query('search');

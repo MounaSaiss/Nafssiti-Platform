@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Appointment;
@@ -12,13 +11,22 @@ class DashboardController extends Controller
 {
     public function index(){
         $users = User::all();
-        $psychologists = Psychologist::all();
+        $allPsychologists = Psychologist::all();
+        $pendingPsychologists = Psychologist::where('validationStatus', 'pending')->get();
         $appointments = Appointment::all();
         $globalRevenue = 0;
-        foreach ($psychologists as $psychologist) {
+        foreach ($allPsychologists as $psychologist) {
             $globalRevenue += $psychologist->pricePerSession * 0.1;
         }
-        return view('admin.dashboard', compact('users', 'psychologists', 'appointments', 'globalRevenue'));
+        $activeUsersCount = User::where('status', 'actif')->where('role_id', '!=', 3)->count();
+        return view('admin.dashboard', [
+            'users' => $users,
+            'activeUsersCount' => $activeUsersCount,
+            'psychologists' => $pendingPsychologists,
+            'totalPsychologistsCount' => $allPsychologists->count(),
+            'appointments' => $appointments,
+            'globalRevenue' => $globalRevenue
+        ]);
     }
     public function approvePsychologist($id){
         $psychologist = Psychologist::findOrFail($id);

@@ -3,20 +3,21 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\admin\AppointmentsFilterRequest;
 use App\Models\Appointment;
 
 class AppointmentsGestionController extends Controller
 {
-    public function appointmentsGestion(\Illuminate\Http\Request $request)
+    public function appointmentsGestion(AppointmentsFilterRequest $request)
     {
-        $query = Appointment::with(['patient.user', 'psychologist']);
+        $query = Appointment::with(['patient.user', 'psychologist.user']);
 
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->whereHas('patient.user', function($userQuery) use ($search) {
                     $userQuery->where('name', 'like', "%{$search}%");
-                })->orWhereHas('psychologist', function($userQuery) use ($search) {
+                })->orWhereHas('psychologist.user', function($userQuery) use ($search) {
                     $userQuery->where('name', 'like', "%{$search}%");
                 });
             });
