@@ -81,6 +81,14 @@ class DashboardController extends Controller
         $user = Auth::user();
         $psychologue = $user->psychologist;
 
+        // Prevent past time slots for today
+        $now = Carbon::now();
+        if ($request->date == $now->toDateString()) {
+            if ($request->start_time <= $now->toTimeString()) {
+                return redirect()->back()->with('error', 'Vous ne pouvez pas ajouter un créneau dans le passé pour aujourd\'hui.');
+            }
+        }
+
         // Check for overlap
         $overlap = Availability::where('psychologist_id', $psychologue->id)
             ->where('date', $request->date)

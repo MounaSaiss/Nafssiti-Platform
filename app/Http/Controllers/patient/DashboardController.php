@@ -18,11 +18,20 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $appointmentsCount = $user->appointments()->count();
+        $appointmentsCount = $user->appointments()
+            ->whereIn('status', ['confirmed', 'completed'])
+            ->count();
         
         $nextAppointment = $user->appointments()
             ->with('psychologist.user')
-            ->where('appointmentDate', '>=', now()->toDateString())
+            ->where('status', 'confirmed')
+            ->where(function($q) {
+                $q->where('appointmentDate', '>', now()->toDateString())
+                  ->orWhere(function($sq) {
+                      $sq->where('appointmentDate', '=', now()->toDateString())
+                         ->where('appointmentTime', '>=', now()->toTimeString());
+                  });
+            })
             ->orderBy('appointmentDate')
             ->orderBy('appointmentTime')
             ->first();
@@ -39,9 +48,6 @@ class DashboardController extends Controller
     {
         $dates = Availability::where('psychologist_id', $psychologist_id)
             ->where('date', '>=', now()->toDateString())
-            ->whereDoesntHave('appointments', function($query) {
-                $query->whereIn('status', ['pending', 'confirmed']);
-            })
             ->distinct()
             ->pluck('date');
 

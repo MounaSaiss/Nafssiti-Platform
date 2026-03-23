@@ -61,7 +61,7 @@
         <div class="p-6 border-b border-slate-100 flex items-center justify-between">
             <div>
                 <h3 class="font-bold text-slate-800 uppercase tracking-widest text-sm italic">Validation des nouveaux praticiens</h3>
-                <p class="text-[10px] text-slate-400 mt-1 uppercase tracking-tighter">Une fois validé ou refusé, le praticien disparaît de cette liste et peut être géré via la page <a href="{{ route('admin.userGestion') }}" class="text-nafssiti-primary hover:underline">Utilisateurs</a>.</p>
+                <p class="text-[10px] text-slate-400 mt-1 uppercase tracking-tighter">Une fois validé , le psychologue apparaît dans la liste suivante et peut être géré via la page <a href="{{ route('admin.userGestion') }}" class="text-nafssiti-primary hover:underline">Utilisateurs</a>.</p>
             </div>
         </div>
         <div class="overflow-x-auto">
@@ -71,8 +71,8 @@
                         <th class="px-6 py-4 font-bold border-b border-slate-200">ID</th>
                         <th class="px-6 py-4 font-bold border-b border-slate-200">Praticien</th>
                         <th class="px-6 py-4 font-bold border-b border-slate-200">Spécialité</th>
-                        <th class="px-6 py-4 font-bold border-b border-slate-200 text-center">City</th>
-                        <th class="px-6 py-4 font-bold border-b border-slate-200 text-right">Statut & Actions</th>
+                        <th class="px-6 py-4 font-bold border-b border-slate-200 text-center">Ville</th>
+                        <th class="px-6 py-4 font-bold border-b border-slate-200 text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -81,35 +81,23 @@
                             <td class="px-6 py-4 font-mono text-slate-400">{{ $psychologist->id }}</td>
                             <td class="px-6 py-4">
                                 <div class="flex flex-col">
-                                    <span class="font-bold text-slate-800 uppercase">{{ $psychologist->user->name }}</span>
+                                    <span class="font-bold text-slate-800 uppercase">{{ $psychologist->user->name ?? 'Praticien inconnu' }}</span>
                                     <span
-                                        class="text-slate-400 font-light tracking-tight text-[11px]">{{ $psychologist->user->email }}</span>
+                                        class="text-slate-400 font-light tracking-tight text-[11px]">{{ $psychologist->user->email ?? '-' }}</span>
                                 </div>
                             </td>
                             <td class="px-6 py-4">{{ $psychologist->specialization }}</td>
                             <td class="px-6 py-4">{{ $psychologist->city }}</td>
                             <td class="px-6 py-4 text-right">
-                                <div class="flex items-center justify-end gap-4">
-                                    <!-- Badge de Statut -->
-                                    <div>
-                                        <span
-                                            class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-1 rounded shadow-sm border border-amber-200 uppercase tracking-widest"><i
-                                                class="fas fa-hourglass-half mr-1"></i>En attente</span>
-                                    </div>
-
-                                    <!-- Actions -->
-                                    <div class="flex justify-end gap-2 border-l border-slate-200 pl-4">
-                                        <a href="{{ route('admin.approvePsychologist', $psychologist->id) }}"
-                                            class="flex items-center justify-center w-8 h-8 rounded-sm bg-slate-50 text-green-600 hover:bg-green-600 hover:text-white border border-slate-200 hover:border-green-600 shadow-sm transition-all"
-                                            title="Approuver">
-                                            <i class="fas fa-check"></i>
-                                        </a>
-                                        <a href="{{ route('admin.rejectPsychologist', $psychologist->id) }}"
-                                            class="flex items-center justify-center w-8 h-8 rounded-sm bg-slate-50 text-red-500 hover:bg-red-600 hover:text-white border border-slate-200 hover:border-red-600 shadow-sm transition-all"
-                                            title="Refuser">
-                                            <i class="fas fa-times"></i>
-                                        </a>
-                                    </div>
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ route('admin.approvePsychologist', $psychologist->id) }}"
+                                        class="px-4 py-1.5 bg-green-50 text-green-600 border border-green-100 rounded-sm text-[9px] font-bold uppercase tracking-wider hover:bg-green-600 hover:text-white hover:border-green-600 transition-all shadow-sm">
+                                        Valide
+                                    </a>
+                                    <a href="{{ route('admin.rejectPsychologist', $psychologist->id) }}"
+                                        class="px-4 py-1.5 bg-red-50 text-red-500 border border-red-100 rounded-sm text-[9px] font-bold uppercase tracking-wider hover:bg-red-600 hover:text-white hover:border-red-600 transition-all shadow-sm">
+                                        Invalide
+                                    </a>
                                 </div>
                             </td>
                         </tr>

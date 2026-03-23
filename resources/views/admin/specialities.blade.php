@@ -68,7 +68,7 @@
                 <tbody class="divide-y divide-slate-50">
                     @forelse ($specialities as $speciality)
                         <tr class="group hover:bg-slate-50/80 transition-all duration-200">
-                            <td class="px-8 py-5 font-mono text-slate-300 group-hover:text-nafssiti-primary transition-colors">#SP-{{ sprintf('%03d', $speciality->id) }}</td>
+                            <td class="px-8 py-5 font-mono text-slate-300 group-hover:text-nafssiti-primary transition-colors">#RF-{{ $speciality->id }}</td>
                             <td class="px-8 py-5 text-sm">
                                 <span class="font-semibold text-slate-700 group-hover:text-slate-900 transition-colors">{{ $speciality->name }}</span>
                             </td>
