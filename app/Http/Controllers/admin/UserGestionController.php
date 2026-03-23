@@ -13,7 +13,9 @@ class UserGestionController extends Controller
         $roleFilter = $request->query('role');
         $search = $request->query('search');
 
-        $query = User::query();
+        $query = User::whereNot(function ($q) {
+            $q->where('role_id', 2)->where('status', 'en attente');
+        });
 
         if ($roleFilter === 'patient') {
             $query->where('role_id', 1);

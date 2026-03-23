@@ -15,7 +15,7 @@ class UserFilterRequest extends FormRequest
     {
         return [
             'search' => 'nullable|string|max:100',
-            'role' => 'nullable|string|in:patient,psychologue',
+            'role' => 'nullable|string|in:patient,psychologue,all',
         ];
     }
 }

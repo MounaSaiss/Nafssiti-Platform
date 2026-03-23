@@ -34,6 +34,9 @@
                         <span class="text-xs px-2 py-0.5 bg-slate-100 text-slate-600 rounded font-medium border border-slate-200">
                             <i class="fas fa-video mr-1"></i> {{ $nextAppointment->psychologist->user->name ?? 'Psychologue' }}
                         </span>
+                        <span class="text-[9px] px-2 py-0.5 bg-green-50 text-green-600 rounded-full font-bold border border-green-100 uppercase tracking-tighter">
+                            <i class="fas fa-check mr-1"></i> Confirmé
+                        </span>
                     </div>
                 @else
                     <p class="text-lg font-bold text-slate-400 mt-1">Aucun rendez-vous prévu</p>

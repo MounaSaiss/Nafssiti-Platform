@@ -39,7 +39,7 @@
         <table class="w-full text-left text-xs border-collapse">
             <thead>
                 <tr class="bg-slate-50 text-slate-500 uppercase tracking-widest border-b border-slate-200">
-                    <th class="px-6 py-4 font-bold">ID / Date de Création</th>
+                    <th class="px-6 py-4 font-bold uppercase tracking-widest border-b border-slate-200">Date de Création</th>
                     <th class="px-6 py-4 font-bold">Patient</th>
                     <th class="px-6 py-4 font-bold">Psychologue</th>
                     <th class="px-6 py-4 font-bold">Date & Heure RDV</th>
@@ -51,11 +51,9 @@
                 @foreach ($appointments as $appointment)
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="px-6 py-4">
-                            <div class="flex flex-col">
-                                <span class="font-mono text-slate-400 text-[10px]">#APP-{{ $appointment->id }}</span>
-                                <span class="text-[9px] text-slate-400">Créé le :
-                                    {{ $appointment->created_at ? $appointment->created_at->format('d/m/Y') : 'N/A' }}</span>
-                            </div>
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter bg-slate-50 px-2 py-1 rounded border border-slate-100">
+                                {{ $appointment->created_at ? $appointment->created_at->format('d/m/Y') : 'N/A' }}
+                            </span>
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2">
