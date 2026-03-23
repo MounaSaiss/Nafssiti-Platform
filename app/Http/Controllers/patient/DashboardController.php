@@ -129,6 +129,7 @@ class DashboardController extends Controller
             'appointmentDate' => $availability->date,
             'appointmentTime' => $request->appointment_time,
             'status' => 'pending',
+            'notes' => $request->notes,
         ]);
 
         return redirect()->route('patient.rendezVous')->with('success', 'Votre réservation a été envoyée avec succès.');
@@ -143,14 +144,26 @@ class DashboardController extends Controller
 
         if ($statusFilter === 'à-venir') {
             $query->where('status', 'confirmed')
-                  ->where('appointmentDate', '>=', now()->toDateString());
+                  ->where(function($q) {
+                      $q->where('appointmentDate', '>', Carbon::today()->toDateString())
+                        ->orWhere(function($sq) {
+                            $sq->where('appointmentDate', '=', Carbon::today()->toDateString())
+                               ->where('appointmentTime', '>=', Carbon::now()->toTimeString());
+                        });
+                  });
         } elseif ($statusFilter === 'en-attente') {
             $query->where('status', 'pending');
         } elseif ($statusFilter === 'historique') {
             $query->where(function($q) {
                 $q->where(function($sq) {
                     $sq->where('status', 'confirmed')
-                       ->where('appointmentDate', '<', now()->toDateString());
+                       ->where(function($fq) {
+                           $fq->where('appointmentDate', '<', Carbon::today()->toDateString())
+                              ->orWhere(function($ssq) {
+                                  $ssq->where('appointmentDate', '=', Carbon::today()->toDateString())
+                                      ->where('appointmentTime', '<', Carbon::now()->toTimeString());
+                              });
+                       });
                 })->orWhere('status', 'completed')
                   ->orWhere('status', 'rejected');
             });

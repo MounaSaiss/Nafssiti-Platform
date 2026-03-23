@@ -17,6 +17,7 @@ class StoreReservationRequest extends FormRequest
             'psychologist_id' => 'required|exists:psychologists,id',
             'availability_id' => 'required|exists:availabilities,id',
             'appointment_time' => 'required',
+            'notes' => 'nullable|string|max:1000',
         ];
     }
 
@@ -26,6 +27,7 @@ class StoreReservationRequest extends FormRequest
             'psychologist_id.required' => 'Le psychologue est requis.',
             'availability_id.required' => 'Le créneau de disponibilité est requis.',
             'appointment_time.required' => 'L\'heure du rendez-vous est requise.',
+            'notes.max' => 'Les remarques ne doivent pas dépasser 1000 caractères.',
         ];
     }
 }

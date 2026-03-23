@@ -149,7 +149,13 @@ class DashboardController extends Controller
 
         $appointments = Appointment::where('psychologist_id', $psychologue->id)
             ->where('status', 'confirmed')
-            ->where('appointmentDate', '<', Carbon::today()->toDateString())
+            ->where(function ($query) {
+                $query->where('appointmentDate', '<', Carbon::today()->toDateString())
+                      ->orWhere(function ($q) {
+                          $q->where('appointmentDate', '=', Carbon::today()->toDateString())
+                            ->where('appointmentTime', '<', Carbon::now()->toTimeString());
+                      });
+            })
             ->with('patient.user')
             ->orderBy('appointmentDate', 'desc')
             ->orderBy('appointmentTime', 'desc')
