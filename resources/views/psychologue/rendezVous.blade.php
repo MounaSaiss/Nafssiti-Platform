@@ -32,9 +32,8 @@
                 <tr class="bg-slate-50/50 border-b border-slate-100">
                     <th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Patient</th>
                     <th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Date & Heure</th>
-                    <th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Type / Notes</th>
-                    <th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Statut</th>
-                    <th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">Action</th>
+                    <th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Remarques / Notes</th>
+                    <th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center">Statut</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-50">
@@ -54,11 +53,15 @@
                         <p class="text-[10px] text-nafssiti-primary font-bold">{{ \Carbon\Carbon::parse($appointment->appointmentTime)->format('H:i') }}</p>
                     </td>
                     <td class="px-8 py-5">
-                        <p class="text-[10px] text-slate-600 leading-relaxed max-w-xs truncate">
-                            <i class="fas fa-comment-dots mr-1 text-slate-300"></i> Séance thérapeutique
+                        <p class="text-[10px] text-slate-600 leading-relaxed max-w-xs italic">
+                            @if($appointment->notes)
+                                <i class="fas fa-quote-left mr-1 text-slate-300"></i> {{ $appointment->notes }}
+                            @else
+                                <span class="text-slate-300">Aucune remarque patient.</span>
+                            @endif
                         </p>
                     </td>
-                    <td class="px-8 py-5">
+                    <td class="px-8 py-5 text-center">
                         @if($appointment->status === 'confirmed')
                             <span class="px-3 py-1 bg-green-50 text-nafssiti-secondary text-[9px] font-bold uppercase rounded-full border border-green-100">Confirmé</span>
                         @elseif($appointment->status === 'pending')
@@ -69,26 +72,15 @@
                             <span class="px-3 py-1 bg-slate-100 text-slate-400 text-[9px] font-bold uppercase rounded-full border border-slate-200">Effectué</span>
                         @endif
                     </td>
-                    <td class="px-8 py-5 text-right">
-                        <button class="text-[10px] font-bold text-nafssiti-primary uppercase tracking-tighter hover:underline">Détails</button>
-                    </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-8 py-10 text-center text-slate-400 italic text-xs">
+                    <td colspan="4" class="px-8 py-10 text-center text-slate-400 italic text-xs">
                         Aucun rendez-vous trouvé pour le moment.
                     </td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
-    </div>
-
-    <div class="mt-6 flex justify-between items-center px-2">
-        <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wider italic">Affichage de {{ $appointments->count() }} rendez-vous</p>
-        <div class="flex gap-1">
-            <button class="w-8 h-8 flex items-center justify-center bg-white border border-slate-200 rounded-sm text-xs text-slate-400 hover:text-nafssiti-primary transition"><i class="fas fa-chevron-left"></i></button>
-            <button class="w-8 h-8 flex items-center justify-center bg-white border border-slate-200 rounded-sm text-xs text-slate-400 hover:text-nafssiti-primary transition"><i class="fas fa-chevron-right"></i></button>
-        </div>
     </div>
 @endsection

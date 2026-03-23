@@ -49,12 +49,15 @@
                         @forelse($psychologues as $psychologue)
                         <label class="relative cursor-pointer group psy-card" 
                             data-search="{{ strtolower($psychologue->user->name) }} {{ strtolower($psychologue->specialization) }}">
-                            <input type="radio" name="psychologist_id" value="{{ $psychologue->id }}" class="peer sr-only psychologist-radio" {{ $loop->first ? 'checked' : '' }}>
+                            <input type="radio" name="psychologist_id" value="{{ $psychologue->id }}" 
+                                data-price="{{ $psychologue->pricePerSession }}"
+                                class="peer sr-only psychologist-radio" {{ $loop->first ? 'checked' : '' }}>
                             <div class="p-3 border border-slate-100 rounded-sm bg-slate-50 peer-checked:bg-white peer-checked:border-nafssiti-primary peer-checked:ring-1 peer-checked:ring-nafssiti-primary transition-all flex items-center gap-3">
                                 <img src="{{ $psychologue->photo ? asset('storage/' . $psychologue->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($psychologue->user->name) . '&background=4dbfbf&color=fff' }}" class="w-9 h-9 rounded-sm object-cover">
                                 <div>
                                     <p class="text-[11px] font-bold text-slate-800">{{ $psychologue->user->name }}</p>
                                     <p class="text-[9px] text-slate-400 font-medium uppercase tracking-tighter">{{ $psychologue->specialization }}</p>
+                                    <p class="text-[10px] text-nafssiti-primary font-bold mt-1">{{ $psychologue->pricePerSession }} DH <span class="text-[8px] text-slate-300 font-medium uppercase">/ séance</span></p>
                                 </div>
                             </div>
                             <div class="absolute top-2 right-2 w-3 h-3 border border-slate-300 rounded-full peer-checked:bg-nafssiti-primary peer-checked:border-nafssiti-primary transition"></div>
@@ -94,9 +97,22 @@
                     </section>
                 </div>
 
+                <section>
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="w-6 h-6 bg-nafssiti-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center">4</span>
+                        <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-600">Remarques (Optionnel)</h3>
+                    </div>
+                    <textarea name="notes" rows="3" 
+                        class="w-full bg-slate-50 border border-slate-200 rounded-sm px-4 py-3 text-xs outline-none focus:border-nafssiti-primary transition placeholder:italic"
+                        placeholder="Ex: C'est ma première consultation, je souhaite discuter de..."></textarea>
+                    <p class="text-[9px] text-slate-400 mt-2 italic">Vos remarques aideront le psychologue à mieux préparer la séance.</p>
+                </section>
+
 
                 <div class="pt-6 border-t border-slate-100 flex justify-end items-center gap-6">
-                    <span class="text-[10px] text-slate-400 font-medium uppercase tracking-tighter italic">Paiement à la séance : 300 DH</span>
+                    <span class="text-[10px] text-slate-400 font-medium uppercase tracking-tighter italic">
+                        Paiement à la séance : <span id="price-display">300</span> DH
+                    </span>
                     <button type="submit" id="submit-btn" disabled
                         class="px-12 py-4 bg-nafssiti-dark text-white rounded-sm text-[10px] font-bold uppercase tracking-widest hover:bg-nafssiti-secondary transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
                         Confirmer la réservation
@@ -119,6 +135,7 @@
         const dateHint = document.getElementById('date-hint');
         const searchInput = document.getElementById('psy-search');
         const psychoCards = document.querySelectorAll('.psy-card');
+        const priceDisplay = document.getElementById('price-display');
 
         // Search functionality
         searchInput.addEventListener('input', function() {
@@ -207,6 +224,11 @@
         psychoRadios.forEach(radio => {
             radio.addEventListener('change', function() {
                 fetchAvailableDates(this.value);
+                // Update price display
+                const selectedPrice = this.getAttribute('data-price');
+                if (priceDisplay && selectedPrice) {
+                    priceDisplay.innerText = selectedPrice;
+                }
             });
         });
 
@@ -223,6 +245,11 @@
         const checkedPsy = document.querySelector('.psychologist-radio:checked');
         if (checkedPsy) {
             fetchAvailableDates(checkedPsy.value);
+            // Initial price display
+            const initialPrice = checkedPsy.getAttribute('data-price');
+            if (priceDisplay && initialPrice) {
+                priceDisplay.innerText = initialPrice;
+            }
         }
     });
 </script>

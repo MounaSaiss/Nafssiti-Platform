@@ -57,15 +57,10 @@
                 <span class="text-xl font-bold text-nafssiti-primary tracking-tighter uppercase">Nafssiti <span
                         class="text-white font-light text-sm italic">Pro</span></span>
             </div>
-
             <nav class="mt-8 space-y-1">
                 <a href="{{ route('psychologue.dashboard') }}"
                     class="flex items-center gap-3 px-8 py-4 text-xs font-bold uppercase tracking-widest transition {{ Route::is('psychologue.dashboard') ? 'nav-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <i class="fas fa-chart-line w-5 {{ Route::is('psychologue.dashboard') ? 'text-nafssiti-primary' : '' }}"></i> Dashboard
-                </a>
-                <a href="{{ route('psychologue.profil') }}"
-                    class="flex items-center gap-3 px-8 py-4 text-xs font-medium transition {{ Route::is('psychologue.profil') ? 'nav-item-active font-bold uppercase tracking-widest' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
-                    <i class="fas fa-user-circle w-5 {{ Route::is('psychologue.profil') ? 'text-nafssiti-primary' : '' }}"></i> Page Profil
                 </a>
                 <a href="{{ route('psychologue.disponabilite') }}"
                     class="flex items-center gap-3 px-8 py-4 text-xs font-medium transition {{ Route::is('psychologue.disponabilite') ? 'nav-item-active font-bold uppercase tracking-widest' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
@@ -78,6 +73,10 @@
                 <a href="{{ route('psychologue.historique') }}"
                     class="flex items-center gap-3 px-8 py-4 text-xs font-medium transition {{ Route::is('psychologue.historique') ? 'nav-item-active font-bold uppercase tracking-widest' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <i class="fas fa-history w-5 {{ Route::is('psychologue.historique') ? 'text-nafssiti-primary' : '' }}"></i> Historique des séances
+                </a>
+                <a href="{{ route('psychologue.profil') }}"
+                    class="flex items-center gap-3 px-8 py-4 text-xs font-medium transition {{ Route::is('psychologue.profil') ? 'nav-item-active font-bold uppercase tracking-widest' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <i class="fas fa-user-circle w-5 {{ Route::is('psychologue.profil') ? 'text-nafssiti-primary' : '' }}"></i> Page Profil
                 </a>
             </nav>
 
@@ -97,14 +96,12 @@
                 class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-10 sticky top-0 z-40">
                 <div>
                     <h2 class="text-lg font-bold text-slate-800">@yield('header_title', 'Bonjour, Dr. ' . (Auth::user()->name ?? 'Utilisateur'))</h2>
-                    <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wide">{{ now()->translatedFormat('l d F Y') }}</p>
                 </div>
                 <div class="flex items-center gap-6">
-                    <button class="relative text-slate-400 hover:text-nafssiti-primary transition">
-                        <i class="fas fa-bell"></i>
-                        <span
-                            class="absolute -top-1 -right-1 w-2 h-2 bg-nafssiti-accent rounded-full border-2 border-white"></span>
-                    </button>
+                    <div class="text-right hidden md:block">
+                        <p class="text-xs font-bold text-slate-900">{{ Auth::user()->name ?? 'Utilisateur' }}</p>
+                        <p class="text-[10px] text-slate-400 font-medium uppercase">Psychologue</p>
+                    </div>
                     <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'U') }}&background=4dbfbf&color=fff"
                         class="w-10 h-10 rounded-full shadow-sm">
                 </div>

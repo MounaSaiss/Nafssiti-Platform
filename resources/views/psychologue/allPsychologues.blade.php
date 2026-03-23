@@ -61,11 +61,8 @@
                         <p class="text-nafssiti-primary text-[10px] font-medium uppercase mt-0.5">{{ $psychologue->specialization }}</p>
 
                         <div class="mt-2 flex items-center gap-3 text-slate-400">
-                            <span class="text-[10px] flex items-center gap-1">
+                            <span class="text-[10px] min-w-0 flex items-center gap-1">
                                 <i class="fas fa-map-marker-alt text-[9px]"></i> {{ $psychologue->city }}
-                            </span>
-                            <span class="text-[10px] flex items-center gap-1 border-l pl-3 border-slate-100">
-                                <i class="fas fa-star text-amber-400 text-[9px]"></i> 5.0
                             </span>
                         </div>
                     </div>

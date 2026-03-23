@@ -42,6 +42,11 @@
                             <div>
                                 <p class="text-xs font-bold text-slate-800">{{ $appointment->patient->user->name }}</p>
                                 <p class="text-[10px] text-slate-400 font-medium">Séance à {{ \Carbon\Carbon::parse($appointment->appointmentTime)->format('H:i') }}</p>
+                                @if($appointment->notes)
+                                <p class="text-[9px] text-slate-400 mt-2 italic border-l-2 border-slate-100 pl-2 leading-relaxed max-w-sm">
+                                    <i class="fas fa-sticky-note mr-1 text-slate-200"></i> {{ $appointment->notes }}
+                                </p>
+                                @endif
                             </div>
                         </div>
                         <div class="flex items-center gap-10">
@@ -54,9 +59,6 @@
                                     <i class="fas fa-check-circle mr-1"></i> Terminée
                                 </span>
                             </div>
-                            <button class="text-slate-300 hover:text-nafssiti-primary transition">
-                                <i class="fas fa-file-medical-alt text-lg"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -71,13 +73,5 @@
             <p class="text-slate-400 italic text-sm">Aucun historique de séance disponible pour le moment.</p>
         </div>
         @endforelse
-
-        @if(!$appointments->isEmpty())
-        <div class="flex justify-center py-10">
-            <button class="px-8 py-3 bg-white border border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] hover:bg-nafssiti-dark hover:text-white transition shadow-sm rounded-sm">
-                Charger les séances précédentes
-            </button>
-        </div>
-        @endif
     </div>
 @endsection

@@ -63,14 +63,6 @@
                         <p class="text-[9px] text-slate-400 mt-1">Ouvrir des créneaux</p>
                     </a>
                 </div>
-                <div class="bg-nafssiti-dark p-8 rounded-sm text-white relative overflow-hidden">
-                    <div class="relative z-10">
-                        <h4 class="text-sm font-bold">Besoin d'aide ?</h4>
-                        <p class="text-[10px] text-slate-400 mt-2 max-w-[200px]">Consultez notre guide de gestion de cabinet ou contactez le support pro.</p>
-                        <button class="mt-4 bg-nafssiti-primary px-4 py-2 rounded-sm text-[9px] font-bold uppercase tracking-widest">Support Nafssiti</button>
-                    </div>
-                    <i class="fas fa-stethoscope absolute -right-4 -bottom-4 text-7xl text-white/5 rotate-12"></i>
-                </div>
             </section>
         </div>
     </div>
