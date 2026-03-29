@@ -6,7 +6,7 @@ use App\Models\Psychologist;
 use App\Models\Speciality;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class PsychologueController extends Controller
 {
     public function allPsychologues(Request $request)
     {
