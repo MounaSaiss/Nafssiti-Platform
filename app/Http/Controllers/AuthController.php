@@ -8,7 +8,10 @@ use App\Models\Speciality;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\patient\PatientRegisterRequest;
+use App\Http\Requests\psychologue\PsychologueRegisterRequest;
+use App\Http\Requests\auth\LoginRequest;
 class AuthController extends Controller
 {
     public function showPatientRegistrationForm()
@@ -27,15 +30,10 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function registerPatient(Request $request)
+    public function registerPatient(PatientRegisterRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required',
-            'password' => 'required|string|min:8',
-        ]);
-        $validated['password'] = bcrypt($validated['password']);
+        $validated = $request->validated();
+        $validated['password'] = Hash::make($validated['password']);
         $validated['role_id'] = 1;
 
         $user = User::create($validated);
@@ -43,26 +41,13 @@ class AuthController extends Controller
             'user_id' => $user->id,
         ]);
 
-        return redirect()->route('show.login')->with('success', 'Votre compte a été créé avec succès. Veuillez attendre la validation de l\'administrateur avant de vous connecter.');
+        return redirect()->route('show.login')->with('success', 'Votre compte a été créé avec succès. Veuillez attendre la validation de l\'admin avant de vous connecter.');
     }
 
-    public function registerPsychologue(Request $request)
+    public function registerPsychologue(PsychologueRegisterRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required',
-            'password' => 'required|string|min:8',
-
-            'specialization' => 'required|string|max:255',
-            'city' => 'required|string',
-            'experienceYears' => 'required|integer',
-            'pricePerSession' => 'required|numeric',
-            'consultationType' => 'required|string',
-            'certificate' => 'nullable|file',
-            'photo' => 'nullable|image',
-        ]);
-        $validated['password'] = bcrypt($validated['password']);
+        $validated = $request->validated();
+        $validated['password'] = Hash::make($validated['password']);
         $validated['role_id'] = 2;
 
         $user = User::create([
@@ -73,9 +58,6 @@ class AuthController extends Controller
             'role_id' => $validated['role_id'],
         ]);
 
-        $certificatePath = $request->file('certificate')?->store('certificates', 'public');
-        $photoPath = $request->file('photo')?->store('psychologists', 'public');
-
         Psychologist::create([
             'user_id' => $user->id,
             'specialization' => $validated['specialization'],
@@ -83,34 +65,29 @@ class AuthController extends Controller
             'experienceYears' => $validated['experienceYears'],
             'pricePerSession' => $validated['pricePerSession'],
             'consultationType' => $validated['consultationType'],
-            'certificate' => $certificatePath,
-            'photo' => $photoPath,
         ]);
 
-        return redirect()->route('show.login')->with('success', 'Votre compte praticien a été créé. Veuillez attendre la validation de l\'administrateur.');
+        return redirect()->route('show.login')->with('success', 'Votre compte praticien a été créé. Veuillez attendre la validation de l\'admin.');
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $validated = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required', 'string', 'min:8'],
-        ]);
+        $validated = $request->validated();
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        if (Auth::attempt($validated)) {
             $user = Auth::user();
 
             if ($user->status !== 'actif') {
                 $statusMessage = $user->status === 'banni'
                     ? 'Votre compte a été banni.'
-                    : 'Votre compte est en attente de validation par l\'administrateur.';
+                    : 'Votre compte est en attente de validation par l\'admin';
 
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
                 return redirect()->back()->withErrors([
-                    'credentials' => $statusMessage,
+                    'auth_error' => $statusMessage,
                 ]);
             }
 
@@ -130,7 +107,7 @@ class AuthController extends Controller
         } else {
 
             return redirect()->back()->withErrors([
-                'credentials' => 'Email ou mot de passe incorrect',
+                'auth_error' => 'Email ou mot de passe incorrect',
             ]);
         }
     }

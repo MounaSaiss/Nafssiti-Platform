@@ -54,7 +54,6 @@
             <form class="space-y-5" action="{{ route('register.patient') }}" method="POST">
                 @csrf
                 <input type="hidden" name="role" value="user">
-
                 <div>
                     <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
                         Nom complet
@@ -103,6 +102,19 @@
                             <i class="fas fa-lock text-gray-400 text-sm"></i>
                         </div>
                         <input id="password" name="password" type="password" required placeholder="**********"
+                            class="appearance-none block w-full pl-10 px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-nafssiti-blue focus:border-nafssiti-blue dark:bg-gray-700 dark:text-white sm:text-sm transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                        Confirmer le mot de passe
+                    </label>
+                    <div class="mt-1 relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock text-gray-400 text-sm"></i>
+                        </div>
+                        <input id="password_confirmation" name="password_confirmation" type="password" required placeholder="**********"
                             class="appearance-none block w-full pl-10 px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-nafssiti-blue focus:border-nafssiti-blue dark:bg-gray-700 dark:text-white sm:text-sm transition">
                     </div>
                     <p class="mt-1 text-xs text-gray-500">Minimum 8 caractères.</p>

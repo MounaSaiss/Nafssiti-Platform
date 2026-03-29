@@ -12,6 +12,7 @@ use App\Http\Controllers\patient\DashboardController as PatientDashboardControll
 use App\Http\Controllers\psychologue\DashboardController as PsychologueDashboardController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 Route::get('/psychologues', [UserController::class, 'allPsychologues'])
     ->name('psychologue.allPsychologues');
 
