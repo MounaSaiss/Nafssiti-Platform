@@ -16,13 +16,13 @@
             <i class="fas fa-chart-line w-6"></i> <span>Dashboard</span>
         </a>
 
-        <a href="{{ route('admin.userGestion') }}"
-            class="flex items-center px-6 py-3 transition-all {{ request()->routeIs('admin.userGestion') ? 'sidebar-item-active text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+        <a href="{{ route('admin.users.index') }}"
+            class="flex items-center px-6 py-3 transition-all {{ request()->routeIs('admin.users.*') ? 'sidebar-item-active text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
             <i class="fas fa-users w-6"></i> <span>Utilisateurs</span>
         </a>
 
-        <a href="{{ route('admin.appointmentsGestion') }}"
-            class="flex items-center px-6 py-3 transition-all {{ request()->routeIs('admin.appointmentsGestion') ? 'sidebar-item-active text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
+        <a href="{{ route('admin.appointments.index') }}"
+            class="flex items-center px-6 py-3 transition-all {{ request()->routeIs('admin.appointments.*') ? 'sidebar-item-active text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800' }}">
             <i class="fas fa-calendar-alt w-6"></i> <span>Rendez-vous</span>
         </a>
 

@@ -17,7 +17,6 @@ class SpecialityController extends Controller
     public function store(StoreSpecialityRequest $request)
     {
         Speciality::create($request->validated());
-
         return redirect()->back()->with('success', 'Spécialité ajoutée avec succès.');
     }
 
@@ -25,7 +24,6 @@ class SpecialityController extends Controller
     {
         $speciality = Speciality::findOrFail($id);
         $speciality->delete();
-
         return redirect()->back()->with('success', 'Spécialité supprimée avec succès.');
     }
 }

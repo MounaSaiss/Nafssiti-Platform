@@ -12,6 +12,31 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+     // Roles
+    public const ROLE_PATIENT = 1;
+    public const ROLE_PSYCHOLOGUE = 2;
+    public const ROLE_ADMIN = 3;
+
+    // Statuses
+    public const STATUS_ACTIF = 'actif';
+    public const STATUS_BANNI = 'banni';
+    public const STATUS_EN_ATTENTE = 'en attente';
+
+    public function isAdmin(): bool
+    {
+        return $this->role_id === self::ROLE_ADMIN;
+    }
+
+    public function isPatient(): bool
+    {
+        return $this->role_id === self::ROLE_PATIENT;
+    }
+
+    public function isPsychologue(): bool
+    {
+        return $this->role_id === self::ROLE_PSYCHOLOGUE;
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -44,9 +69,6 @@ class User extends Authenticatable
         return $this->hasManyThrough(Appointment::class, Patient::class);
     }
 
-    public function isAdmin(){
-        return $this->role_id == 3;
-    }
 
 
     /**
