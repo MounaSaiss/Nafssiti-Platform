@@ -27,7 +27,7 @@
 @endif
 
 
-<form action="{{ route('admin.userGestion') }}" method="GET" class="flex flex-col md:flex-row gap-4 mb-6">
+<form action="{{ route('admin.users.index') }}" method="GET" class="flex flex-col md:flex-row gap-4 mb-6">
     <div class="relative flex-1">
         <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher par nom, email, ville..."
@@ -52,9 +52,8 @@
                 <th class="px-6 py-4 font-bold text-right">Actions de Contrôle</th>
             </tr>
         </thead>
-        @foreach ($users as $user)
-        @if($user->role_id != 3)
         <tbody class="divide-y divide-slate-100">
+            @foreach ($users as $user)
             <tr class="hover:bg-slate-50 transition-colors">
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
@@ -71,34 +70,27 @@
                         class="text-[10px] font-bold text-slate-500 border border-slate-200 px-2 py-0.5 rounded uppercase">{{ $user->role->status }}</span>
                 </td>
                 <td class="px-6 py-4 font-medium text-slate-700">
-                    @if($user->psychologist)
-                    {{ $user->psychologist->city }}
-                    @else
-                    -
-                    @endif
+                    {{ $user->psychologist->city ?? '-' }}
                 </td>
                 <td class="px-6 py-4 text-center">
-                    @if($user->status == 'actif')
-                    <span class="inline-flex items-center gap-1.5 text-green-600 font-bold uppercase text-[9px] bg-green-50 px-2 py-1 rounded border border-green-100">
+                    @php
+                        $statusClasses = match($user->status) {
+                            'actif' => 'text-green-600 bg-green-50 border-green-100',
+                            'banni' => 'text-red-600 bg-red-50 border-red-100',
+                            'en attente' => 'text-amber-600 bg-amber-50 border-amber-100',
+                            default => 'text-slate-600 bg-slate-50 border-slate-100'
+                        };
+                    @endphp
+                    <span class="inline-flex items-center gap-1.5 font-bold uppercase text-[9px] px-2 py-1 rounded border {{ $statusClasses }}">
                         {{ $user->status }}
                     </span>
-                    @elseif($user->status == 'banni')
-                    <span class="inline-flex items-center gap-1.5 text-red-600 font-bold uppercase text-[9px] bg-red-50 px-2 py-1 rounded border border-red-100">
-                        {{ $user->status }}
-                    </span>
-                    @else
-                    <span class="inline-flex items-center gap-1.5 text-amber-600 font-bold uppercase text-[9px] bg-amber-50 px-2 py-1 rounded border border-amber-100">
-                        {{ $user->status }}
-                    </span>
-                    @endif
                 </td>
                 <td class="px-6 py-4">
                     <div class="flex justify-end gap-2 items-center">
                         @if($user->isAdmin())
-                        <button disabled
-                            class="flex items-center justify-center gap-2 px-3 py-2 bg-slate-50 text-slate-400 rounded-sm font-bold uppercase text-[10px] border border-slate-200 cursor-not-allowed">
+                        <span class="px-3 py-2 bg-slate-50 text-slate-400 border border-slate-200 rounded-sm font-bold uppercase text-[10px]">
                             <i class="fas fa-shield-alt"></i> Protégé
-                        </button>
+                        </span>
                         @else
                         <button
                             onclick="openProfileModal(this)"
@@ -112,20 +104,39 @@
                             class="flex items-center justify-center gap-2 px-3 py-2 bg-slate-100 text-slate-700 rounded-sm font-bold uppercase text-[10px] hover:bg-slate-200 transition-all border border-slate-200 shadow-sm">
                             <i class="fas fa-eye"></i> Consulter
                         </button>
-                        @if($user->status != 'actif')
-                        <form action="{{ route('admin.unbanUser', $user->id) }}" method="POST">
+                        
+                        @if($user->status == 'en attente')
+                        <form action="{{ route('admin.users.approve', $user) }}" method="POST">
                             @csrf
                             <button type="submit"
-                                class="w-28 flex items-center justify-center gap-2 px-3 py-2 bg-white text-nafssiti-primary border border-nafssiti-primary rounded-sm font-bold uppercase text-[10px] hover:bg-nafssiti-primary hover:text-white transition-all shadow-sm">
-                                <i class="fas fa-check"></i> Activer
+                                class="w-28 flex items-center justify-center gap-2 px-3 py-2 bg-nafssiti-primary text-white rounded-sm font-bold uppercase text-[10px] hover:bg-nafssiti-dark transition-all shadow-sm">
+                                <i class="fas fa-check-circle"></i> Accepter
+                            </button>
+                        </form>
+                        <form action="{{ route('admin.users.reject', $user) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir refuser et supprimer ce praticien ?')">
+                            @csrf
+                            <button type="submit"
+                                class="w-28 flex items-center justify-center gap-2 px-3 py-2 bg-white text-red-600 border border-red-600 rounded-sm font-bold uppercase text-[10px] hover:bg-red-600 hover:text-white transition-all shadow-sm">
+                                <i class="fas fa-times-circle"></i> Refuser
                             </button>
                         </form>
                         @endif
-                        @if($user->status != 'banni')
-                        <form action="{{ route('admin.banUser', $user->id) }}" method="POST">
+
+                        @if($user->status == 'banni' || ($user->status == 'en attente' && false)) {{-- Just a safety check for unban --}}
+                        <form action="{{ route('admin.users.unban', $user) }}" method="POST">
                             @csrf
                             <button type="submit"
-                                class="w-28 flex items-center justify-center gap-2 px-3 py-2 bg-white text-nafssiti-red border border-nafssiti-red rounded-sm font-bold uppercase text-[10px] hover:bg-nafssiti-red hover:text-white transition-all shadow-sm">
+                                class="w-28 flex items-center justify-center gap-2 px-3 py-2 bg-white text-nafssiti-primary border border-nafssiti-primary rounded-sm font-bold uppercase text-[10px] hover:bg-nafssiti-primary hover:text-white transition-all shadow-sm">
+                                <i class="fas fa-undo"></i> Activer
+                            </button>
+                        </form>
+                        @endif
+
+                        @if($user->status == 'actif')
+                        <form action="{{ route('admin.users.ban', $user) }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="w-28 flex items-center justify-center gap-2 px-3 py-2 bg-white text-red-600 border border-red-600 rounded-sm font-bold uppercase text-[10px] hover:bg-red-600 hover:text-white transition-all shadow-sm">
                                 <i class="fas fa-ban"></i> Bannir
                             </button>
                         </form>
@@ -134,11 +145,11 @@
                     </div>
                 </td>
             </tr>
+            @endforeach
         </tbody>
-        @endif
-        @endforeach
     </table>
 </div>
+
 
 <!-- Modal Profil Utilisateur -->
 <div id="profileModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
@@ -154,7 +165,6 @@
                 <div class="flex justify-between items-start mb-6">
                     <div class="flex items-center gap-4">
                         <div id="modalAvatar" class="w-16 h-16 rounded-full bg-nafssiti-primary flex items-center justify-center text-white text-2xl font-bold shadow-md">
-                            <!-- Initials here -->
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-slate-900 uppercase tracking-tight" id="modalName"></h3>
@@ -215,14 +225,11 @@
         document.getElementById('modalCity').textContent = city;
         document.getElementById('modalJoined').textContent = joined;
 
-        // Set initials in avatar
         const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
         document.getElementById('modalAvatar').textContent = initials;
 
-        // Handle Status Badge
         const statusBadge = document.getElementById('modalStatusBadge');
         let badgeClass = "";
-        let statusText = status;
 
         if (status === 'actif') {
             badgeClass = "text-green-600 bg-green-50 border-green-100";
@@ -232,18 +239,17 @@
             badgeClass = "text-amber-600 bg-amber-50 border-amber-100";
         }
 
-        statusBadge.innerHTML = `<span class="inline-flex items-center gap-1.5 font-bold uppercase text-[10px] px-3 py-1.5 rounded border ${badgeClass}">${statusText}</span>`;
+        statusBadge.innerHTML = `<span class="inline-flex items-center gap-1.5 font-bold uppercase text-[10px] px-3 py-1.5 rounded border ${badgeClass}">${status}</span>`;
 
         document.getElementById('profileModal').classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
+        document.body.style.overflow = 'hidden';
     }
 
     function closeProfileModal() {
         document.getElementById('profileModal').classList.add('hidden');
-        document.body.style.overflow = 'auto'; // Restore scrolling
+        document.body.style.overflow = 'auto';
     }
 
-    // Close on ESC key
     window.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
             closeProfileModal();
