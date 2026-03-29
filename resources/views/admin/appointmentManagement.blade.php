@@ -2,7 +2,7 @@
 
 @section('title', 'Gestion des Rendez-vous | NAFSSITI PRO')
 
-@section('page_title', 'Gestion des Appointments')
+@section('page_title', 'Gestion des Rendez-vous')
 
 @section('content')
     @if (session('success'))
@@ -20,7 +20,7 @@
             {{ session('error') }}
         </div>
     @endif
-    <form action="{{ route('admin.appointmentsGestion') }}" method="GET" class="flex flex-wrap gap-4 mb-6">
+    <form action="{{ route('admin.appointments.index') }}" method="GET" class="flex flex-wrap gap-4 mb-6">
         <div class="relative flex-1 min-w-[300px]">
             <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher par patient ou psychologue..."
@@ -48,7 +48,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
-                @foreach ($appointments as $appointment)
+                @forelse ($appointments as $appointment)
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="px-6 py-4">
                             <span class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter bg-slate-50 px-2 py-1 rounded border border-slate-100">
@@ -76,55 +76,54 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 text-center">
-                            @if ($appointment->status == 'pending')
-                                <span
-                                    class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-amber-50 text-amber-500 border border-amber-100">
-                                    En attente
-                                </span>
-                            @elseif($appointment->status == 'confirmed')
-                                <span
-                                    class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-green-50 text-nafssiti-secondary border border-green-100">
-                                    Confirmé
-                                </span>
-                            @else
-                                <span
-                                    class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-red-50 text-nafssiti-red border border-red-100">
-                                    {{ $appointment->status }}
-                                </span>
-                            @endif
+                            @php
+                                $statusClasses = match($appointment->status) {
+                                    'pending' => 'bg-amber-50 text-amber-500 border-amber-100',
+                                    'confirmed' => 'bg-green-50 text-nafssiti-secondary border-green-100',
+                                    'rejected' => 'bg-red-50 text-nafssiti-red border-red-100',
+                                    default => 'bg-slate-50 text-slate-500 border-slate-100'
+                                };
+                                $statusLabel = match($appointment->status) {
+                                    'pending' => 'En attente',
+                                    'confirmed' => 'Confirmé',
+                                    'rejected' => 'Refusé',
+                                    default => $appointment->status
+                                };
+                            @endphp
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase border {{ $statusClasses }}">
+                                {{ $statusLabel }}
+                            </span>
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex justify-end gap-2">
                                 @if ($appointment->status == 'pending')
-                                    <form action="{{ route('admin.acceptAppointment', $appointment->id) }}" method="POST">
+                                    <form action="{{ route('admin.appointments.accept', $appointment) }}" method="POST">
                                         @csrf
                                         <button type="submit"
                                             class="px-3 py-1.5 bg-nafssiti-secondary text-white rounded-sm font-bold uppercase text-[9px] hover:bg-green-600 transition shadow-sm">
                                             <i class="fas fa-check mr-1"></i> Accepter
                                         </button>
                                     </form>
-                                    <form action="{{ route('admin.refuseAppointment', $appointment->id) }}" method="POST">
+                                    <form action="{{ route('admin.appointments.refuse', $appointment) }}" method="POST" onsubmit="return confirm('Refuser ce rendez-vous ?')">
                                         @csrf
                                         <button type="submit"
                                             class="px-3 py-1.5 bg-nafssiti-red text-white rounded-sm font-bold uppercase text-[9px] hover:bg-red-600 transition shadow-sm">
                                             <i class="fas fa-times mr-1"></i> Refuser
                                         </button>
                                     </form>
-                                @elseif($appointment->status == 'confirmed')
-                                    <button
-                                        class="px-3 py-1.5 bg-slate-100 text-slate-400 cursor-not-allowed rounded-sm font-bold uppercase text-[9px]">
-                                        <i class="fas fa-check mr-1"></i> Accepté
-                                    </button>
-                                @elseif($appointment->status == 'rejected')
-                                    <button
-                                        class="px-3 py-1.5 bg-slate-100 text-slate-400 cursor-not-allowed rounded-sm font-bold uppercase text-[9px]">
-                                        <i class="fas fa-times mr-1"></i> Refusé
-                                    </button>
+                                @else
+                                    <span class="text-[9px] font-bold uppercase text-slate-400 italic">Traité</span>
                                 @endif
                             </div>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="6" class="px-6 py-10 text-center text-slate-400 italic">
+                            Aucun rendez-vous trouvé.
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
