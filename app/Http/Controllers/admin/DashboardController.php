@@ -26,27 +26,5 @@ class DashboardController extends Controller
             'globalRevenue' => $globalRevenue
         ]);
     }
-    public function approvePsychologist($id){
-        $psychologist = Psychologist::findOrFail($id);
-        $psychologist->validationStatus = 'approved';
-        $psychologist->save();
-        
-        // Update user status
-        $psychologist->user->update(['status' => 'actif']);
-        
-        return redirect()->route('admin.dashboard')->with('success', 'Praticien approuvé avec succès.');
-    }   
-    public function rejectPsychologist($id){
-        $psychologist = Psychologist::findOrFail($id);
-        $user = $psychologist->user;
-        
-        // Explicitly delete both to avoid orphaned records in some environments
-        $psychologist->delete();
-        if ($user) {
-            $user->delete();
-        }
-        
-        return redirect()->route('admin.dashboard')->with('success', 'Praticien refusé et supprimé.');
-    }
 }
 

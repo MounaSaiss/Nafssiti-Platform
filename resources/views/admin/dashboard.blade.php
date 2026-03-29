@@ -61,7 +61,7 @@
         <div class="p-6 border-b border-slate-100 flex items-center justify-between">
             <div>
                 <h3 class="font-bold text-slate-800 uppercase tracking-widest text-sm italic">Validation des nouveaux praticiens</h3>
-                <p class="text-[10px] text-slate-400 mt-1 uppercase tracking-tighter">Une fois validé , le psychologue apparaît dans la liste suivante et peut être géré via la page <a href="{{ route('admin.userGestion') }}" class="text-nafssiti-primary hover:underline">Utilisateurs</a>.</p>
+                <p class="text-[10px] text-slate-400 mt-1 uppercase tracking-tighter">Une fois validé, le psychologue apparaît dans la liste suivante et peut être géré via la page <a href="{{ route('admin.users.index') }}" class="text-nafssiti-primary hover:underline">Utilisateurs</a>.</p>
             </div>
         </div>
         <div class="overflow-x-auto">
@@ -90,14 +90,20 @@
                             <td class="px-6 py-4">{{ $psychologist->city }}</td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2">
-                                    <a href="{{ route('admin.approvePsychologist', $psychologist->id) }}"
-                                        class="px-4 py-1.5 bg-green-50 text-green-600 border border-green-100 rounded-sm text-[9px] font-bold uppercase tracking-wider hover:bg-green-600 hover:text-white hover:border-green-600 transition-all shadow-sm">
-                                        Valide
-                                    </a>
-                                    <a href="{{ route('admin.rejectPsychologist', $psychologist->id) }}"
-                                        class="px-4 py-1.5 bg-red-50 text-red-500 border border-red-100 rounded-sm text-[9px] font-bold uppercase tracking-wider hover:bg-red-600 hover:text-white hover:border-red-600 transition-all shadow-sm">
-                                        Invalide
-                                    </a>
+                                    <form action="{{ route('admin.users.approve', $psychologist->user) }}" method="POST">
+                                        @csrf
+                                        <button type="submit"
+                                            class="px-4 py-1.5 bg-green-50 text-green-600 border border-green-100 rounded-sm text-[9px] font-bold uppercase tracking-wider hover:bg-green-600 hover:text-white hover:border-green-600 transition-all shadow-sm">
+                                            Valide
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('admin.users.reject', $psychologist->user) }}" method="POST" onsubmit="return confirm('Refuser ce praticien ?')">
+                                        @csrf
+                                        <button type="submit"
+                                            class="px-4 py-1.5 bg-red-50 text-red-500 border border-red-100 rounded-sm text-[9px] font-bold uppercase tracking-wider hover:bg-red-600 hover:text-white hover:border-red-600 transition-all shadow-sm">
+                                            Invalide
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

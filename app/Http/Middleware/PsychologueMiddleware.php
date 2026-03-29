@@ -20,6 +20,6 @@ class PsychologueMiddleware
             return $next($request);
         }
 
-        return redirect()->route('home')->with('error', 'Accès réservé aux praticiens.');
+        return redirect()->route('home')->with('error', 'Accès réservé aux psychologues.');
     }
 }
