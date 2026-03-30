@@ -26,7 +26,6 @@ class PatientRegisterRequest extends FormRequest
             'email' => 'required|string|email|max:255|unique:users',
             'phone' => 'required',
             'password' => 'required|string|min:8|confirmed',
-            'confirm_password' => 'required|string|min:8|confirmed',
         ];
     }
 }

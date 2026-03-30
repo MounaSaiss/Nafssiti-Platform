@@ -34,9 +34,14 @@ class AuthController extends Controller
     {
         $validated = $request->validated();
         $validated['password'] = Hash::make($validated['password']);
-        $validated['role_id'] = 1;
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'password' => $validated['password'],
+            'role_id' => 1,
+        ]);
 
-        $user = User::create($validated);
         Patient::create([
             'user_id' => $user->id,
         ]);
@@ -77,7 +82,7 @@ class AuthController extends Controller
         if (Auth::attempt($validated)) {
             $user = Auth::user();
 
-            if ($user->status !== 'actif') {
+            if ($user->status !== 'actif' || $user->psychologist->validationStatus !== 'approved') {
                 $statusMessage = $user->status === 'banni'
                     ? 'Votre compte a été banni.'
                     : 'Votre compte est en attente de validation par l\'admin';
