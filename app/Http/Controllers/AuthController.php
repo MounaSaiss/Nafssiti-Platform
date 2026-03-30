@@ -82,7 +82,7 @@ class AuthController extends Controller
         if (Auth::attempt($validated)) {
             $user = Auth::user();
 
-            if ($user->status !== 'actif') {
+            if ($user->status !== 'actif' || $user->psychologist->validationStatus !== 'approved') {
                 $statusMessage = $user->status === 'banni'
                     ? 'Votre compte a été banni.'
                     : 'Votre compte est en attente de validation par l\'admin';
