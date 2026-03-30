@@ -55,7 +55,7 @@
                 @csrf
                 <input type="hidden" name="role" value="user">
                 <div>
-                    <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    <label for="name" class="block text-sxm font-semibold text-gray-700 dark:text-gray-300">
                         Nom complet
                     </label>
                     <div class="mt-1 relative">

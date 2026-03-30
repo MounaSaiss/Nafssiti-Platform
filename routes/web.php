@@ -7,6 +7,9 @@ use App\Http\Controllers\admin\UserManagementController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\patient\DashboardController as PatientDashboardController;
+use App\Http\Controllers\patient\ReservationController as PatientReservationController;
+use App\Http\Controllers\patient\AppointmentController as PatientAppointmentController;
+use App\Http\Controllers\patient\ProfileController as PatientProfileController;
 use App\Http\Controllers\psychologue\DashboardController as PsychologueDashboardController;
 use App\Http\Controllers\PsychologueController;
 use Illuminate\Support\Facades\Route;
@@ -49,15 +52,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
 // PATIENT LINK
 Route::middleware(['auth', 'patient'])->group(function () {
     Route::get('/patient/dashboard', [PatientDashboardController::class, 'index'])->name('patient.dashboard');
-    Route::get('/patient/reservation', [PatientDashboardController::class, 'reservation'])->name('patient.reservation');
-    Route::post('/patient/reservation', [PatientDashboardController::class, 'storeReservation'])->name('patient.storeReservation');
-    Route::get('/patient/rendezVous', [PatientDashboardController::class, 'rendezVous'])->name('patient.rendezVous');
-    Route::get('/patient/profil', [PatientDashboardController::class, 'profil'])->name('patient.profil');
-    Route::post('/patient/profil', [PatientDashboardController::class, 'updateProfil'])->name('patient.updateProfil');
-
-    // AJAX Availability Routes (used during reservation)
-    Route::get('/patient/get-available-dates/{psychologue}', [PatientDashboardController::class, 'getAvailableDates']);
-    Route::get('/patient/get-available-times/{psychologue}/{date}', [PatientDashboardController::class, 'getAvailableTimes']);
+    Route::get('/patient/reservation', [PatientReservationController::class, 'reservation'])->name('patient.reservation');
+    Route::post('/patient/reservation', [PatientReservationController::class, 'storeReservation'])->name('patient.storeReservation');
+    Route::get('/patient/rendezVous', [PatientAppointmentController::class, 'rendezVous'])->name('patient.rendezVous');
+    Route::get('/patient/profil', [PatientProfileController::class, 'profil'])->name('patient.profil');
+    Route::post('/patient/profil', [PatientProfileController::class, 'updateProfil'])->name('patient.updateProfil');
 });
 
 // PSYCHOLOGUE LINK
