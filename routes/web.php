@@ -11,6 +11,9 @@ use App\Http\Controllers\patient\ReservationController as PatientReservationCont
 use App\Http\Controllers\patient\AppointmentController as PatientAppointmentController;
 use App\Http\Controllers\patient\ProfileController as PatientProfileController;
 use App\Http\Controllers\psychologue\DashboardController as PsychologueDashboardController;
+use App\Http\Controllers\psychologue\ProfileController as PsychologueProfileController;
+use App\Http\Controllers\psychologue\AvailabilityController as PsychologueAvailabilityController;
+use App\Http\Controllers\psychologue\AppointmentController as PsychologueAppointmentController;
 use App\Http\Controllers\PsychologueController;
 use Illuminate\Support\Facades\Route;
 
@@ -62,11 +65,11 @@ Route::middleware(['auth', 'patient'])->group(function () {
 // PSYCHOLOGUE LINK
 Route::middleware(['auth', 'psychologue'])->group(function () {
     Route::get('/psychologue/dashboard', [PsychologueDashboardController::class, 'index'])->name('psychologue.dashboard');
-    Route::get('/psychologue/profil', [PsychologueDashboardController::class, 'profil'])->name('psychologue.profil');
-    Route::post('/psychologue/profil', [PsychologueDashboardController::class, 'updateProfil'])->name('psychologue.updateProfil');
-    Route::get('/psychologue/disponabilite', [PsychologueDashboardController::class, 'disponabilite'])->name('psychologue.disponabilite');
-    Route::post('/psychologue/disponabilite', [PsychologueDashboardController::class, 'storeDisponabilite'])->name('psychologue.storeDisponabilite');
-    Route::delete('/psychologue/disponabilite/{id}', [PsychologueDashboardController::class, 'destroyDisponabilite'])->name('psychologue.destroyDisponabilite');
-    Route::get('/psychologue/rendezVous', [PsychologueDashboardController::class, 'rendezVous'])->name('psychologue.rendezVous');
-    Route::get('/psychologue/historique', [PsychologueDashboardController::class, 'historique'])->name('psychologue.historique');
+    Route::get('/psychologue/profil', [PsychologueProfileController::class, 'profil'])->name('psychologue.profil');
+    Route::post('/psychologue/profil', [PsychologueProfileController::class, 'updateProfil'])->name('psychologue.updateProfil');
+    Route::get('/psychologue/disponabilite', [PsychologueAvailabilityController::class, 'disponabilite'])->name('psychologue.disponabilite');
+    Route::post('/psychologue/disponabilite', [PsychologueAvailabilityController::class, 'storeDisponabilite'])->name('psychologue.storeDisponabilite');
+    Route::delete('/psychologue/disponabilite/{id}', [PsychologueAvailabilityController::class, 'destroyDisponabilite'])->name('psychologue.destroyDisponabilite');
+    Route::get('/psychologue/rendezVous', [PsychologueAppointmentController::class, 'rendezVous'])->name('psychologue.rendezVous');
+    Route::get('/psychologue/historique', [PsychologueAppointmentController::class, 'historique'])->name('psychologue.historique');
 });
