@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\psychologue;
 
+use App\Http\Requests\psychologue\UpdateProfileRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,20 +15,12 @@ class ProfileController extends Controller
         return view("psychologue.profil");
     }
 
-    public function updateProfil(Request $request)
+    public function updateProfil(UpdateProfileRequest $request)
     {
         $user = Auth::user();
         $psychologue = $user->psychologist;
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'specialization' => 'required|string|max:255',
-            'city' => 'required|string|max:100',
-            'experienceYears' => 'required|integer',
-            'description' => 'nullable|string',
-            'education' => 'nullable|string',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        $validated = $request->validated();
 
         $user->update([
             'name' => $validated['name'],

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\psychologue;
 
+use App\Http\Requests\psychologue\StoreAvailabilityRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Availability;
@@ -26,14 +27,8 @@ class AvailabilityController extends Controller
         return view("psychologue.disponabilite", compact('availabilities'));
     }
 
-    public function storeDisponabilite(Request $request)
+    public function storeDisponabilite(StoreAvailabilityRequest $request)
     {
-        $request->validate([
-            'date' => 'required|date|after_or_equal:today',
-            'start_time' => 'required',
-            'end_time' => 'required|after:start_time',
-        ]);
-
         $user = Auth::user();
         $psychologue = $user->psychologist;
 
