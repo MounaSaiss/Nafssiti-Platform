@@ -4,7 +4,6 @@ namespace App\Http\Controllers\psychologue;
 
 use App\Http\Requests\psychologue\StoreAvailabilityRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Availability;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -20,9 +19,7 @@ class AvailabilityController extends Controller
             ->orderBy('date')
             ->orderBy('start_time')
             ->get()
-            ->groupBy(function($val) {
-                return Carbon::parse($val->date)->translatedFormat('l');
-            });
+            ->groupBy('date');
 
         return view("psychologue.disponabilite", compact('availabilities'));
     }
@@ -31,17 +28,13 @@ class AvailabilityController extends Controller
     {
         $user = Auth::user();
         $psychologue = $user->psychologist;
-
-        // Prevent past time slots for today
-        $now = Carbon::now();
-        if ($request->date == $now->toDateString()) {
-            if ($request->start_time <= $now->toTimeString()) {
+        if ($request->date == Carbon::now()->toDateString()) {
+            if ($request->start_time <= Carbon::now()->toTimeString()) {
                 return redirect()->back()->with('error', 'Vous ne pouvez pas ajouter un créneau dans le passé pour aujourd\'hui.');
             }
         }
 
-        // Check for overlap
-        $overlap = Availability::where('psychologist_id', $psychologue->id)
+        $existe = Availability::where('psychologist_id', $psychologue->id)
             ->where('date', $request->date)
             ->where(function ($query) use ($request) {
                 $query->where(function ($q) use ($request) {
@@ -51,7 +44,7 @@ class AvailabilityController extends Controller
             })
             ->exists();
 
-        if ($overlap) {
+        if ($existe) {
             return redirect()->back()->with('error', 'Vous avez déjà un créneau qui chevauche cet horaire.');
         }
 
