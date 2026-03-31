@@ -26,14 +26,7 @@ class ProfileController extends Controller
             'name' => $validated['name'],
             'city' => $validated['city'],
         ]);
-
-        if ($request->hasFile('avatar')) {
-            if ($psychologue->photo) {
-                Storage::disk('public')->delete($psychologue->photo);
-            }
-            $psychologue->photo = $request->file('avatar')->store('psychologists', 'public');
-        }
-
+        
         $psychologue->update([
             'specialization' => $validated['specialization'],
             'city' => $validated['city'],

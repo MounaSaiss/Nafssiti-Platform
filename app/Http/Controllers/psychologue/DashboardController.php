@@ -15,16 +15,13 @@ class DashboardController extends Controller
         $user = Auth::user();
         $psychologue = $user->psychologist;
 
-        // Only count and show confirmed or completed appointments
-        $visibleStatuses = ['confirmed', 'completed'];
-
         $totalAppointments = Appointment::where('psychologist_id', $psychologue->id)
-            ->whereIn('status', $visibleStatuses)
+            ->whereIn('status', ['confirmed', 'completed'])
             ->count();
 
         $appointmentsToday = Appointment::where('psychologist_id', $psychologue->id)
             ->where('appointmentDate', Carbon::today()->toDateString())
-            ->whereIn('status', $visibleStatuses)
+            ->whereIn('status', ['confirmed', 'completed'])
             ->count();
 
         $pastAppointments = Appointment::where('psychologist_id', $psychologue->id)
@@ -32,12 +29,12 @@ class DashboardController extends Controller
                 $query->where('appointmentDate', '<', Carbon::today()->toDateString())
                     ->orWhere('status', 'completed');
             })
-            ->whereIn('status', $visibleStatuses)
+            ->whereIn('status', ['confirmed', 'completed'])
             ->count();
 
         $upcomingUpcoming = Appointment::where('psychologist_id', $psychologue->id)
             ->where('appointmentDate', '>=', Carbon::today()->toDateString())
-            ->where('status', 'confirmed') // For dashboard preview, show only confirmed upcoming
+            ->where('status', 'confirmed') 
             ->orderBy('appointmentDate')
             ->orderBy('appointmentTime')
             ->take(5)

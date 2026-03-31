@@ -14,7 +14,7 @@ class AppointmentController extends Controller
     {
         $user = Auth::user();
         $psychologue = $user->psychologist;
-        $filter = $request->get('filter', 'all');
+        $filter = $request->input('filter', 'all');
 
         $query = Appointment::where('psychologist_id', $psychologue->id);
 

@@ -67,7 +67,7 @@
             @forelse($availabilities as $day => $slots)
             <div class="bg-white border border-slate-200 rounded-sm overflow-hidden shadow-sm">
                 <div class="bg-slate-50 px-6 py-3 border-b border-slate-100 flex justify-between items-center">
-                    <span class="text-xs font-bold text-slate-700 uppercase tracking-tight">{{ $day }}</span>
+                    <span class="text-xs font-bold text-slate-700 uppercase tracking-tight">{{ \Carbon\Carbon::parse($day)->translatedFormat('l d F') }}</span>
                     <span class="text-[9px] bg-nafssiti-primary/10 text-nafssiti-primary px-2 py-1 rounded-full font-bold">
                         {{ $slots->count() }} Créneau{{ $slots->count() > 1 ? 'x' : '' }}
                     </span>
