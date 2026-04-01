@@ -74,6 +74,10 @@
                     class="flex items-center gap-3 px-6 py-4 text-sm font-medium transition {{ Route::is('patient.rendezVous') ? 'nav-item-active font-bold uppercase tracking-tight' : 'text-slate-500 hover:bg-slate-50 hover:text-nafssiti-primary' }}">
                     <i class="fas fa-calendar-check w-5"></i> Mes Rendez-vous
                 </a>
+                <a href="{{ route('patient.bilan_seance') }}"
+                    class="flex items-center gap-3 px-6 py-4 text-sm font-medium transition {{ Route::is('patient.bilan_seance') ? 'nav-item-active font-bold uppercase tracking-tight' : 'text-slate-500 hover:bg-slate-50 hover:text-nafssiti-primary' }}">
+                    <i class="fas fa-clipboard-check w-5"></i> Bilan Séance
+                </a>
                 <a href="{{ route('patient.profil') }}"
                     class="flex items-center gap-3 px-6 py-4 text-sm font-medium transition {{ Route::is('patient.profil') ? 'nav-item-active font-bold uppercase tracking-tight' : 'text-slate-500 hover:bg-slate-50 hover:text-nafssiti-primary' }}">
                     <i class="fas fa-cog w-5"></i> Paramètres
