@@ -8,6 +8,8 @@ class Patient extends Model
 {
     protected $fillable = [
         'user_id',
+        'date_of_birth',
+        'problematique_principale',
     ];
 
     public function user()
@@ -18,5 +20,38 @@ class Patient extends Model
     public function appointments()
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    public function privateNotes()
+    {
+        return $this->hasMany(PrivateNote::class);
+    }
+
+    public function therapeuticObjectives()
+    {
+        return $this->hasMany(TherapeuticObjective::class);
+    }
+
+    public function recommendations()
+    {
+        return $this->hasMany(Recommendation::class);
+    }
+
+    /**
+     * Calcule l'âge à partir de la date de naissance
+     */
+    public function getAgeAttribute()
+    {
+        if (!$this->date_of_birth) return null;
+        return \Carbon\Carbon::parse($this->date_of_birth)->age;
+    }
+
+    /**
+     * Date de début de suivi (date du premier rendez-vous partagé/confirmé)
+     */
+    public function getSuiviStartDateAttribute()
+    {
+        $firstApp = $this->appointments()->where('status', 'confirmed')->orderBy('appointmentDate', 'asc')->first();
+        return $firstApp ? $firstApp->appointmentDate : null;
     }
 }
