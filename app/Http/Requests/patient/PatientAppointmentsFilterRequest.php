@@ -14,7 +14,7 @@ class PatientAppointmentsFilterRequest extends FormRequest
     public function rules()
     {
         return [
-            'status' => 'nullable|string|in:à-venir,en-attente,historique',
+            'status' => 'nullable|string|in:à-venir,en-attente,refuse',
         ];
     }
 }

@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Availability extends Model
+class Unavailability extends Model
 {
+    protected $table = 'unavailabilities';
+
     protected $fillable = [
         'psychologist_id',
         'date',
@@ -16,10 +18,5 @@ class Availability extends Model
     public function psychologist()
     {
         return $this->belongsTo(Psychologist::class);
-    }
-
-    public function appointments()
-    {
-        return $this->hasMany(Appointment::class);
     }
 }

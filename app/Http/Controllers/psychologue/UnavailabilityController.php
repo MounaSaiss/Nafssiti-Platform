@@ -2,39 +2,35 @@
 
 namespace App\Http\Controllers\psychologue;
 
-use App\Http\Requests\psychologue\StoreAvailabilityRequest;
+use App\Http\Requests\psychologue\StoreUnavailabilityRequest;
 use App\Http\Controllers\Controller;
-use App\Models\Availability;
+use App\Models\Unavailability;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
-class AvailabilityController extends Controller
+class UnavailabilityController extends Controller
 {
-    public function disponabilite()
+    public function indisponabilite()
     {
         $user = Auth::user();
         $psychologue = $user->psychologist;
         
-        $availabilities = $psychologue->availabilities()
+        $unavailabilities = $psychologue->unavailabilities()
             ->orderBy('date')
             ->orderBy('start_time')
             ->get()
             ->groupBy('date');
 
-        return view("psychologue.disponabilite", compact('availabilities'));
+        return view("psychologue.disponabilite", compact('unavailabilities'));
     }
 
-    public function storeDisponabilite(StoreAvailabilityRequest $request)
+    public function storeIndisponabilite(StoreUnavailabilityRequest $request)
     {
         $user = Auth::user();
         $psychologue = $user->psychologist;
-        if ($request->date == Carbon::now()->toDateString()) {
-            if ($request->start_time <= Carbon::now()->toTimeString()) {
-                return redirect()->back()->with('error', 'Vous ne pouvez pas ajouter un créneau dans le passé pour aujourd\'hui.');
-            }
-        }
 
-        $existe = Availability::where('psychologist_id', $psychologue->id)
+        // Check for overlaps in unavailabilities
+        $existe = Unavailability::where('psychologist_id', $psychologue->id)
             ->where('date', $request->date)
             ->where(function ($query) use ($request) {
                 $query->where(function ($q) use ($request) {
@@ -45,30 +41,30 @@ class AvailabilityController extends Controller
             ->exists();
 
         if ($existe) {
-            return redirect()->back()->with('error', 'Vous avez déjà un créneau qui chevauche cet horaire.');
+            return redirect()->back()->with('error', 'Cet horaire est déjà marqué comme indisponible.');
         }
 
-        Availability::create([
+        Unavailability::create([
             'psychologist_id' => $psychologue->id,
             'date' => $request->date,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
         ]);
 
-        return redirect()->back()->with('success', 'Créneau ajouté avec succès.');
+        return redirect()->back()->with('success', 'Période d\'indisponibilité ajoutée avec succès.');
     }
 
-    public function destroyDisponabilite($id)
+    public function destroyIndisponabilite($id)
     {
         $user = Auth::user();
         $psychologue = $user->psychologist;
 
-        $availability = Availability::where('id', $id)
+        $unavailability = Unavailability::where('id', $id)
             ->where('psychologist_id', $psychologue->id)
             ->firstOrFail();
 
-        $availability->delete();
+        $unavailability->delete();
 
-        return redirect()->back()->with('success', 'Créneau supprimé avec succès.');
+        return redirect()->back()->with('delete_success', 'L\'indisponibilité a été supprimée. Vous êtes de nouveau disponible sur ce créneau.');
     }
 }

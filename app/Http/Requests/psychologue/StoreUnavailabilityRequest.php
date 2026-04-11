@@ -4,7 +4,7 @@ namespace App\Http\Requests\psychologue;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreAvailabilityRequest extends FormRequest
+class StoreUnavailabilityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,17 @@ class StoreAvailabilityRequest extends FormRequest
     {
         return [
             'date' => 'required|date|after_or_equal:today',
-            'start_time' => 'required',
+            'start_time' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $date = $this->input('date');
+                    if ($date === \Carbon\Carbon::now()->toDateString()) {
+                        if ($value <= \Carbon\Carbon::now()->toTimeString()) {
+                            $fail('Vous ne pouvez pas signaler une indisponibilité dans le passé pour aujourd\'hui.');
+                        }
+                    }
+                },
+            ],
             'end_time' => 'required|after:start_time',
         ];
     }
