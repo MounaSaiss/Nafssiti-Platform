@@ -83,7 +83,7 @@
                     <i class="fas fa-history w-5 {{ Route::is('psychologue.historique') ? 'text-nafssiti-primary' : '' }}"></i> Historique des séances
                 </a>
                 <a href="{{ route('psychologue.follow_requests.index') }}"
-                    class="flex items-center gap-3 px-8 py-4 text-xs font-medium transition {{ Route::is('psychologue.follow_requests.*') ? 'nav-item-active font-bold uppercase tracking-widest' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    class="flex items-center gap-3 px-8 py-4 text-[11px] font-medium transition {{ Route::is('psychologue.follow_requests.*') ? 'nav-item-active font-bold uppercase tracking-widest' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
                     <i class="fas fa-user-plus w-5 {{ Route::is('psychologue.follow_requests.*') ? 'text-nafssiti-primary' : '' }}"></i> Demandes de suivi
                 </a>
                 <a href="{{ route('psychologue.profil') }}"
