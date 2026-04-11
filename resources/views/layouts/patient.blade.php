@@ -44,6 +44,14 @@
             background: #4dbfbf;
             border-radius: 10px;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
     </style>
     @yield('styles')
 </head>
@@ -112,6 +120,21 @@
             </header>
 
             <div class="p-8">
+                {{-- Session Messages --}}
+                @if (session('success'))
+                    <div class="mb-6 p-3 bg-emerald-50 border border-emerald-100 text-emerald-600 text-[10px] font-bold rounded-sm flex items-center gap-3 animate-fade-in shadow-sm">
+                        <i class="fas fa-check-circle text-sm"></i>
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="mb-6 p-3 bg-red-50 border border-red-100 text-red-600 text-[10px] font-bold rounded-sm flex items-center gap-3 animate-fade-in shadow-sm">
+                        <i class="fas fa-exclamation-circle text-sm"></i>
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 @yield('content')
             </div>
         </main>

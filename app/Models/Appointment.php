@@ -5,19 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Patient;
 use App\Models\Psychologist;
-use App\Models\Availability;
 
 class Appointment extends Model
 {
     protected $fillable = [
         'patient_id',
         'psychologist_id',
-        'availability_id',
         'appointmentDate',
         'appointmentTime',
         'status',
         'consultation_status',
         'notes',
+        'rejection_reason',
+        'jitsi_room_id',
+        'is_started',
+    ];
+
+    protected $casts = [
+        'is_started' => 'boolean',
     ];
 
     public function patient()
@@ -28,10 +33,5 @@ class Appointment extends Model
     public function psychologist()
     {
         return $this->belongsTo(Psychologist::class);
-    }
-
-    public function availability()
-    {
-        return $this->belongsTo(Availability::class);
     }
 }
