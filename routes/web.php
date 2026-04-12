@@ -14,6 +14,7 @@ use App\Http\Controllers\psychologue\DashboardController as PsychologueDashboard
 use App\Http\Controllers\psychologue\ProfileController as PsychologueProfileController;
 use App\Http\Controllers\psychologue\UnavailabilityController as PsychologueUnavailabilityController;
 use App\Http\Controllers\psychologue\AppointmentController as PsychologueAppointmentController;
+use App\Http\Controllers\psychologue\CalendarController;
 use App\Http\Controllers\psychologue\FollowRequestController as PsychologueFollowRequestController;
 use App\Http\Controllers\patient\BilanSeanceController as PatientBilanSeanceController;
 use App\Http\Controllers\patient\FollowRequestController as PatientFollowRequestController;
@@ -78,6 +79,8 @@ Route::middleware(['auth', 'patient'])->group(function () {
 // PSYCHOLOGUE LINK
 Route::middleware(['auth', 'psychologue'])->group(function () {
     Route::get('/psychologue/dashboard', [PsychologueDashboardController::class, 'index'])->name('psychologue.dashboard');
+    Route::get('/psychologue/api/events', [CalendarController::class, 'getEvents'])->name('psychologue.calendar.events');
+    Route::post('/psychologue/api/calendar/quick-store', [CalendarController::class, 'storeQuickEvent'])->name('psychologue.calendar.quickStore');
     Route::get('/psychologue/profil', [PsychologueProfileController::class, 'profil'])->name('psychologue.profil');
     Route::post('/psychologue/profil', [PsychologueProfileController::class, 'updateProfil'])->name('psychologue.updateProfil');
     Route::get('/psychologue/disponabilite', [PsychologueUnavailabilityController::class, 'indisponabilite'])->name('psychologue.disponabilite');
