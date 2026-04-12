@@ -65,7 +65,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::middleware(['auth', 'patient'])->group(function () {
     Route::get('/patient/dashboard', [PatientDashboardController::class, 'index'])->name('patient.dashboard');
     Route::get('/patient/reservation', [PatientReservationController::class, 'reservation'])->name('patient.reservation');
-    Route::post('/patient/reservation', [PatientReservationController::class, 'storeReservation'])->name('patient.storeReservation');
+    Route::post('/patient/reservation', [App\Http\Controllers\patient\StripePaymentController::class, 'checkout'])->name('patient.storeReservation');
+    
+    // Stripe Payments
+    Route::get('/patient/payment/success', [App\Http\Controllers\patient\StripePaymentController::class, 'success'])->name('patient.payment.success');
+    Route::get('/patient/payment/cancel', [App\Http\Controllers\patient\StripePaymentController::class, 'cancel'])->name('patient.payment.cancel');
+
     Route::get('/patient/rendezVous', [PatientAppointmentController::class, 'rendezVous'])->name('patient.rendezVous');
     Route::get('/patient/bilan-seance', [PatientBilanSeanceController::class, 'index'])->name('patient.bilan_seance');
     Route::post('/patient/bilan-seance/{appointment}/follow', [PatientFollowRequestController::class, 'store'])->name('patient.follow_request.store');

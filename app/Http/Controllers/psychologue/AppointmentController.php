@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Stripe\Stripe;
+use Stripe\Refund;
+use App\Models\Payment;
 
 class AppointmentController extends Controller
 {
@@ -77,7 +81,27 @@ class AppointmentController extends Controller
             'rejection_reason' => $request->input('rejection_reason', $defaultMessage)
         ]);
 
-        return back()->with('success', 'Rendez-vous refusé.');
+        // Logic Remboursement Stripe
+        $payment = Payment::where('appointment_id', $appointment->id)
+            ->where('status', 'completed')
+            ->first();
+
+        if ($payment && $payment->stripe_id) {
+            try {
+                Stripe::setApiKey(env('STRIPE_SECRET'));
+                Refund::create([
+                    'payment_intent' => $payment->stripe_id,
+                ]);
+                
+                $payment->update(['status' => 'refunded']);
+            } catch (\Exception $e) {
+                // Log l'erreur mais ne bloque pas le refus
+                \Log::error('Erreur Remboursement Stripe: ' . $e->getMessage());
+                return back()->with('success', 'Rendez-vous refusé, mais erreur lors du remboursement automatique. Veuillez vérifier sur votre interface Stripe.');
+            }
+        }
+
+        return back()->with('success', 'Rendez-vous refusé' . ($payment ? ' et remboursé au patient.' : '.'));
     }
 
     public function complete(Appointment $appointment)
