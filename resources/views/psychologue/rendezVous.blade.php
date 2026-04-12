@@ -34,6 +34,7 @@
                     <th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Date & Heure</th>
                     <th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Remarques / Notes</th>
                     <th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center">Statut</th>
+                    <th class="px-8 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">Actions</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-50">
@@ -70,6 +71,14 @@
                             <span class="px-3 py-1 bg-red-50 text-red-600 text-[9px] font-bold uppercase rounded-full border border-red-100">Refusé</span>
                         @elseif($appointment->status === 'completed')
                             <span class="px-3 py-1 bg-slate-100 text-slate-400 text-[9px] font-bold uppercase rounded-full border border-slate-200">Effectué</span>
+                        @endif
+                    </td>
+                    <td class="px-8 py-5 text-right">
+                        @if($appointment->status === 'confirmed' || $appointment->status === 'completed')
+                            <a href="{{ route('psychologue.shared_room.index', $appointment->patient_id) }}" 
+                               class="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-800 text-white text-[9px] font-bold uppercase rounded-sm hover:bg-slate-900 transition shadow-sm">
+                                <i class="fas fa-folder-open"></i> Dossier CLINIQUE
+                            </a>
                         @endif
                     </td>
                 </tr>

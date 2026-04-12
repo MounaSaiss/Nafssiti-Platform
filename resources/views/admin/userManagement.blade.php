@@ -87,11 +87,7 @@
                 </td>
                 <td class="px-6 py-4">
                     <div class="flex justify-end gap-2 items-center">
-                        @if($user->isAdmin())
-                        <span class="px-3 py-2 bg-slate-50 text-slate-400 border border-slate-200 rounded-sm font-bold uppercase text-[10px]">
-                            <i class="fas fa-shield-alt"></i> Protégé
-                        </span>
-                        @else
+                        {{-- Admin check removed as admins are excluded in controller --}}
                         <button
                             onclick="openProfileModal(this)"
                             data-name="{{ $user->name }}"
@@ -140,7 +136,6 @@
                                 <i class="fas fa-ban"></i> Bannir
                             </button>
                         </form>
-                        @endif
                         @endif
                     </div>
                 </td>

@@ -44,7 +44,7 @@
                     <th class="px-6 py-4 font-bold">Psychologue</th>
                     <th class="px-6 py-4 font-bold">Date & Heure RDV</th>
                     <th class="px-6 py-4 font-bold text-center">Statut</th>
-                    <th class="px-6 py-4 font-bold text-right">Actions Admin</th>
+                    <th class="px-6 py-4 font-bold text-right text-nafssiti-primary italic">Responsabilité</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
@@ -95,22 +95,9 @@
                             </span>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="flex justify-end gap-2">
+                            <div class="flex justify-end">
                                 @if ($appointment->status == 'pending')
-                                    <form action="{{ route('admin.appointments.accept', $appointment) }}" method="POST">
-                                        @csrf
-                                        <button type="submit"
-                                            class="px-3 py-1.5 bg-nafssiti-secondary text-white rounded-sm font-bold uppercase text-[9px] hover:bg-green-600 transition shadow-sm">
-                                            <i class="fas fa-check mr-1"></i> Accepter
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('admin.appointments.refuse', $appointment) }}" method="POST" onsubmit="return confirm('Refuser ce rendez-vous ?')">
-                                        @csrf
-                                        <button type="submit"
-                                            class="px-3 py-1.5 bg-nafssiti-red text-white rounded-sm font-bold uppercase text-[9px] hover:bg-red-600 transition shadow-sm">
-                                            <i class="fas fa-times mr-1"></i> Refuser
-                                        </button>
-                                    </form>
+                                    <span class="text-[9px] font-bold uppercase text-nafssiti-primary bg-nafssiti-primary/5 px-2 py-1 rounded border border-nafssiti-primary/10 italic">Attente Psychologue</span>
                                 @else
                                     <span class="text-[9px] font-bold uppercase text-slate-400 italic">Traité</span>
                                 @endif

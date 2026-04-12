@@ -31,8 +31,23 @@ class Psychologist extends Model
         return $this->hasMany(Appointment::class);
     }
 
-    public function availabilities()
+    public function unavailabilities()
     {
-        return $this->hasMany(Availability::class);
+        return $this->hasMany(Unavailability::class);
+    }
+
+    public function privateNotes()
+    {
+        return $this->hasMany(PrivateNote::class);
+    }
+
+    public function therapeuticObjectives()
+    {
+        return $this->hasMany(TherapeuticObjective::class);
+    }
+
+    public function recommendations()
+    {
+        return $this->hasMany(Recommendation::class);
     }
 }

@@ -13,10 +13,11 @@ class UserManagementController extends Controller
         $roleFilter = $request->query('role');
         $search = $request->query('search');
 
-        $query = User::whereNot(function ($q) {
-            $q->where('role_id', User::ROLE_PSYCHOLOGUE)
-              ->where('status', User::STATUS_EN_ATTENTE);
-        });
+        $query = User::where('role_id', '!=', User::ROLE_ADMIN)
+            ->whereNot(function ($q) {
+                $q->where('role_id', User::ROLE_PSYCHOLOGUE)
+                  ->where('status', User::STATUS_EN_ATTENTE);
+            });
 
         if ($roleFilter && $roleFilter !== 'all') {
             $roleId = match($roleFilter) {
@@ -69,7 +70,7 @@ class UserManagementController extends Controller
     
     public function approve(User $user)
     {
-        if (!$user->isPsychologue() || $user->status !== User::STATUS_EN_ATTENTE) {
+        if ($user->status !== User::STATUS_EN_ATTENTE || $user->isAdmin()) {
             return back()->with('error', 'Cet utilisateur ne peut pas être approuvé.');
         }
 
@@ -79,12 +80,12 @@ class UserManagementController extends Controller
             $user->psychologist->update(['validationStatus' => 'approved']);
         }
 
-        return back()->with('success', 'Psychologue approuvé avec succès.');
+        return back()->with('success', 'Utilisateur approuvé avec succès.');
     }
 
     public function reject(User $user)
     {
-        if (!$user->isPsychologue() || $user->status !== User::STATUS_EN_ATTENTE) {
+        if ($user->status !== User::STATUS_EN_ATTENTE || $user->isAdmin()) {
             return back()->with('error', 'Cet utilisateur ne peut pas être rejeté.');
         }
 
@@ -94,6 +95,6 @@ class UserManagementController extends Controller
         
         $user->delete();
 
-        return back()->with('success', 'Praticien rejeté et supprimé définitivement.');
+        return back()->with('success', 'Utilisateur rejeté et supprimé définitivement.');
     }
 }

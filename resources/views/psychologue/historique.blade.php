@@ -1,77 +1,111 @@
 @extends('layouts.psychologue')
 
-@section('title', 'Historique des Séances | NAFSSITI Pro')
-@section('header_title', 'Archive des Consultations')
-
-@section('styles')
-    <style>
-        .timeline-line::before {
-            content: '';
-            position: absolute;
-            left: 20px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: repeating-linear-gradient(to bottom, #e2e8f0 0%, #e2e8f0 50%, transparent 50%, transparent 100%);
-            background-size: 1px 10px;
-        }
-    </style>
-@endsection
+@section('title', 'Historique des Rendez-vous | Psychologue')
+@section('header_title', 'Mon Historique')
 
 @section('content')
-    <div class="max-w-5xl mx-auto">
-        @forelse($appointments as $monthYear => $monthAppointments)
-        <div class="mb-12">
-            <div class="flex items-center gap-4 mb-8">
-                <h3 class="text-sm font-bold text-slate-800 uppercase tracking-tighter">{{ $monthYear }}</h3>
-                <div class="h-[1px] flex-1 bg-slate-200"></div>
+    <div class="max-w-6xl">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+                <h1 class="text-xl font-bold text-slate-900 tracking-tight">Mon Historique</h1>
+                <p class="text-slate-400 text-xs mt-1 font-medium">Consultez l'historique de vos séances passées.</p>
             </div>
+        </div>
 
-            <div class="relative timeline-line ml-4 space-y-8">
-                @foreach($monthAppointments as $appointment)
-                <div class="relative pl-12 group">
-                    <div class="absolute left-0 top-1 w-10 h-10 bg-white border-2 {{ $appointment->status === 'completed' ? 'border-nafssiti-primary' : 'border-slate-200' }} rounded-sm flex items-center justify-center z-10 shadow-sm group-hover:scale-110 transition">
-                        <span class="text-[10px] font-bold {{ $appointment->status === 'completed' ? 'text-nafssiti-primary' : 'text-slate-400' }} uppercase">
-                            {{ \Carbon\Carbon::parse($appointment->appointmentDate)->format('d') }}
-                        </span>
-                    </div>
+        {{-- Filter Tabs --}}
+        <div class="flex p-1 bg-slate-100 rounded-lg border border-slate-200 mb-8 inline-flex">
+            <a href="{{ route('psychologue.historique', ['status' => 'all']) }}"
+                class="px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-md transition-all {{ !request('status') || request('status') == 'all' ? 'bg-white text-nafssiti-primary shadow-sm' : 'text-slate-500 hover:text-slate-700' }}">
+                Tout
+            </a>
+            <a href="{{ route('psychologue.historique', ['status' => 'confirmed']) }}"
+                class="px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-md transition-all {{ request('status') == 'confirmed' ? 'bg-white text-emerald-500 shadow-sm' : 'text-slate-500 hover:text-slate-700' }}">
+                Confirmés
+            </a>
+            <a href="{{ route('psychologue.historique', ['status' => 'rejected']) }}"
+                class="px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-md transition-all {{ request('status') == 'rejected' ? 'bg-white text-red-500 shadow-sm' : 'text-slate-500 hover:text-slate-700' }}">
+                Refusés
+            </a>
+            <a href="{{ route('psychologue.historique', ['status' => 'cancelled']) }}"
+                class="px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-md transition-all {{ request('status') == 'cancelled' ? 'bg-white text-slate-600 shadow-sm' : 'text-slate-500 hover:text-slate-700' }}">
+                Annulés
+            </a>
+        </div>
 
-                    <div class="bg-white p-6 border border-slate-200 rounded-sm shadow-sm hover:border-nafssiti-secondary transition flex items-center justify-between">
-                        <div class="flex items-center gap-6">
-                            <img src="{{ $appointment->patient->photo ? asset('storage/' . $appointment->patient->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($appointment->patient->user->name) . '&background=f1f5f9&color=4dbfbf' }}" class="w-12 h-12 rounded-sm grayscale group-hover:grayscale-0 transition">
-                            <div>
-                                <p class="text-xs font-bold text-slate-800">{{ $appointment->patient->user->name }}</p>
-                                <p class="text-[10px] text-slate-400 font-medium">Séance à {{ \Carbon\Carbon::parse($appointment->appointmentTime)->format('H:i') }}</p>
-                                @if($appointment->notes)
-                                <p class="text-[9px] text-slate-400 mt-2 italic border-l-2 border-slate-100 pl-2 leading-relaxed max-w-sm">
-                                    <i class="fas fa-sticky-note mr-1 text-slate-200"></i> {{ $appointment->notes }}
-                                </p>
+        <div class="bg-white border border-slate-200 rounded-sm shadow-sm overflow-hidden">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="bg-slate-50 border-b border-slate-200">
+                        <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Patient</th>
+                        <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">Date & Heure
+                        </th>
+                        <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right">Statut</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @forelse($appointments as $appointment)
+                        <tr class="hover:bg-slate-50/50 transition">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <img src="{{ $appointment->patient->photo ? asset('storage/' . $appointment->patient->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($appointment->patient->user->name) . '&background=4dbfbf&color=fff' }}"
+                                        class="w-7 h-7 rounded-sm object-cover">
+                                    <div>
+                                        <p class="text-xs font-bold text-slate-700">{{ $appointment->patient->user->name }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <p class="text-xs font-bold text-slate-700">
+                                    {{ \Carbon\Carbon::parse($appointment->appointmentDate)->translatedFormat('d F Y') }}</p>
+                                <p class="text-[10px] text-slate-400 font-medium">
+                                    {{ \Carbon\Carbon::parse($appointment->appointmentTime)->format('H:i') }} (45 min)</p>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                @if ($appointment->status === 'confirmed')
+                                    <div class="flex flex-col items-end gap-2">
+                                        <div class="flex items-center gap-2">
+                                            <span class="px-3 py-1 bg-green-50 text-nafssiti-secondary text-[9px] font-bold uppercase rounded-full border border-green-100">Accepté</span>
+                                            @if($appointment->consultation_status === 'completed')
+                                                <span class="px-3 py-1 bg-slate-100 text-slate-500 text-[9px] font-bold uppercase rounded-full border border-slate-200">
+                                                    <i class="fas fa-check-double mr-1 text-slate-400"></i> Séance Terminée
+                                                </span>
+                                            @endif
+                                        </div>
+                                        
+                                        @if($appointment->consultation_status !== 'completed')
+                                            <div class="flex items-center gap-2">
+                                                <form action="{{ route('psychologue.appointments.complete', $appointment) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment marquer cette séance comme terminée ? Cela coupera l\'accès vidéo.')">
+                                                    @csrf
+                                                    <button type="submit" class="px-3 py-1.5 bg-red-50 text-red-600 text-[9px] font-bold uppercase rounded-sm border border-red-100 hover:bg-red-500 hover:text-white transition shadow-sm">
+                                                        <i class="fas fa-times-circle"></i> Terminer séance
+                                                    </button>
+                                                </form>
+                                                <a href="{{ route('meeting.join', $appointment) }}" class="flex items-center gap-2 px-3 py-1.5 bg-nafssiti-primary text-white text-[9px] font-bold uppercase rounded-sm hover:bg-nafssiti-secondary transition shadow-sm">
+                                                    <i class="fas fa-play text-[8px]"></i> Démarrer séance
+                                                </a>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @elseif($appointment->status === 'rejected')
+                                    <span
+                                        class="px-3 py-1 bg-red-50 text-red-500 text-[9px] font-bold uppercase rounded-full border border-red-100">Refusé</span>
+                                @else
+                                    <span
+                                        class="px-3 py-1 bg-slate-100 text-slate-400 text-[9px] font-bold uppercase rounded-full border border-slate-200">Annulé</span>
                                 @endif
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-10">
-                            <div class="text-center">
-                                <p class="text-[9px] font-bold text-slate-300 uppercase tracking-widest">Durée</p>
-                                <p class="text-xs font-bold text-slate-600">60 min</p>
-                            </div>
-                            <div class="px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-sm">
-                                <span class="text-[9px] font-bold text-nafssiti-secondary uppercase tracking-tighter">
-                                    <i class="fas fa-check-circle mr-1"></i> Terminée
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="3"
+                                class="px-6 py-12 text-center text-[10px] text-slate-400 uppercase tracking-widest font-medium italic">
+                                Aucun rendez-vous trouvé dans l'historique.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-        @empty
-        <div class="py-20 text-center">
-            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-history text-slate-200 text-2xl"></i>
-            </div>
-            <p class="text-slate-400 italic text-sm">Aucun historique de séance disponible pour le moment.</p>
-        </div>
-        @endforelse
     </div>
 @endsection

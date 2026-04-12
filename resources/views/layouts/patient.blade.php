@@ -44,6 +44,14 @@
             background: #4dbfbf;
             border-radius: 10px;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
     </style>
     @yield('styles')
 </head>
@@ -73,6 +81,10 @@
                 <a href="{{ route('patient.rendezVous') }}"
                     class="flex items-center gap-3 px-6 py-4 text-sm font-medium transition {{ Route::is('patient.rendezVous') ? 'nav-item-active font-bold uppercase tracking-tight' : 'text-slate-500 hover:bg-slate-50 hover:text-nafssiti-primary' }}">
                     <i class="fas fa-calendar-check w-5"></i> Mes Rendez-vous
+                </a>
+                <a href="{{ route('patient.bilan_seance') }}"
+                    class="flex items-center gap-3 px-6 py-4 text-sm font-medium transition {{ Route::is('patient.bilan_seance') ? 'nav-item-active font-bold uppercase tracking-tight' : 'text-slate-500 hover:bg-slate-50 hover:text-nafssiti-primary' }}">
+                    <i class="fas fa-clipboard-check w-5"></i> Bilan Séance
                 </a>
                 <a href="{{ route('patient.profil') }}"
                     class="flex items-center gap-3 px-6 py-4 text-sm font-medium transition {{ Route::is('patient.profil') ? 'nav-item-active font-bold uppercase tracking-tight' : 'text-slate-500 hover:bg-slate-50 hover:text-nafssiti-primary' }}">
@@ -108,6 +120,21 @@
             </header>
 
             <div class="p-8">
+                {{-- Session Messages --}}
+                @if (session('success'))
+                    <div class="mb-6 p-3 bg-emerald-50 border border-emerald-100 text-emerald-600 text-[10px] font-bold rounded-sm flex items-center gap-3 animate-fade-in shadow-sm">
+                        <i class="fas fa-check-circle text-sm"></i>
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="mb-6 p-3 bg-red-50 border border-red-100 text-red-600 text-[10px] font-bold rounded-sm flex items-center gap-3 animate-fade-in shadow-sm">
+                        <i class="fas fa-exclamation-circle text-sm"></i>
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 @yield('content')
             </div>
         </main>

@@ -27,24 +27,12 @@ class AppointmentController extends Controller
                   });
         } elseif ($statusFilter === 'en-attente') {
             $query->where('status', 'pending');
-        } elseif ($statusFilter === 'historique') {
-            $query->where(function($q) {
-                $q->where(function($sq) {
-                    $sq->where('status', 'confirmed')
-                       ->where(function($fq) {
-                           $fq->where('appointmentDate', '<', Carbon::today()->toDateString())
-                              ->orWhere(function($ssq) {
-                                  $ssq->where('appointmentDate', '=', Carbon::today()->toDateString())
-                                      ->where('appointmentTime', '<', Carbon::now()->toTimeString());
-                              });
-                       });
-                })->orWhere('status', 'completed')
-                  ->orWhere('status', 'rejected');
-            });
+        } elseif ($statusFilter === 'refuse') {
+            $query->where('status', 'rejected');
         }
 
-        $appointments = $query->orderBy('appointmentDate', $statusFilter === 'historique' ? 'desc' : 'asc')
-            ->orderBy('appointmentTime', $statusFilter === 'historique' ? 'desc' : 'asc')
+        $appointments = $query->orderBy('appointmentDate', $statusFilter === 'refuse' ? 'desc' : 'asc')
+            ->orderBy('appointmentTime', $statusFilter === 'refuse' ? 'desc' : 'asc')
             ->get();
 
         return view("patient.rendezVous", compact('appointments', 'statusFilter'));

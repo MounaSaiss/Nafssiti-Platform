@@ -45,6 +45,22 @@
             background: #4dbfbf;
             border-radius: 10px;
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
     </style>
     @yield('styles')
 </head>
@@ -60,23 +76,39 @@
             <nav class="mt-8 space-y-1">
                 <a href="{{ route('psychologue.dashboard') }}"
                     class="flex items-center gap-3 px-8 py-4 text-xs font-bold uppercase tracking-widest transition {{ Route::is('psychologue.dashboard') ? 'nav-item-active' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
-                    <i class="fas fa-chart-line w-5 {{ Route::is('psychologue.dashboard') ? 'text-nafssiti-primary' : '' }}"></i> Dashboard
+                    <i
+                        class="fas fa-chart-line w-5 {{ Route::is('psychologue.dashboard') ? 'text-nafssiti-primary' : '' }}"></i>
+                    Dashboard
                 </a>
                 <a href="{{ route('psychologue.disponabilite') }}"
                     class="flex items-center gap-3 px-8 py-4 text-xs font-medium transition {{ Route::is('psychologue.disponabilite') ? 'nav-item-active font-bold uppercase tracking-widest' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
-                    <i class="fas fa-clock w-5 {{ Route::is('psychologue.disponabilite') ? 'text-nafssiti-primary' : '' }}"></i> Gestion Disponibilités
+                    <i
+                        class="fas fa-clock w-5 {{ Route::is('psychologue.disponabilite') ? 'text-nafssiti-primary' : '' }}"></i>
+                    Gestion Disponibilités
                 </a>
                 <a href="{{ route('psychologue.rendezVous') }}"
                     class="flex items-center gap-3 px-8 py-4 text-xs font-medium transition {{ Route::is('psychologue.rendezVous') ? 'nav-item-active font-bold uppercase tracking-widest' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
-                    <i class="fas fa-calendar-alt w-5 {{ Route::is('psychologue.rendezVous') ? 'text-nafssiti-primary' : '' }}"></i> Page Rendez-vous
+                    <i
+                        class="fas fa-calendar-alt w-5 {{ Route::is('psychologue.rendezVous') ? 'text-nafssiti-primary' : '' }}"></i>
+                    Page Rendez-vous
                 </a>
                 <a href="{{ route('psychologue.historique') }}"
                     class="flex items-center gap-3 px-8 py-4 text-xs font-medium transition {{ Route::is('psychologue.historique') ? 'nav-item-active font-bold uppercase tracking-widest' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
-                    <i class="fas fa-history w-5 {{ Route::is('psychologue.historique') ? 'text-nafssiti-primary' : '' }}"></i> Historique des séances
+                    <i
+                        class="fas fa-history w-5 {{ Route::is('psychologue.historique') ? 'text-nafssiti-primary' : '' }}"></i>
+                    Historique des séances
+                </a>
+                <a href="{{ route('psychologue.follow_requests.index') }}"
+                    class="flex items-center gap-3 px-8 py-4 text-[11px] font-medium transition {{ Route::is('psychologue.follow_requests.*') ? 'nav-item-active font-bold uppercase tracking-widest' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
+                    <i
+                        class="fas fa-user-plus w-5 {{ Route::is('psychologue.follow_requests.*') ? 'text-nafssiti-primary' : '' }}"></i>
+                    Demandes de suivi
                 </a>
                 <a href="{{ route('psychologue.profil') }}"
                     class="flex items-center gap-3 px-8 py-4 text-xs font-medium transition {{ Route::is('psychologue.profil') ? 'nav-item-active font-bold uppercase tracking-widest' : 'text-slate-400 hover:text-white hover:bg-white/5' }}">
-                    <i class="fas fa-user-circle w-5 {{ Route::is('psychologue.profil') ? 'text-nafssiti-primary' : '' }}"></i> Page Profil
+                    <i
+                        class="fas fa-user-circle w-5 {{ Route::is('psychologue.profil') ? 'text-nafssiti-primary' : '' }}"></i>
+                    Page Profil
                 </a>
             </nav>
 
@@ -108,6 +140,23 @@
             </header>
 
             <div class="p-10">
+                {{-- Session Messages --}}
+                @if (session('success'))
+                    <div
+                        class="mb-8 p-4 bg-emerald-50 border border-emerald-100 text-emerald-600 text-[10px] font-bold rounded-sm flex items-center gap-4 animate-fade-in shadow-sm">
+                        <i class="fas fa-check-circle text-sm"></i>
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div
+                        class="mb-8 p-4 bg-rose-50 border border-rose-100 text-rose-600 text-[10px] font-bold rounded-sm flex items-center gap-4 animate-fade-in shadow-sm">
+                        <i class="fas fa-exclamation-triangle text-sm text-rose-500"></i>
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 @yield('content')
             </div>
         </main>
