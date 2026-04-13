@@ -18,7 +18,7 @@
                 <div class="absolute top-0 left-0 w-full h-1 bg-nafssiti-primary"></div>
                 <div class="flex flex-col md:flex-row items-center gap-8">
                     <div class="relative group">
-                        <img id="preview" src="{{ Auth::user()->psychologist->photo ? asset('storage/' . Auth::user()->psychologist->photo) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=4dbfbf&color=fff&size=128' }}"
+                        <img id="preview" src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=4dbfbf&color=fff&size=128' }}"
                             class="w-32 h-32 rounded-sm object-cover border-4 border-slate-50 shadow-sm">
                         <label class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition cursor-pointer text-white text-xs font-bold uppercase tracking-tighter">
                             <i class="fas fa-camera mr-2"></i> Changer

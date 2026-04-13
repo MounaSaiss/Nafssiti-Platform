@@ -32,7 +32,7 @@ class PsychologueRegisterRequest extends FormRequest
             'pricePerSession' => 'required|numeric',
             'consultationType' => 'required|string',
             'certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
-            'photo' => 'nullable|image',
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 }

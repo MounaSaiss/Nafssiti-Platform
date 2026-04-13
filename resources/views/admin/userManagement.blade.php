@@ -57,8 +57,9 @@
             <tr class="hover:bg-slate-50 transition-colors">
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
-                        <img src="https://ui-avatars.com/api/?name={{ $user->name }}&background=4dbfbf&color=fff"
-                            class="w-8 h-8 rounded-full shadow-sm">
+                        <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=4dbfbf&color=fff' }}"
+                            class="w-10 h-10 rounded-full shadow-sm object-cover cursor-zoom-in border border-slate-200"
+                            onclick="zoomImage('{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=4dbfbf&color=fff' }}')">
                         <div class="flex flex-col">
                             <span class="font-bold text-slate-900 uppercase tracking-tight">{{ $user->name }}</span>
                             <span class="text-slate-400 text-[10px]">{{ $user->email }}</span>
@@ -159,7 +160,8 @@
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="flex justify-between items-start mb-6">
                     <div class="flex items-center gap-4">
-                        <div id="modalAvatar" class="w-16 h-16 rounded-full bg-nafssiti-primary flex items-center justify-center text-white text-2xl font-bold shadow-md">
+                        <div id="modalAvatar" class="w-16 h-16 rounded-full overflow-hidden border-2 border-nafssiti-primary shadow-md">
+                            <img id="modalAvatarImg" src="" class="w-full h-full object-cover">
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-slate-900 uppercase tracking-tight" id="modalName"></h3>
@@ -203,6 +205,16 @@
     </div>
 </div>
 
+<!-- Modal Zoom Image -->
+<div id="zoomModal" class="fixed inset-0 z-[60] hidden overflow-hidden flex items-center justify-center bg-slate-900/90 backdrop-blur-md p-4" onclick="closeZoom()">
+    <div class="relative max-w-4xl max-h-[90vh] w-full flex items-center justify-center">
+        <img id="zoomedImg" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-transform duration-300 scale-95 opacity-0">
+        <button class="absolute top-[-40px] right-0 text-white hover:text-nafssiti-primary transition-colors">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+    </div>
+</div>
+
 <script>
     function openProfileModal(button) {
         const name = button.getAttribute('data-name');
@@ -220,8 +232,8 @@
         document.getElementById('modalCity').textContent = city;
         document.getElementById('modalJoined').textContent = joined;
 
-        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-        document.getElementById('modalAvatar').textContent = initials;
+        const avatarSrc = button.closest('tr').querySelector('img').src;
+        document.getElementById('modalAvatarImg').src = avatarSrc;
 
         const statusBadge = document.getElementById('modalStatusBadge');
         let badgeClass = "";
@@ -240,14 +252,45 @@
         document.body.style.overflow = 'hidden';
     }
 
-    function closeProfileModal() {
-        document.getElementById('profileModal').classList.add('hidden');
-        document.body.style.overflow = 'auto';
+    function zoomImage(src) {
+        const modal = document.getElementById('zoomModal');
+        const img = document.getElementById('zoomedImg');
+        img.src = src;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        
+        // Trigger animation
+        setTimeout(() => {
+            img.classList.remove('scale-95', 'opacity-0');
+            img.classList.add('scale-100', 'opacity-100');
+        }, 10);
+        
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeZoom() {
+        const modal = document.getElementById('zoomModal');
+        const img = document.getElementById('zoomedImg');
+        
+        img.classList.remove('scale-100', 'opacity-100');
+        img.classList.add('scale-95', 'opacity-0');
+        
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 300);
+        
+        if (!document.getElementById('profileModal').classList.contains('hidden')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
     }
 
     window.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
             closeProfileModal();
+            closeZoom();
         }
     });
 </script>

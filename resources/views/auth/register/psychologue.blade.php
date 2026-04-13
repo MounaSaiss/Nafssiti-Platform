@@ -185,7 +185,7 @@
                             Photo de profil
                         </label>
 
-                        <input type="file" name="photo"
+                        <input type="file" name="avatar" required accept="image/*"
                             class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-nafssiti-blue/10 file:text-nafssiti-blue hover:file:bg-nafssiti-blue/20 cursor-pointer">
                     </div>
                     <div class="md:col-span-2">

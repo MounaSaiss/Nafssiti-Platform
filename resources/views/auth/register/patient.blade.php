@@ -51,7 +51,7 @@
             </a>
         </div>
         <div class="bg-white dark:bg-gray-800 py-8 px-4 shadow-xl border border-gray-100 dark:border-gray-700 sm:rounded-2xl sm:px-10">
-            <form class="space-y-5" action="{{ route('register.patient') }}" method="POST">
+            <form class="space-y-5" action="{{ route('register.patient') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="role" value="user">
                 <div>
@@ -118,6 +118,17 @@
                             class="appearance-none block w-full pl-10 px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-nafssiti-blue focus:border-nafssiti-blue dark:bg-gray-700 dark:text-white sm:text-sm transition">
                     </div>
                     <p class="mt-1 text-xs text-gray-500">Minimum 8 caractères.</p>
+                </div>
+
+                <div>
+                    <label for="avatar" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                        Photo de profil
+                    </label>
+                    <div class="mt-1 relative">
+                        <input id="avatar" name="avatar" type="file" required accept="image/*"
+                            class="appearance-none block w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-nafssiti-blue focus:border-nafssiti-blue dark:bg-gray-700 dark:text-white sm:text-sm selection:bg-nafssiti-blue/20 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-nafssiti-blue/10 file:text-nafssiti-blue hover:file:bg-nafssiti-blue/20 cursor-pointer transition">
+                    </div>
+                    <p class="mt-1 text-[10px] text-gray-500">Image obligatoire. Taille max 2Mo.</p>
                 </div>
 
                 <div class="flex items-center">

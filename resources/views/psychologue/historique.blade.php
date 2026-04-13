@@ -47,7 +47,7 @@
                         <tr class="hover:bg-slate-50/50 transition">
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-3">
-                                    <img src="{{ $appointment->patient->photo ? asset('storage/' . $appointment->patient->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($appointment->patient->user->name) . '&background=4dbfbf&color=fff' }}"
+                                    <img src="{{ $appointment->patient->user->avatar ? asset('storage/' . $appointment->patient->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($appointment->patient->user->name) . '&background=4dbfbf&color=fff' }}"
                                         class="w-7 h-7 rounded-sm object-cover">
                                     <div>
                                         <p class="text-xs font-bold text-slate-700">{{ $appointment->patient->user->name }}

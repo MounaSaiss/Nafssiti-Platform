@@ -80,10 +80,13 @@
                         <tr>
                             <td class="px-6 py-4 font-mono text-slate-400">{{ $psychologist->id }}</td>
                             <td class="px-6 py-4">
-                                <div class="flex flex-col">
-                                    <span class="font-bold text-slate-800 uppercase">{{ $psychologist->user->name ?? 'Praticien inconnu' }}</span>
-                                    <span
-                                        class="text-slate-400 font-light tracking-tight text-[11px]">{{ $psychologist->user->email ?? '-' }}</span>
+                                <div class="flex items-center gap-3">
+                                    <img src="{{ $psychologist->user->avatar ? asset('storage/' . $psychologist->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($psychologist->user->name ?? 'P') . '&background=4dbfbf&color=fff' }}" 
+                                         class="w-8 h-8 rounded-full border border-slate-200 object-cover shadow-sm">
+                                    <div class="flex flex-col">
+                                        <span class="font-bold text-slate-800 uppercase leading-none">{{ $psychologist->user->name ?? 'Praticien inconnu' }}</span>
+                                        <span class="text-slate-400 font-light tracking-tight text-[10px] mt-1">{{ $psychologist->user->email ?? '-' }}</span>
+                                    </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4">{{ $psychologist->specialization }}</td>

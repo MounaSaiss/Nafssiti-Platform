@@ -32,8 +32,8 @@
                 <tr class="hover:bg-slate-50 transition">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($req->patient->user->name ?? 'P') }}&background=f1f5f9&color=4dbfbf"
-                                class="w-9 h-9 rounded-full border border-slate-200">
+                            <img src="{{ $req->patient->user->avatar ? asset('storage/' . $req->patient->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($req->patient->user->name ?? 'P') . '&background=f1f5f9&color=4dbfbf' }}"
+                                 class="w-10 h-10 rounded-sm object-cover border border-slate-100">
                             <div>
                                 <p class="font-bold text-slate-800">{{ $req->patient->user->name ?? 'Patient' }}</p>
                                 <p class="text-[10px] text-slate-400">{{ $req->patient->user->email ?? '' }}</p>

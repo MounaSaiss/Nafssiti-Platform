@@ -22,10 +22,19 @@ class ProfileController extends Controller
 
         $validated = $request->validated();
 
-        $user->update([
+        $userData = [
             'name' => $validated['name'],
             'city' => $validated['city'],
-        ]);
+        ];
+
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $userData['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        $user->update($userData);
         
         $psychologue->update([
             'specialization' => $validated['specialization'],

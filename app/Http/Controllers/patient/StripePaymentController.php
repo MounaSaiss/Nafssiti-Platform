@@ -89,7 +89,7 @@ class StripePaymentController extends Controller
             'payment_method_types' => ['card'],
             'line_items' => [[
                 'price_data' => [
-                    'currency' => 'eur', // Or 'mad'
+                    'currency' => 'mad', // Changed back to Dirham
                     'product_data' => [
                         'name' => 'Consultation avec Dr. ' . $psychologist->user->name,
                     ],

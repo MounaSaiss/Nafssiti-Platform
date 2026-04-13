@@ -34,11 +34,17 @@ class AuthController extends Controller
     {
         $validated = $request->validated();
         $validated['password'] = Hash::make($validated['password']);
+        $avatarPath = null;
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        }
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'password' => $validated['password'],
+            'avatar' => $avatarPath,
             'role_id' => 1,
         ]);
 
@@ -55,11 +61,17 @@ class AuthController extends Controller
         $validated['password'] = Hash::make($validated['password']);
         $validated['role_id'] = 2;
 
+        $avatarPath = null;
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        }
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'password' => $validated['password'],
+            'avatar' => $avatarPath,
             'role_id' => $validated['role_id'],
         ]);
 

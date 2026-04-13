@@ -46,7 +46,7 @@
             <div class="bg-white rounded-sm p-5 border border-slate-200 shadow-sm hover:border-nafssiti-primary/30 transition-all duration-300">
                 <div class="flex items-start gap-4">
                     <div class="relative flex-shrink-0">
-                        <img src="{{ $psychologue->photo ? asset('storage/' . $psychologue->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($psychologue->user->name) . '&background=4dbfbf&color=fff' }}"
+                        <img src="{{ $psychologue->user->avatar ? asset('storage/' . $psychologue->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($psychologue->user->name) . '&background=4dbfbf&color=fff' }}"
                             class="w-16 h-16 rounded-sm object-cover"
                             alt="{{ $psychologue->user->name }}">
                         @if($psychologue->validationStatus === 'approved')
@@ -81,7 +81,7 @@
                             experience: '{{ $psychologue->experienceYears }}',
                             price: '{{ $psychologue->pricePerSession }}',
                             type: '{{ $psychologue->consultationType }}',
-                            photo: '{{ $psychologue->photo ? asset('storage/' . $psychologue->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($psychologue->user->name) . '&background=4dbfbf&color=fff' }}'
+                            photo: '{{ $psychologue->user->avatar ? asset('storage/' . $psychologue->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($psychologue->user->name) . '&background=4dbfbf&color=fff' }}'
                         })"
                         class="px-4 py-2 bg-slate-50 text-slate-700 border border-slate-200 rounded-sm text-[9px] font-bold uppercase tracking-widest hover:bg-nafssiti-primary hover:text-white hover:border-nafssiti-primary transition-all">
                         Voir Profil
