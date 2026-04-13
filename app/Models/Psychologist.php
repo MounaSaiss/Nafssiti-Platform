@@ -14,7 +14,6 @@ class Psychologist extends Model
         'experienceYears',
         'pricePerSession',
         'consultationType',
-        'certificate',
         'photo',
         'description',
         'education',
@@ -24,6 +23,11 @@ class Psychologist extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
     }
 
     public function appointments()

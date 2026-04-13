@@ -56,6 +56,17 @@
                         2</div>
                 </div>
             </div>
+            
+            @if ($errors->any())
+                <div class="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                    <strong>Erreurs de validation:</strong>
+                    <ul class="list-disc pl-5 mt-2 text-xs font-bold">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </div>
 
         <form action="{{ route('register.psychologue') }}" method="POST" enctype="multipart/form-data"
@@ -75,24 +86,28 @@
                             Complet</label>
                         <input type="text" name="name" value="{{ old('name') }}" required
                             class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
+                        @error('name')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
                     </div>
                     <div>
                         <label
                             class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Email</label>
                         <input type="email" name="email" value="{{ old('email') }}" required
                             class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
+                        @error('email')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
                     </div>
                     <div>
                         <label
                             class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Téléphone</label>
                         <input type="tel" name="phone" value="{{ old('phone') }}" required
                             class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
+                        @error('phone')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Mot de
                             passe</label>
                         <input type="password" name="password" required
                             class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
+                        @error('password')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
                     </div>
                     <div>
                         <label
@@ -145,40 +160,45 @@
                             class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
                             <option value="" disabled selected>Choisir une spécialité</option>
                             @foreach($specialities as $speciality)
-                                <option value="{{ $speciality->name }}">{{ $speciality->name }}</option>
+                                <option value="{{ $speciality->name }}" {{ old('specialization') == $speciality->name ? 'selected' : '' }}>{{ $speciality->name }}</option>
                             @endforeach
                         </select>
+                        @error('specialization')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
                     </div>
                     <div>
                         <label
                             class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Ville</label>
-                        <input type="text" name="city"
+                        <input type="text" name="city" value="{{ old('city') }}"
                             class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
+                        @error('city')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
                     </div>
                     <div>
                         <label
                             class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Expérience
                             (Ans)</label>
-                        <input type="number" name="experienceYears"
+                        <input type="number" name="experienceYears" value="{{ old('experienceYears') }}"
                             class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
+                        @error('experienceYears')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
                     </div>
                     <div>
                         <label
                             class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Consultation</label>
                         <select name="consultationType"
                             class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
-                            <option value="online">En ligne</option>
-                            <option value="onsite">Cabinet</option>
-                            <option value="both">Les deux</option>
+                            <option value="online" {{ old('consultationType') == 'online' ? 'selected' : '' }}>En ligne</option>
+                            <option value="onsite" {{ old('consultationType') == 'onsite' ? 'selected' : '' }}>Cabinet</option>
+                            <option value="both" {{ old('consultationType') == 'both' ? 'selected' : '' }}>Les deux</option>
                         </select>
+                        @error('consultationType')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">
                             Prix par session
                         </label>
 
-                        <input type="number" name="pricePerSession"
+                        <input type="number" name="pricePerSession" value="{{ old('pricePerSession') }}"
                             class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
+                        @error('pricePerSession')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">
@@ -187,13 +207,34 @@
 
                         <input type="file" name="avatar" required accept="image/*"
                             class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-nafssiti-blue/10 file:text-nafssiti-blue hover:file:bg-nafssiti-blue/20 cursor-pointer">
+                        @error('avatar')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
                     </div>
                     <div class="md:col-span-2">
-                        <label
-                            class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Certificat
-                            (PDF/Image)</label>
-                        <input type="file" name="certificate"
-                            class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-nafssiti-blue/10 file:text-nafssiti-blue hover:file:bg-nafssiti-blue/20 cursor-pointer" />
+                        <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-2">
+                            Certificats (Au moins un fichier ou un lien est requis)
+                        </label>
+                        
+                        @if($errors->has('certificates'))
+                            <p class="text-red-500 text-xs mb-2">{{ $errors->first('certificates') }}</p>
+                        @endif
+
+                        <div id="certificates-container" class="space-y-3">
+                            <!-- Initial Fichier -->
+                            <div class="flex items-center gap-2">
+                                <input type="file" name="certificate_files[]"
+                                    class="w-full text-xs text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-nafssiti-blue/10 file:text-nafssiti-blue hover:file:bg-nafssiti-blue/20 cursor-pointer" />
+                                <button type="button" onclick="this.parentElement.remove()" class="text-red-500 text-xs hover:text-red-700 font-bold"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 flex gap-2">
+                            <button type="button" onclick="addCertificateFile()" class="text-[10px] bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 text-gray-700 dark:text-gray-300 font-bold py-1 px-3 rounded flex items-center transition">
+                                <i class="fas fa-plus mr-1"></i> Ajouter un fichier
+                            </button>
+                            <button type="button" onclick="addCertificateLink()" class="text-[10px] bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 text-gray-700 dark:text-gray-300 font-bold py-1 px-3 rounded flex items-center transition">
+                                <i class="fas fa-link mr-1"></i> Ajouter un lien
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -219,25 +260,58 @@
         const indicator2 = document.getElementById('step-2-indicator');
 
         if (step === 2) {
-            // Animation vers l'étape 2
+            // Validate part 1 fields before moving to step 2
+            const inputs = part1.querySelectorAll('input[required], select[required]');
+            for (let input of inputs) {
+                if (!input.checkValidity()) {
+                    input.reportValidity();
+                    return; // Stop if invalid
+                }
+            }
+
             part1.classList.add('hidden');
             part2.classList.remove('hidden');
-
-            // Mise à jour visuelle progression
             indicator2.classList.replace('bg-gray-200', 'bg-green-600');
             indicator2.classList.replace('text-gray-600', 'text-white');
             indicator1.classList.replace('bg-nafssiti-blue', 'bg-gray-400');
         } else {
-            // Retour vers l'étape 1
             part2.classList.add('hidden');
             part1.classList.remove('hidden');
-
-            // Mise à jour visuelle progression
             indicator2.classList.replace('bg-green-600', 'bg-gray-200');
             indicator2.classList.replace('text-white', 'text-gray-600');
             indicator1.classList.replace('bg-gray-400', 'bg-nafssiti-blue');
         }
     }
+
+    function addCertificateFile() {
+        const container = document.getElementById('certificates-container');
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2 mt-2';
+        div.innerHTML = `
+            <input type="file" name="certificate_files[]" class="w-full text-xs text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-nafssiti-blue/10 file:text-nafssiti-blue hover:file:bg-nafssiti-blue/20 cursor-pointer" />
+            <button type="button" onclick="this.parentElement.remove()" class="text-red-500 text-xs hover:text-red-700 font-bold"><i class="fas fa-trash"></i></button>
+        `;
+        container.appendChild(div);
+    }
+
+    function addCertificateLink() {
+        const container = document.getElementById('certificates-container');
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2 mt-2';
+        div.innerHTML = `
+            <input type="url" name="certificate_links[]" placeholder="https://lien-vers-certificat.com" class="w-full px-3 py-1.5 text-xs bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" />
+            <button type="button" onclick="this.parentElement.remove()" class="text-red-500 text-xs hover:text-red-700 font-bold"><i class="fas fa-trash"></i></button>
+        `;
+        container.appendChild(div);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        @if($errors->any())
+            @if($errors->has('certificates') || $errors->has('specialization') || $errors->has('city') || $errors->has('experienceYears') || $errors->has('pricePerSession') || $errors->has('avatar'))
+                goToStep(2);
+            @endif
+        @endif
+    });
 </script>
 
 <style>

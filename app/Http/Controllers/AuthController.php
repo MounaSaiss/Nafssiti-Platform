@@ -6,6 +6,7 @@ use App\Models\Patient;
 use App\Models\Psychologist;
 use App\Models\Speciality;
 use App\Models\User;
+use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -75,7 +76,7 @@ class AuthController extends Controller
             'role_id' => $validated['role_id'],
         ]);
 
-        Psychologist::create([
+        $psychologist = Psychologist::create([
             'user_id' => $user->id,
             'specialization' => $validated['specialization'],
             'city' => $validated['city'],
@@ -83,6 +84,31 @@ class AuthController extends Controller
             'pricePerSession' => $validated['pricePerSession'],
             'consultationType' => $validated['consultationType'],
         ]);
+
+        if ($request->hasFile('certificate_files')) {
+            foreach ($request->file('certificate_files') as $file) {
+                if ($file) {
+                    $path = $file->store('certificates', 'public');
+                    Certificate::create([
+                        'psychologist_id' => $psychologist->id,
+                        'type' => 'file',
+                        'path_or_url' => $path,
+                    ]);
+                }
+            }
+        }
+
+        if ($request->has('certificate_links') && is_array($request->input('certificate_links'))) {
+            foreach ($request->input('certificate_links') as $link) {
+                if (!empty($link)) {
+                    Certificate::create([
+                        'psychologist_id' => $psychologist->id,
+                        'type' => 'link',
+                        'path_or_url' => $link,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('show.login')->with('success', 'Votre compte praticien a été créé. Veuillez attendre la validation de l\'admin.');
     }
