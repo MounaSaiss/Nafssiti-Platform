@@ -28,7 +28,7 @@ class PsychologueRegisterRequest extends FormRequest
             'password' => 'required|string|min:8|confirmed',
             'specialization' => 'required|string|max:255',
             'city' => 'required|string',
-            'experienceYears' => 'required|integer',
+            'experienceYears' => 'required|integer|max:50',
             'pricePerSession' => 'required|numeric',
             'consultationType' => 'required|string',
             'certificate_files' => 'nullable|array',

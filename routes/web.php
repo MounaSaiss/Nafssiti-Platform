@@ -4,7 +4,6 @@ use App\Http\Controllers\admin\AppointmentManagementController;
 use App\Http\Controllers\admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\admin\SpecialityController;
 use App\Http\Controllers\admin\UserManagementController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\patient\DashboardController as PatientDashboardController;
 use App\Http\Controllers\patient\ReservationController as PatientReservationController;
@@ -27,16 +26,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/psychologues', [PsychologueController::class, 'allPsychologues'])
     ->name('psychologue.allPsychologues');
 
-// register routes
-Route::get('/register/patient', [AuthController::class, 'showPatientRegistrationForm'])->name('show.register.patient');
-Route::get('/register/psychologue', [AuthController::class, 'showPsychologueRegistrationForm'])->name('show.register.psychologue');
-Route::post('/register/patient', [AuthController::class, 'registerPatient'])->name('register.patient');
-Route::post('/register/psychologue', [AuthController::class, 'registerPsychologue'])->name('register.psychologue');
-
-// login routes
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('show.login');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+require __DIR__.'/auth.php';
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/meeting/{appointment}', [MeetingController::class, 'join'])->name('meeting.join');

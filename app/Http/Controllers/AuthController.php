@@ -7,12 +7,13 @@ use App\Models\Psychologist;
 use App\Models\Speciality;
 use App\Models\User;
 use App\Models\Certificate;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\patient\PatientRegisterRequest;
 use App\Http\Requests\psychologue\PsychologueRegisterRequest;
 use App\Http\Requests\auth\LoginRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 class AuthController extends Controller
 {
     public function showPatientRegistrationForm()
@@ -23,39 +24,29 @@ class AuthController extends Controller
     public function showPsychologueRegistrationForm()
     {
         $specialities = Speciality::all();
-        return view('auth.register.psychologue', compact('specialities'));
+        return view('auth.register.psychologue',compact('specialities'));
     }
 
     public function showLoginForm()
     {
         return view('auth.login');
     }
-
     public function registerPatient(PatientRegisterRequest $request)
     {
         $validated = $request->validated();
         $validated['password'] = Hash::make($validated['password']);
-        $avatarPath = null;
-        if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('avatars', 'public');
-        }
-
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'password' => $validated['password'],
-            'avatar' => $avatarPath,
             'role_id' => 1,
         ]);
-
         Patient::create([
             'user_id' => $user->id,
         ]);
-
         return redirect()->route('show.login')->with('success', 'Votre compte a été créé avec succès. Veuillez attendre la validation de l\'admin avant de vous connecter.');
     }
-
     public function registerPsychologue(PsychologueRegisterRequest $request)
     {
         $validated = $request->validated();
@@ -66,7 +57,6 @@ class AuthController extends Controller
         if ($request->hasFile('avatar')) {
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
         }
-
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -119,7 +109,6 @@ class AuthController extends Controller
 
         if (Auth::attempt($validated)) {
             $user = Auth::user();
-
             if ($user->status !== 'actif' ) {
                 $statusMessage = $user->status === 'banni'
                     ? 'Votre compte a été banni.'
