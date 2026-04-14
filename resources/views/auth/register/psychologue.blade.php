@@ -6,25 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nafssiti</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
+    @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .text-nafssiti-blue {
-            color: #4dbfbf;
-        }
-
-        .bg-nafssiti-blue {
-            background-color: #4dbfbf;
-        }
-
-        .text-nafssiti-green {
-            color: #96d14b;
-        }
-
-        .bg-nafssiti-green {
-            background-color: #96d14b;
-        }
-    </style>
 </head>
 <div class="min-h-screen flex flex-col justify-center py-8 px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto w-full">
@@ -43,20 +26,6 @@
                 </p>
             </div>
 
-            <div class="mt-6 relative w-48 mx-auto">
-                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                    <div class="w-full border-t border-gray-200 dark:border-gray-700"></div>
-                </div>
-                <div class="relative flex justify-between">
-                    <div id="step-1-indicator"
-                        class="bg-nafssiti-blue text-white w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold shadow-sm">
-                        1</div>
-                    <div id="step-2-indicator"
-                        class="bg-gray-200 dark:bg-gray-700 text-gray-500 w-8 h-8 flex items-center justify-center rounded-full text-sm font-bold">
-                        2</div>
-                </div>
-            </div>
-            
             @if ($errors->any())
                 <div class="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
                     <strong>Erreurs de validation:</strong>
@@ -70,264 +39,188 @@
         </div>
 
         <form action="{{ route('register.psychologue') }}" method="POST" enctype="multipart/form-data"
-            class="space-y-4">
+            class="space-y-6 bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-gray-100 dark:border-gray-700">
             @csrf
-            <div id="form-part-1"
-                class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-gray-100 dark:border-gray-700 animate-fade-in">
-                <div
-                    class="flex items-center mb-5 text-nafssiti-blue border-b border-gray-50 dark:border-gray-700 pb-3">
-                    <i class="fas fa-id-card mr-2"></i>
-                    <h3 class="font-bold uppercase text-xs tracking-wider">Informations du compte</h3>
-                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Nom
-                            Complet</label>
-                        <input type="text" name="name" value="{{ old('name') }}" required
-                            class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
-                        @error('name')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
+            <div class="absolute top-4 left-4 sm:top-8 sm:left-8">
+                <a href="/"
+                    class="flex items-center text-gray-500 hover:text-nafssiti-blue dark:text-gray-400 dark:hover:text-white transition-colors group">
+                    <div
+                        class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-sm border border-gray-100 dark:border-gray-700 mr-3 group-hover:shadow-md transition-all">
+                        <i class="fas fa-arrow-left text-sm"></i>
                     </div>
-                    <div>
-                        <label
-                            class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Email</label>
-                        <input type="email" name="email" value="{{ old('email') }}" required
-                            class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
-                        @error('email')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
-                    </div>
-                    <div>
-                        <label
-                            class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Téléphone</label>
-                        <input type="tel" name="phone" value="{{ old('phone') }}" required
-                            class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
-                        @error('phone')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Mot de
-                            passe</label>
-                        <input type="password" name="password" required
-                            class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
-                        @error('password')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
-                    </div>
-                    <div>
-                        <label
-                            class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Confirmation</label>
-                        <input type="password" name="password_confirmation" required
-                            class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
-                    </div>
-                </div>
+                    <span class="text-xs font-bold uppercase tracking-widest hidden sm:inline">Accueil</span>
+                </a>
+            </div>
 
-                <div class="mt-6 flex justify-end">
-                    <button type="button" onclick="goToStep(2)"
-                        class="bg-nafssiti-blue hover:bg-[#3da3a3] text-white px-8 py-2 rounded-lg font-bold text-sm shadow-sm transition-all flex items-center">
-                        Suivant <i class="fas fa-chevron-right ml-2 text-[10px]"></i>
-                    </button>
+            <!-- Informations du compte -->
+            <div class="flex items-center mb-5 text-nafssiti-blue border-b border-gray-50 dark:border-gray-700 pb-3">
+                <i class="fas fa-id-card mr-2"></i>
+                <h3 class="font-bold uppercase text-xs tracking-wider">Informations du compte</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Nom
+                        Complet</label>
+                    <input type="text" name="name" value="{{ old('name') }}" required
+                        class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
+                    @error('name')
+                        <span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>
+                    @enderror
                 </div>
-                <div class="absolute top-4 left-4 sm:top-8 sm:left-8">
-                    <a href="/"
-                        class="flex items-center text-gray-500 hover:text-nafssiti-blue dark:text-gray-400 dark:hover:text-white transition-colors group">
-                        <div
-                            class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-sm border border-gray-100 dark:border-gray-700 mr-3 group-hover:shadow-md transition-all">
-                            <i class="fas fa-arrow-left text-sm"></i>
-                        </div>
-                        <span class="text-xs font-bold uppercase tracking-widest hidden sm:inline">Accueil</span>
-                    </a>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Email</label>
+                    <input type="email" name="email" value="{{ old('email') }}" required
+                        class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
+                    @error('email')
+                        <span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div>
+                    <label
+                        class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Téléphone</label>
+                    <input type="tel" name="phone" value="{{ old('phone') }}" required
+                        class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
+                    @error('phone')
+                        <span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Mot de
+                        passe</label>
+                    <input type="password" name="password" required
+                        class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
+                    @error('password')
+                        <span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div>
+                    <label
+                        class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Confirmation</label>
+                    <input type="password" name="password_confirmation" required
+                        class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-nafssiti-blue/20 focus:border-nafssiti-blue outline-none dark:text-white transition">
                 </div>
             </div>
-            <div id="form-part-2"
-                class="hidden bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 border border-gray-100 dark:border-gray-700 animate-fade-in">
-                <div class="absolute top-4 left-4 sm:top-8 sm:left-8">
-                    <a href="/"
-                        class="flex items-center text-gray-500 hover:text-nafssiti-blue dark:text-gray-400 dark:hover:text-white transition-colors group">
+
+            <!-- Détails Professionnels -->
+            <div
+                class="flex items-center mb-5 mt-8 text-nafssiti-green border-b border-gray-50 dark:border-gray-700 pb-3">
+                <i class="fas fa-user-md mr-2"></i>
+                <h3 class="font-bold uppercase text-xs tracking-wider">Détails Professionnels</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label
+                        class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Spécialité</label>
+                    <select name="specialization" required
+                        class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
+                        <option value="" disabled selected>Choisir une spécialité</option>
+                        @foreach ($specialities as $speciality)
+                            <option value="{{ $speciality->name }}"
+                                {{ old('specialization') == $speciality->name ? 'selected' : '' }}>
+                                {{ $speciality->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('specialization')
+                        <span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Ville</label>
+                    <input type="text" name="city" value="{{ old('city') }}"
+                        class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
+                    @error('city')
+                        <span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Expérience
+                        (Ans)</label>
+                    <input type="number" name="experienceYears" value="{{ old('experienceYears') }}"
+                        class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
+                    @error('experienceYears')
+                        <span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div>
+                    <label
+                        class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Consultation</label>
+                    <select name="consultationType"
+                        class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
+                        <option value="online" {{ old('consultationType') == 'online' ? 'selected' : '' }}>En ligne
+                        </option>
+                        <option value="onsite" {{ old('consultationType') == 'onsite' ? 'selected' : '' }}>Cabinet
+                        </option>
+                        <option value="both" {{ old('consultationType') == 'both' ? 'selected' : '' }}>Les deux
+                        </option>
+                    </select>
+                    @error('consultationType')
+                        <span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Prix par
+                        session</label>
+                    <input type="number" name="pricePerSession" value="{{ old('pricePerSession') }}"
+                        class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
+                    @error('pricePerSession')
+                        <span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Photo de
+                        profil</label>
+                    <input type="file" name="avatar" required accept="image/*"
+                        class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-nafssiti-blue/10 file:text-nafssiti-blue hover:file:bg-nafssiti-blue/20 cursor-pointer">
+                    @error('avatar')
+                        <span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-2">
+                        Certificats (Au moins un fichier ou un lien est requis)
+                    </label>
+
+                    @if ($errors->has('certificates'))
+                        <p class="text-red-500 text-xs mb-2">{{ $errors->first('certificates') }}</p>
+                    @endif
+
+                    <div class="space-y-4">
                         <div
-                            class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-sm border border-gray-100 dark:border-gray-700 mr-3 group-hover:shadow-md transition-all">
-                            <i class="fas fa-arrow-left text-sm"></i>
+                            class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-100 dark:border-gray-600">
+                            <span class="block text-[10px] font-bold text-nafssiti-blue mb-2 uppercase"><i
+                                    class="fas fa-file-upload mr-1"></i> Envoyer vos fichiers (Multiple
+                                possible)</span>
+                            <input type="file" name="certificate_files[]" multiple
+                                class="w-full text-xs text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-nafssiti-blue/10 file:text-nafssiti-blue hover:file:bg-nafssiti-blue/20 cursor-pointer" />
                         </div>
-                        <span class="text-xs font-bold uppercase tracking-widest hidden sm:inline">Accueil</span>
-                    </a>
-                </div>
-                <div
-                    class="flex items-center mb-5 text-nafssiti-green border-b border-gray-50 dark:border-gray-700 pb-3">
-                    <i class="fas fa-user-md mr-2"></i>
-                    <h3 class="font-bold uppercase text-xs tracking-wider">Détails Professionnels</h3>
-                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label
-                            class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Spécialité</label>
-                        <select name="specialization" required
-                            class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
-                            <option value="" disabled selected>Choisir une spécialité</option>
-                            @foreach($specialities as $speciality)
-                                <option value="{{ $speciality->name }}" {{ old('specialization') == $speciality->name ? 'selected' : '' }}>{{ $speciality->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('specialization')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
-                    </div>
-                    <div>
-                        <label
-                            class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Ville</label>
-                        <input type="text" name="city" value="{{ old('city') }}"
-                            class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
-                        @error('city')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
-                    </div>
-                    <div>
-                        <label
-                            class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Expérience
-                            (Ans)</label>
-                        <input type="number" name="experienceYears" value="{{ old('experienceYears') }}"
-                            class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
-                        @error('experienceYears')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
-                    </div>
-                    <div>
-                        <label
-                            class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Consultation</label>
-                        <select name="consultationType"
-                            class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
-                            <option value="online" {{ old('consultationType') == 'online' ? 'selected' : '' }}>En ligne</option>
-                            <option value="onsite" {{ old('consultationType') == 'onsite' ? 'selected' : '' }}>Cabinet</option>
-                            <option value="both" {{ old('consultationType') == 'both' ? 'selected' : '' }}>Les deux</option>
-                        </select>
-                        @error('consultationType')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">
-                            Prix par session
-                        </label>
-
-                        <input type="number" name="pricePerSession" value="{{ old('pricePerSession') }}"
-                            class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
-                        @error('pricePerSession')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">
-                            Photo de profil
-                        </label>
-
-                        <input type="file" name="avatar" required accept="image/*"
-                            class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-nafssiti-blue/10 file:text-nafssiti-blue hover:file:bg-nafssiti-blue/20 cursor-pointer">
-                        @error('avatar')<span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-2">
-                            Certificats (Au moins un fichier ou un lien est requis)
-                        </label>
-                        
-                        @if($errors->has('certificates'))
-                            <p class="text-red-500 text-xs mb-2">{{ $errors->first('certificates') }}</p>
-                        @endif
-
-                        <div id="certificates-container" class="space-y-3">
-                            <!-- Initial Fichier -->
-                            <div class="flex items-center gap-2">
-                                <input type="file" name="certificate_files[]"
-                                    class="w-full text-xs text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-nafssiti-blue/10 file:text-nafssiti-blue hover:file:bg-nafssiti-blue/20 cursor-pointer" />
-                                <button type="button" onclick="this.parentElement.remove()" class="text-red-500 text-xs hover:text-red-700 font-bold"><i class="fas fa-trash"></i></button>
+                        <div
+                            class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-100 dark:border-gray-600">
+                            <span class="block text-[10px] font-bold text-nafssiti-blue mb-2 uppercase"><i
+                                    class="fas fa-link mr-1"></i> Liens additionnels (Formations, Profil
+                                Linkedin...)</span>
+                            <div class="space-y-2">
+                                <input type="url" name="certificate_links[]" placeholder="https://lien-1.com"
+                                    class="w-full px-3 py-1.5 text-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" />
+                                <input type="url" name="certificate_links[]"
+                                    placeholder="https://lien-2.com (Optionnel)"
+                                    class="w-full px-3 py-1.5 text-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" />
+                                <input type="url" name="certificate_links[]"
+                                    placeholder="https://lien-3.com (Optionnel)"
+                                    class="w-full px-3 py-1.5 text-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" />
                             </div>
                         </div>
-
-                        <div class="mt-3 flex gap-2">
-                            <button type="button" onclick="addCertificateFile()" class="text-[10px] bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 text-gray-700 dark:text-gray-300 font-bold py-1 px-3 rounded flex items-center transition">
-                                <i class="fas fa-plus mr-1"></i> Ajouter un fichier
-                            </button>
-                            <button type="button" onclick="addCertificateLink()" class="text-[10px] bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 text-gray-700 dark:text-gray-300 font-bold py-1 px-3 rounded flex items-center transition">
-                                <i class="fas fa-link mr-1"></i> Ajouter un lien
-                            </button>
-                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="mt-6 flex justify-between items-center border-t border-gray-50 dark:border-gray-700 pt-4">
-                    <button type="button" onclick="goToStep(1)"
-                        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xs font-bold flex items-center transition">
-                        <i class="fas fa-chevron-left mr-1"></i> Retour
-                    </button>
-                    <button type="submit"
-                        class="bg-nafssiti-green hover:bg-[#85bc41] text-white px-8 py-2 rounded-lg font-bold text-sm shadow-sm transition-all">
-                        Confirmer l'inscription
-                    </button>
-                </div>
+            <div class="mt-8 pt-4 flex justify-end border-t border-gray-50 dark:border-gray-700">
+                <button type="submit"
+                    class="bg-nafssiti-green hover:bg-[#85bc41] text-white px-8 py-3 rounded-lg font-bold text-sm shadow-sm transition-all flex items-center">
+                    <i class="fas fa-check-circle mr-2"></i> Confirmer l'inscription
+                </button>
             </div>
         </form>
-    </div>
-</div>
-<script>
-    function goToStep(step) {
-        const part1 = document.getElementById('form-part-1');
-        const part2 = document.getElementById('form-part-2');
-        const indicator1 = document.getElementById('step-1-indicator');
-        const indicator2 = document.getElementById('step-2-indicator');
-
-        if (step === 2) {
-            // Validate part 1 fields before moving to step 2
-            const inputs = part1.querySelectorAll('input[required], select[required]');
-            for (let input of inputs) {
-                if (!input.checkValidity()) {
-                    input.reportValidity();
-                    return; // Stop if invalid
-                }
-            }
-
-            part1.classList.add('hidden');
-            part2.classList.remove('hidden');
-            indicator2.classList.replace('bg-gray-200', 'bg-green-600');
-            indicator2.classList.replace('text-gray-600', 'text-white');
-            indicator1.classList.replace('bg-nafssiti-blue', 'bg-gray-400');
-        } else {
-            part2.classList.add('hidden');
-            part1.classList.remove('hidden');
-            indicator2.classList.replace('bg-green-600', 'bg-gray-200');
-            indicator2.classList.replace('text-white', 'text-gray-600');
-            indicator1.classList.replace('bg-gray-400', 'bg-nafssiti-blue');
-        }
-    }
-
-    function addCertificateFile() {
-        const container = document.getElementById('certificates-container');
-        const div = document.createElement('div');
-        div.className = 'flex items-center gap-2 mt-2';
-        div.innerHTML = `
-            <input type="file" name="certificate_files[]" class="w-full text-xs text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-nafssiti-blue/10 file:text-nafssiti-blue hover:file:bg-nafssiti-blue/20 cursor-pointer" />
-            <button type="button" onclick="this.parentElement.remove()" class="text-red-500 text-xs hover:text-red-700 font-bold"><i class="fas fa-trash"></i></button>
-        `;
-        container.appendChild(div);
-    }
-
-    function addCertificateLink() {
-        const container = document.getElementById('certificates-container');
-        const div = document.createElement('div');
-        div.className = 'flex items-center gap-2 mt-2';
-        div.innerHTML = `
-            <input type="url" name="certificate_links[]" placeholder="https://lien-vers-certificat.com" class="w-full px-3 py-1.5 text-xs bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg outline-none dark:text-white" />
-            <button type="button" onclick="this.parentElement.remove()" class="text-red-500 text-xs hover:text-red-700 font-bold"><i class="fas fa-trash"></i></button>
-        `;
-        container.appendChild(div);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        @if($errors->any())
-            @if($errors->has('certificates') || $errors->has('specialization') || $errors->has('city') || $errors->has('experienceYears') || $errors->has('pricePerSession') || $errors->has('avatar'))
-                goToStep(2);
-            @endif
-        @endif
-    });
-</script>
-
-<style>
-    .animate-fade-in {
-        animation: fadeIn 0.4s ease-out;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-</style>
