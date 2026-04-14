@@ -73,7 +73,7 @@
                                     {{ $selectedPsychologistId == $psychologue->id ? 'checked' : '' }}>
                                 <div
                                     class="p-3 border border-slate-100 rounded-sm bg-slate-50 peer-checked:bg-white peer-checked:border-nafssiti-primary peer-checked:ring-1 peer-checked:ring-nafssiti-primary transition-all flex items-center gap-3">
-                                    <img src="{{ $psychologue->photo ? asset('storage/' . $psychologue->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($psychologue->user->name) . '&background=4dbfbf&color=fff' }}"
+                                    <img src="{{ $psychologue->user->avatar ? asset('storage/' . $psychologue->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($psychologue->user->name) . '&background=4dbfbf&color=fff' }}"
                                         class="w-9 h-9 rounded-sm object-cover">
                                     <div>
                                         <p class="text-[11px] font-bold text-slate-800">{{ $psychologue->user->name }}</p>

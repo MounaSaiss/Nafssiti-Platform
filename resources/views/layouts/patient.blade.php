@@ -114,7 +114,7 @@
                         <p class="text-xs font-bold text-slate-900">{{ Auth::user()->name ?? 'Utilisateur' }}</p>
                         <p class="text-[10px] text-slate-400 font-medium uppercase">Patient</p>
                     </div>
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'U') }}&background=f1f5f9&color=4dbfbf"
+                    <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name ?? 'U') . '&background=f1f5f9&color=4dbfbf' }}"
                         class="w-9 h-9 rounded-full border border-slate-200">
                 </div>
             </header>

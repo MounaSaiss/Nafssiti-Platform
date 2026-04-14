@@ -4,7 +4,6 @@ use App\Http\Controllers\admin\AppointmentManagementController;
 use App\Http\Controllers\admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\admin\SpecialityController;
 use App\Http\Controllers\admin\UserManagementController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\patient\DashboardController as PatientDashboardController;
 use App\Http\Controllers\patient\ReservationController as PatientReservationController;
@@ -14,6 +13,7 @@ use App\Http\Controllers\psychologue\DashboardController as PsychologueDashboard
 use App\Http\Controllers\psychologue\ProfileController as PsychologueProfileController;
 use App\Http\Controllers\psychologue\UnavailabilityController as PsychologueUnavailabilityController;
 use App\Http\Controllers\psychologue\AppointmentController as PsychologueAppointmentController;
+use App\Http\Controllers\psychologue\CalendarController;
 use App\Http\Controllers\psychologue\FollowRequestController as PsychologueFollowRequestController;
 use App\Http\Controllers\patient\BilanSeanceController as PatientBilanSeanceController;
 use App\Http\Controllers\patient\FollowRequestController as PatientFollowRequestController;
@@ -26,16 +26,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/psychologues', [PsychologueController::class, 'allPsychologues'])
     ->name('psychologue.allPsychologues');
 
-// register routes
-Route::get('/register/patient', [AuthController::class, 'showPatientRegistrationForm'])->name('show.register.patient');
-Route::get('/register/psychologue', [AuthController::class, 'showPsychologueRegistrationForm'])->name('show.register.psychologue');
-Route::post('/register/patient', [AuthController::class, 'registerPatient'])->name('register.patient');
-Route::post('/register/psychologue', [AuthController::class, 'registerPsychologue'])->name('register.psychologue');
-
-// login routes
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('show.login');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+require __DIR__.'/auth.php';
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/meeting/{appointment}', [MeetingController::class, 'join'])->name('meeting.join');
@@ -64,7 +55,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::middleware(['auth', 'patient'])->group(function () {
     Route::get('/patient/dashboard', [PatientDashboardController::class, 'index'])->name('patient.dashboard');
     Route::get('/patient/reservation', [PatientReservationController::class, 'reservation'])->name('patient.reservation');
-    Route::post('/patient/reservation', [PatientReservationController::class, 'storeReservation'])->name('patient.storeReservation');
+    Route::post('/patient/reservation', [App\Http\Controllers\patient\StripePaymentController::class, 'checkout'])->name('patient.storeReservation');
+    
+    // Stripe Payments
+    Route::get('/patient/payment/success', [App\Http\Controllers\patient\StripePaymentController::class, 'success'])->name('patient.payment.success');
+    Route::get('/patient/payment/cancel', [App\Http\Controllers\patient\StripePaymentController::class, 'cancel'])->name('patient.payment.cancel');
+
     Route::get('/patient/rendezVous', [PatientAppointmentController::class, 'rendezVous'])->name('patient.rendezVous');
     Route::get('/patient/bilan-seance', [PatientBilanSeanceController::class, 'index'])->name('patient.bilan_seance');
     Route::post('/patient/bilan-seance/{appointment}/follow', [PatientFollowRequestController::class, 'store'])->name('patient.follow_request.store');
@@ -78,6 +74,8 @@ Route::middleware(['auth', 'patient'])->group(function () {
 // PSYCHOLOGUE LINK
 Route::middleware(['auth', 'psychologue'])->group(function () {
     Route::get('/psychologue/dashboard', [PsychologueDashboardController::class, 'index'])->name('psychologue.dashboard');
+    Route::get('/psychologue/api/events', [CalendarController::class, 'getEvents'])->name('psychologue.calendar.events');
+    Route::post('/psychologue/api/calendar/quick-store', [CalendarController::class, 'storeQuickEvent'])->name('psychologue.calendar.quickStore');
     Route::get('/psychologue/profil', [PsychologueProfileController::class, 'profil'])->name('psychologue.profil');
     Route::post('/psychologue/profil', [PsychologueProfileController::class, 'updateProfil'])->name('psychologue.updateProfil');
     Route::get('/psychologue/disponabilite', [PsychologueUnavailabilityController::class, 'indisponabilite'])->name('psychologue.disponabilite');

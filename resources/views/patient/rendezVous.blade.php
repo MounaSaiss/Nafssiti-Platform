@@ -48,7 +48,7 @@
                         </td>
                         <td class="px-6 py-5">
                             <div class="flex items-center gap-3">
-                                <img src="{{ $appointment->psychologist->photo ? asset('storage/' . $appointment->psychologist->photo) : 'https://ui-avatars.com/api/?name=' . urlencode($appointment->psychologist->user->name) . '&background=4dbfbf&color=fff' }}"
+                                <img src="{{ $appointment->psychologist->user->avatar ? asset('storage/' . $appointment->psychologist->user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($appointment->psychologist->user->name) . '&background=4dbfbf&color=fff' }}"
                                     class="w-7 h-7 rounded-sm">
                                 <div>
                                     <p class="text-xs font-bold text-slate-700">{{ $appointment->psychologist->user->name }}

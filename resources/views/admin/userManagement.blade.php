@@ -57,8 +57,9 @@
             <tr class="hover:bg-slate-50 transition-colors">
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
-                        <img src="https://ui-avatars.com/api/?name={{ $user->name }}&background=4dbfbf&color=fff"
-                            class="w-8 h-8 rounded-full shadow-sm">
+                        <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=4dbfbf&color=fff' }}"
+                            class="w-10 h-10 rounded-full shadow-sm object-cover cursor-zoom-in border border-slate-200"
+                            onclick="zoomImage('{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=4dbfbf&color=fff' }}')">
                         <div class="flex flex-col">
                             <span class="font-bold text-slate-900 uppercase tracking-tight">{{ $user->name }}</span>
                             <span class="text-slate-400 text-[10px]">{{ $user->email }}</span>
@@ -90,6 +91,7 @@
                         {{-- Admin check removed as admins are excluded in controller --}}
                         <button
                             onclick="openProfileModal(this)"
+                            data-userid="{{ $user->id }}"
                             data-name="{{ $user->name }}"
                             data-email="{{ $user->email }}"
                             data-role="{{ $user->role->status }}"
@@ -101,6 +103,26 @@
                             <i class="fas fa-eye"></i> Consulter
                         </button>
                         
+                        <!-- Hidden certificates data -->
+                        @if($user->psychologist && $user->psychologist->certificates)
+                        <div id="certs-data-{{ $user->id }}" class="hidden">
+                            @forelse($user->psychologist->certificates as $cert)
+                                @if($cert->type === 'file')
+                                    <button type="button" onclick="openCertModal('{{ asset('storage/' . $cert->path_or_url) }}', 'Fichier')" title="Voir Fichier" class="px-3 py-2 bg-blue-50 text-blue-500 rounded text-[11px] font-bold uppercase hover:bg-blue-100 transition flex items-center gap-2 shadow-sm border border-blue-100">
+                                        <i class="fas fa-file-pdf text-sm"></i> Fichier
+                                    </button>
+                                @else
+                                    <button type="button" onclick="openCertModal('{{ $cert->path_or_url }}', 'Lien')" title="Ouvrir Lien" class="px-3 py-2 bg-purple-50 text-purple-500 rounded text-[11px] font-bold uppercase hover:bg-purple-100 transition flex items-center gap-2 shadow-sm border border-purple-100">
+                                        <i class="fas fa-link text-sm"></i> Lien
+                                    </button>
+                                @endif
+                            @empty
+                            @endforelse
+                        </div>
+                        @else
+                        <div id="certs-data-{{ $user->id }}" class="hidden"></div>
+                        @endif
+
                         @if($user->status == 'en attente')
                         <form action="{{ route('admin.users.approve', $user) }}" method="POST">
                             @csrf
@@ -159,16 +181,14 @@
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="flex justify-between items-start mb-6">
                     <div class="flex items-center gap-4">
-                        <div id="modalAvatar" class="w-16 h-16 rounded-full bg-nafssiti-primary flex items-center justify-center text-white text-2xl font-bold shadow-md">
+                        <div id="modalAvatar" class="w-16 h-16 rounded-full overflow-hidden border-2 border-nafssiti-primary shadow-md">
+                            <img id="modalAvatarImg" src="" class="w-full h-full object-cover">
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-slate-900 uppercase tracking-tight" id="modalName"></h3>
                             <span class="text-[10px] font-bold text-slate-500 border border-slate-200 px-2 py-0.5 rounded uppercase tracking-widest" id="modalRole"></span>
                         </div>
                     </div>
-                    <button onclick="closeProfileModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
-                        <i class="fas fa-times text-lg"></i>
-                    </button>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -192,6 +212,10 @@
                         <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Statut du Compte</label>
                         <div id="modalStatusBadge"></div>
                     </div>
+                    <div id="modalCertificatesWrapper" class="col-span-full space-y-2 mt-2 pt-4 border-t border-slate-100 hidden">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2 text-center">Certificats</label>
+                        <div id="modalCertificatesContent" class="flex flex-wrap justify-center gap-2"></div>
+                    </div>
                 </div>
             </div>
             <div class="bg-slate-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
@@ -199,6 +223,34 @@
                     Fermer
                 </button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Zoom Image -->
+<div id="zoomModal" class="fixed inset-0 z-[60] hidden overflow-hidden flex items-center justify-center bg-slate-900/90 backdrop-blur-md p-4" onclick="closeZoom()">
+    <div class="relative max-w-4xl max-h-[90vh] w-full flex items-center justify-center">
+        <img id="zoomedImg" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-transform duration-300 scale-95 opacity-0">
+        <button class="absolute top-[-40px] right-0 text-white hover:text-nafssiti-primary transition-colors">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Certificate Modal (Duplicate from Dashboard) -->
+<div id="certModal" class="fixed inset-0 z-[70] hidden bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl h-[80vh] flex flex-col overflow-hidden animate-fade-in-up">
+        <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+            <h3 id="certModalTitle" class="font-bold text-gray-800 uppercase tracking-wider text-sm"><i class="fas fa-file-contract mr-2"></i> Document</h3>
+        </div>
+        <div class="flex-grow p-0 bg-gray-100 relative">
+            <iframe id="certModalIframe" class="w-full h-full border-0" src=""></iframe>
+            <div id="certModalLoading" class="absolute inset-0 flex items-center justify-center text-gray-400 font-bold text-sm tracking-widest uppercase pointer-events-none">
+                Chargement...
+            </div>
+        </div>
+        <div class="p-3 border-t border-gray-100 bg-gray-50 flex justify-end">
+            <button onclick="closeCertModal()" class="px-4 py-1.5 bg-gray-200 text-gray-700 rounded text-xs font-bold hover:bg-gray-300 transition-colors">Fermer</button>
         </div>
     </div>
 </div>
@@ -212,6 +264,7 @@
         const city = button.getAttribute('data-city');
         const phone = button.getAttribute('data-phone');
         const joined = button.getAttribute('data-joined');
+        const userid = button.getAttribute('data-userid');
 
         document.getElementById('modalName').textContent = name;
         document.getElementById('modalEmail').textContent = email;
@@ -220,8 +273,8 @@
         document.getElementById('modalCity').textContent = city;
         document.getElementById('modalJoined').textContent = joined;
 
-        const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-        document.getElementById('modalAvatar').textContent = initials;
+        const avatarSrc = button.closest('tr').querySelector('img').src;
+        document.getElementById('modalAvatarImg').src = avatarSrc;
 
         const statusBadge = document.getElementById('modalStatusBadge');
         let badgeClass = "";
@@ -236,6 +289,19 @@
 
         statusBadge.innerHTML = `<span class="inline-flex items-center gap-1.5 font-bold uppercase text-[10px] px-3 py-1.5 rounded border ${badgeClass}">${status}</span>`;
 
+        // Handle certificates
+        const certsWrapper = document.getElementById('modalCertificatesWrapper');
+        const certsContent = document.getElementById('modalCertificatesContent');
+        const certsData = document.getElementById('certs-data-' + userid);
+        
+        if (certsData && certsData.innerHTML.trim() !== '') {
+            certsWrapper.classList.remove('hidden');
+            certsContent.innerHTML = certsData.innerHTML;
+        } else {
+            certsWrapper.classList.add('hidden');
+            certsContent.innerHTML = '';
+        }
+
         document.getElementById('profileModal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
@@ -245,9 +311,65 @@
         document.body.style.overflow = 'auto';
     }
 
+    function openCertModal(url, type) {
+        document.getElementById('certModal').classList.remove('hidden');
+        document.getElementById('certModalTitle').innerHTML = '<i class="' + (type === 'Fichier' ? 'fas fa-file-pdf' : 'fas fa-link') + ' mr-2 text-nafssiti-primary"></i> ' + type + ' du Praticien';
+        
+        const iframe = document.getElementById('certModalIframe');
+        const loading = document.getElementById('certModalLoading');
+        
+        loading.style.display = 'flex';
+        iframe.onload = function() {
+            loading.style.display = 'none';
+        };
+        
+        iframe.src = url;
+    }
+
+    function closeCertModal() {
+        document.getElementById('certModal').classList.add('hidden');
+        document.getElementById('certModalIframe').src = '';
+    }
+
+    function zoomImage(src) {
+        const modal = document.getElementById('zoomModal');
+        const img = document.getElementById('zoomedImg');
+        img.src = src;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        
+        // Trigger animation
+        setTimeout(() => {
+            img.classList.remove('scale-95', 'opacity-0');
+            img.classList.add('scale-100', 'opacity-100');
+        }, 10);
+        
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeZoom() {
+        const modal = document.getElementById('zoomModal');
+        const img = document.getElementById('zoomedImg');
+        
+        img.classList.remove('scale-100', 'opacity-100');
+        img.classList.add('scale-95', 'opacity-0');
+        
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 300);
+        
+        if (!document.getElementById('profileModal').classList.contains('hidden')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }
+
     window.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
             closeProfileModal();
+            closeZoom();
         }
     });
 </script>

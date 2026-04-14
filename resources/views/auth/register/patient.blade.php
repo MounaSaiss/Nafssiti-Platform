@@ -6,25 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nafssiti</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
+    @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .text-nafssiti-blue {
-            color: #4dbfbf;
-        }
-
-        .bg-nafssiti-blue {
-            background-color: #4dbfbf;
-        }
-
-        .text-nafssiti-green {
-            color: #96d14b;
-        }
-
-        .bg-nafssiti-green {
-            background-color: #96d14b;
-        }
-    </style>
 </head>
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors duration-300">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
@@ -51,7 +34,7 @@
             </a>
         </div>
         <div class="bg-white dark:bg-gray-800 py-8 px-4 shadow-xl border border-gray-100 dark:border-gray-700 sm:rounded-2xl sm:px-10">
-            <form class="space-y-5" action="{{ route('register.patient') }}" method="POST">
+            <form class="space-y-5" action="{{ route('register.patient') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="role" value="user">
                 <div>
@@ -119,22 +102,12 @@
                     </div>
                     <p class="mt-1 text-xs text-gray-500">Minimum 8 caractères.</p>
                 </div>
-
-                <div class="flex items-center">
-                    <input id="terms" name="terms" type="checkbox" required
-                        class="h-4 w-4 text-nafssiti-blue focus:ring-nafssiti-blue border-gray-300 rounded cursor-pointer">
-                    <label for="terms" class="ml-2 block text-sm text-gray-700 dark:text-gray-400 cursor-pointer">
-                        J'accepte les <a href="#" class="text-nafssiti-blue underline">Conditions Générales</a> d'Utilisation.
-                    </label>
-                </div>
-
                 <div>
                     <button type="submit"
                         class="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-lg text-sm font-bold text-white bg-nafssiti-blue hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nafssiti-blue transition-all transform hover:scale-[1.01]">
                         S'inscrire en tant que Patient
                     </button>
                 </div>
-
             {{-- validation errors --}}
             @if($errors->any())
                 <ul>
@@ -144,7 +117,6 @@
                 </ul>
             @endif
             </form>
-
             <div class="mt-6 text-center">
                 <p class="text-sm text-gray-500">
                     Vous êtes un Spécialiste ?

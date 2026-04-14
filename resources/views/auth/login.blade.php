@@ -1,30 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nafssiti</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
+    @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .text-nafssiti-blue {
-            color: #4dbfbf;
-        }
-
-        .bg-nafssiti-blue {
-            background-color: #4dbfbf;
-        }
-
-        .text-nafssiti-green {
-            color: #96d14b;
-        }
-
-        .bg-nafssiti-green {
-            background-color: #96d14b;
-        }
-    </style>
 </head>
 <div
     class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors duration-300">
@@ -82,31 +64,13 @@
                             class="appearance-none block w-full pl-10 px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-nafssiti-blue focus:border-nafssiti-blue dark:bg-gray-700 dark:text-white sm:text-sm transition">
                     </div>
                 </div>
-
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input id="remember-me" name="remember-me" type="checkbox"
-                            class="h-4 w-4 text-nafssiti-blue focus:ring-nafssiti-blue border-gray-300 dark:border-gray-600 rounded transition cursor-pointer">
-                        <label for="remember-me"
-                            class="ml-2 block text-sm text-gray-700 dark:text-gray-400 cursor-pointer">
-                            Se souvenir de moi
-                        </label>
-                    </div>
-
-                    <div class="text-sm">
-                        <a href="#" class="font-medium text-nafssiti-blue hover:text-opacity-80">
-                            Mot de passe oublié ?
-                        </a>
-                    </div>
-                </div>
-
                 <div>
                     <button type="submit"
                         class="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-md text-sm font-bold text-white bg-nafssiti-blue hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-nafssiti-blue transition-all transform hover:scale-[1.02]">
                         Se connecter
                     </button>
                 </div>
-                {{-- validation errors --}}
+                {{-- Valide les errors --}}
                 @if ($errors->any())
                     <ul>
                         @foreach ($errors->all() as $error)

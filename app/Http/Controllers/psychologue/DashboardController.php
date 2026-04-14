@@ -5,6 +5,7 @@ namespace App\Http\Controllers\psychologue;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
+use App\Models\FollowRequest;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -40,11 +41,21 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        // Récupérer les patients suivis (FollowRequest accepted)
+        $followedPatients = FollowRequest::where('psychologist_id', $psychologue->id)
+            ->where('status', 'accepted')
+            ->with('patient.user')
+            ->get()
+            ->map(function($request) {
+                return $request->patient;
+            });
+
         return view("psychologue.dashboard", compact(
             'totalAppointments',
             'appointmentsToday',
             'pastAppointments',
-            'upcomingUpcoming'
+            'upcomingUpcoming',
+            'followedPatients'
         ));
     }
 }

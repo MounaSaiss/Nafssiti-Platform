@@ -134,7 +134,7 @@
                         <p class="text-xs font-bold text-slate-900">{{ Auth::user()->name ?? 'Utilisateur' }}</p>
                         <p class="text-[10px] text-slate-400 font-medium uppercase">Psychologue</p>
                     </div>
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name ?? 'U') }}&background=4dbfbf&color=fff"
+                    <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name ?? 'U') . '&background=4dbfbf&color=fff' }}"
                         class="w-10 h-10 rounded-full shadow-sm">
                 </div>
             </header>
@@ -162,7 +162,10 @@
         </main>
     </div>
 
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/fr.global.min.js"></script>
     @yield('scripts')
+    @stack('scripts')
 </body>
 
 </html>
