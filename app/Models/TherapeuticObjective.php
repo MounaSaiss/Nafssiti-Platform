@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class TherapeuticObjective extends Model
 {
-    protected $fillable = ['psychologist_id', 'patient_id', 'description', 'status'];
+    protected $fillable = [
+        'psychologist_id',
+        'patient_id',
+        'description',
+        'status'
+    ];
 
     public function psychologist()
     {

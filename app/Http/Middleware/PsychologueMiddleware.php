@@ -9,11 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PsychologueMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
+    // Handle an incoming request.
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && Auth::user()->role_id == 2) {

@@ -37,18 +37,14 @@ class Patient extends Model
         return $this->hasMany(Recommendation::class);
     }
 
-    /**
-     * Calcule l'âge à partir de la date de naissance
-     */
+    // Calcule l'âge à partir de la date de naissance
     public function getAgeAttribute()
     {
         if (!$this->date_of_birth) return null;
         return \Carbon\Carbon::parse($this->date_of_birth)->age;
     }
 
-    /**
-     * Date de début de suivi (date du premier rendez-vous partagé/confirmé)
-     */
+    // Date de début de suivi (date du premier rendez-vous partagé/confirmé)
     public function getSuiviStartDateAttribute()
     {
         $firstApp = $this->appointments()->where('status', 'confirmed')->orderBy('appointmentDate', 'asc')->first();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\patient;
 
+use App\Rules\ValidConsultationSlot;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreReservationRequest extends FormRequest
@@ -16,7 +17,10 @@ class StoreReservationRequest extends FormRequest
         return [
             'psychologist_id' => 'required|exists:psychologists,id',
             'appointment_date' => 'required|date|after_or_equal:today',
-            'appointment_time' => 'required',
+            'appointment_time' => [
+                'required',
+                new ValidConsultationSlot($this->psychologist_id, $this->appointment_date),
+            ],
             'notes' => 'nullable|string|max:1000',
         ];
     }

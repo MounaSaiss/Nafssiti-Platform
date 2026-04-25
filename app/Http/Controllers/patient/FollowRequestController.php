@@ -17,7 +17,8 @@ class FollowRequestController extends Controller
 
         // Vérifier que le rendez-vous appartient au patient connecté
         if ($appointment->patient_id !== $patient->id) {
-            abort(403);
+            return redirect()->route('patient.bilan_seance')
+                ->with('error', 'Vous ne pouvez pas encore soumettre un bilan.');
         }
 
         // Vérifier que la consultation est bien terminée

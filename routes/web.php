@@ -1,18 +1,12 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\patient\DashboardController as PatientDashboardController;
-use App\Http\Controllers\patient\ReservationController as PatientReservationController;
-use App\Http\Controllers\patient\AppointmentController as PatientAppointmentController;
-use App\Http\Controllers\patient\ProfileController as PatientProfileController;
 use App\Http\Controllers\psychologue\DashboardController as PsychologueDashboardController;
 use App\Http\Controllers\psychologue\ProfileController as PsychologueProfileController;
 use App\Http\Controllers\psychologue\UnavailabilityController as PsychologueUnavailabilityController;
 use App\Http\Controllers\psychologue\AppointmentController as PsychologueAppointmentController;
 use App\Http\Controllers\psychologue\CalendarController;
 use App\Http\Controllers\psychologue\FollowRequestController as PsychologueFollowRequestController;
-use App\Http\Controllers\patient\BilanSeanceController as PatientBilanSeanceController;
-use App\Http\Controllers\patient\FollowRequestController as PatientFollowRequestController;
 use App\Http\Controllers\PsychologueController;
 use App\Http\Controllers\MeetingController;
 use Illuminate\Support\Facades\Route;
@@ -22,34 +16,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/psychologues', [PsychologueController::class, 'allPsychologues'])
     ->name('psychologue.allPsychologues');
 
-require __DIR__.'/auth.php';
-require __DIR__.'/admin.php';
-
 Route::middleware(['auth'])->group(function () {
     Route::get('/meeting/{appointment}', [MeetingController::class, 'join'])->name('meeting.join');
 });
 
-
-
-// PATIENT LINK
-Route::middleware(['auth', 'patient'])->group(function () {
-    Route::get('/patient/dashboard', [PatientDashboardController::class, 'index'])->name('patient.dashboard');
-    Route::get('/patient/reservation', [PatientReservationController::class, 'reservation'])->name('patient.reservation');
-    Route::post('/patient/reservation', [App\Http\Controllers\patient\StripePaymentController::class, 'checkout'])->name('patient.storeReservation');
-    
-    // Stripe Payments
-    Route::get('/patient/payment/success', [App\Http\Controllers\patient\StripePaymentController::class, 'success'])->name('patient.payment.success');
-    Route::get('/patient/payment/cancel', [App\Http\Controllers\patient\StripePaymentController::class, 'cancel'])->name('patient.payment.cancel');
-
-    Route::get('/patient/rendezVous', [PatientAppointmentController::class, 'rendezVous'])->name('patient.rendezVous');
-    Route::get('/patient/bilan-seance', [PatientBilanSeanceController::class, 'index'])->name('patient.bilan_seance');
-    Route::post('/patient/bilan-seance/{appointment}/follow', [PatientFollowRequestController::class, 'store'])->name('patient.follow_request.store');
-    Route::get('/patient/profil', [PatientProfileController::class, 'profil'])->name('patient.profil');
-    Route::post('/patient/profil', [PatientProfileController::class, 'updateProfil'])->name('patient.updateProfil');
-
-    // Shared Room
-    Route::get('/patient/mon-suivi/{psychologist}', [App\Http\Controllers\patient\SharedRoomController::class, 'index'])->name('patient.shared_room.index');
-});
 
 // PSYCHOLOGUE LINK
 Route::middleware(['auth', 'psychologue'])->group(function () {
@@ -84,3 +54,7 @@ Route::middleware(['auth', 'psychologue'])->group(function () {
         Route::post('/{patient}/appointment', [App\Http\Controllers\psychologue\SharedRoomController::class, 'storeAppointment'])->name('storeAppointment');
     });
 });
+
+require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';
+require __DIR__.'/patient.php';

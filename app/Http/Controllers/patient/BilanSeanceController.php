@@ -30,7 +30,6 @@ class BilanSeanceController extends Controller
                 ->where('psychologist_id', $appointment->psychologist_id)
                 ->first();
         }
-
         return view('patient.post_meeting', compact('appointment', 'followRequest'));
     }
 }
