@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,24 +6,26 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans:
+        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
 }
-        .text-nafssiti-blue {
-            color: #4dbfbf;
-        }
+.text-nafssiti-blue {
+    color: #4dbfbf;
+}
 
-        .bg-nafssiti-blue {
-            background-color: #4dbfbf;
-        }
+.bg-nafssiti-blue {
+    background-color: #4dbfbf;
+}
 
-        .text-nafssiti-green {
-            color: #96d14b;
-        }
+.text-nafssiti-green {
+    color: #96d14b;
+}
 
-        .bg-nafssiti-green {
-            background-color: #96d14b;
-        }
+.bg-nafssiti-green {
+    background-color: #96d14b;
+}
 
 /* --- Psychologist Dashboard Styles --- */
 
@@ -62,24 +64,24 @@
 }
 
 /* Shared Room Specific Styles */
-.shared-room-body { 
-    background-color: #f8fafc; 
+.shared-room-body {
+    background-color: #f8fafc;
 }
 
-.custom-scrollbar-thin::-webkit-scrollbar { 
-    width: 2px; 
+.custom-scrollbar-thin::-webkit-scrollbar {
+    width: 2px;
 }
 
-.custom-scrollbar-thin::-webkit-scrollbar-track { 
-    background: transparent; 
+.custom-scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-.custom-scrollbar-thin::-webkit-scrollbar-thumb { 
-    background: #e2e8f0; 
-    border-radius: 10px; 
+.custom-scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
 }
 
-* { 
-    font-family: 'Rubik', sans-serif; 
+* {
+    font-family: "Rubik", sans-serif;
     -webkit-font-smoothing: antialiased;
 }
