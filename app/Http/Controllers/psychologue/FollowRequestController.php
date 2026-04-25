@@ -4,7 +4,6 @@ namespace App\Http\Controllers\psychologue;
 
 use App\Http\Controllers\Controller;
 use App\Models\FollowRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FollowRequestController extends Controller
@@ -26,7 +25,7 @@ class FollowRequestController extends Controller
         $psychologist = Auth::user()->psychologist;
 
         if ($followRequest->psychologist_id !== $psychologist->id) {
-            abort(403);
+            return redirect()->back()->with('error', 'Action non autorisée.');
         }
 
         $followRequest->update(['status' => 'accepted']);
@@ -40,7 +39,7 @@ class FollowRequestController extends Controller
         $psychologist = Auth::user()->psychologist;
 
         if ($followRequest->psychologist_id !== $psychologist->id) {
-            abort(403);
+            return redirect()->back()->with('error', 'Action non autorisée.');
         }
 
         $followRequest->update(['status' => 'rejected']);

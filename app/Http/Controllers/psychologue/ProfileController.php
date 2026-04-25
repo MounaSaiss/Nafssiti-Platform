@@ -26,7 +26,6 @@ class ProfileController extends Controller
             'name' => $validated['name'],
             'city' => $validated['city'],
         ];
-
         if ($request->hasFile('avatar')) {
             if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);

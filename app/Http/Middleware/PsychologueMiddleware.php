@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class PsychologueMiddleware
 {
-    // Handle an incoming request.
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && Auth::user()->role_id == 2) {
