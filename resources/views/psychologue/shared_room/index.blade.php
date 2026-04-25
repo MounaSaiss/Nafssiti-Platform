@@ -182,19 +182,6 @@
     </div>
 </div>
 
-<style>
-    body { background-color: #f8fafc; }
-    .custom-scrollbar::-webkit-scrollbar { width: 2px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-    
-    /* Global Compact Font Factor */
-    * { 
-        font-family: 'Rubik', sans-serif; 
-        -webkit-font-smoothing: antialiased;
-    }
-</style>
-
 <script>
     function toggleEditInfo() {
         const display = document.getElementById('patient-info-display');
