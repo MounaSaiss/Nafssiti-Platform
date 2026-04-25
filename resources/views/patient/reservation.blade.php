@@ -39,7 +39,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('patient.storeReservation') }}" method="POST" class="p-8 space-y-12" id="reservation-form">
+            <form action="{{ route('patient.payment') }}" method="POST" class="p-8 space-y-12" id="reservation-form">
                 @csrf
                 {{-- Hidden inputs for final submission --}}
                 <input type="hidden" name="psychologist_id" value="{{ $selectedPsychologistId }}">

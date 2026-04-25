@@ -13,7 +13,6 @@ Route::middleware(['auth', 'patient'])->group(function () {
     Route::get('/patient/dashboard', [PatientDashboardController::class, 'index'])->name('patient.dashboard');
 
     Route::get('/patient/reservation', [PatientReservationController::class, 'reservation'])->name('patient.reservation');
-    Route::get('/patient/reservation/store', [PatientReservationController::class, 'storeReservation'])->name('patient.storeReservation');
 
     Route::post('/patient/payment', [PatientStripePaymentController::class, 'checkout'])->name('patient.payment');
     Route::get('/patient/payment/success', [PatientStripePaymentController::class, 'success'])->name('patient.payment.success');
