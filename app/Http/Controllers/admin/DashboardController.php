@@ -16,7 +16,11 @@ class DashboardController extends Controller
         $pendingPsychologists = Psychologist::with('user')->where('validationStatus', 'pending')->get();
         $appointments = Appointment::all();
         $globalRevenue = 0;
-        $globalRevenue = Payment::where('status', 'completed')->sum('totalPrice') * 0.1;
+        $globalRevenue = Payment::where('status', 'completed')
+            ->whereHas('appointment', function($query) {
+                $query->where('status', 'confirmed');
+            })
+            ->sum('totalPrice') * 0.1;
         $activeUsersCount = User::where('status', 'actif')->where('role_id', '!=', 3)->count();
 
         return view('admin.dashboard', [
