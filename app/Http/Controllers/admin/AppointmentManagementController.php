@@ -11,19 +11,15 @@ class AppointmentManagementController extends Controller
     public function index(AppointmentsFilterRequest $request)
     {
         $query = Appointment::with(['patient.user', 'psychologist.user']);
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->whereHas('patient.user', function($userQuery) use ($search) {
-                    $userQuery->where('name', 'like', "%{$search}%");
-                })->orWhereHas('psychologist.user', function($userQuery) use ($search) {
-                    $userQuery->where('name', 'like', "%{$search}%");
-                });
-            });
+        //Recherche par nom (patient ou psychologue)
+        if ($search = $request->search) {
+            $query->where(fn($q) => 
+                $q->whereHas('patient.user', fn($u) => $u->where('name', 'like', "%$search%"))
+                  ->orWhereHas('psychologist.user', fn($u) => $u->where('name', 'like', "%$search%"))
+            );
         }
-
-        if (isset($request->status) && $request->status != 'all') {
+        //Filtre par statut
+        if ($request->status && $request->status !== 'all') {
             $query->where('status', $request->status);
         }
         $appointments = $query->latest()->get();
@@ -34,9 +30,7 @@ class AppointmentManagementController extends Controller
         if ($appointment->status !== 'pending') {
             return back()->with('error', 'Ce rendez-vous n\'est plus en attente.');
         }
-
         $appointment->update(['status' => 'confirmed']);
-
         return back()->with('success', 'Le rendez-vous a été accepté avec succès.');
     }
     public function refuse(Appointment $appointment)
@@ -44,9 +38,7 @@ class AppointmentManagementController extends Controller
         if ($appointment->status !== 'pending') {
             return back()->with('error', 'Ce rendez-vous n\'est plus en attente.');
         }
-
         $appointment->update(['status' => 'rejected']);
-
         return back()->with('success', 'Le rendez-vous a été refusé.');
     }
 }

@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recommendation extends Model
 {
-    protected $fillable = ['psychologist_id', 'patient_id', 'content'];
+    protected $fillable = [
+        'psychologist_id',
+        'patient_id',
+        'content'
+    ];
 
     public function psychologist()
     {

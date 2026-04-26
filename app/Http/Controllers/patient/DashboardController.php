@@ -17,13 +17,13 @@ class DashboardController extends Controller
         $nextAppointment = $user->appointments()
             ->with('psychologist.user')
             ->where('status', 'confirmed')
-            ->where(function ($q) {
+            ->where(fn($q) => 
                 $q->where('appointmentDate', '>', now()->toDateString())
-                    ->orWhere(function ($sq) {
+                    ->orWhere(fn($sq) => 
                         $sq->where('appointmentDate', '=', now()->toDateString())
-                            ->where('appointmentTime', '>=', now()->toTimeString());
-                    });
-            })
+                            ->where('appointmentTime', '>=', now()->toTimeString())
+                    )
+            )
             ->orderBy('appointmentDate')
             ->orderBy('appointmentTime')
             ->first();

@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\psychologue;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\psychologue\UpdatePatientInfoRequest;
+use App\Http\Requests\psychologue\StorePrivateNoteRequest;
+use App\Http\Requests\psychologue\StoreObjectiveRequest;
+use App\Http\Requests\psychologue\StoreRecommendationRequest;
+use App\Http\Requests\psychologue\StoreAppointmentRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Patient;
 use App\Models\Appointment;
@@ -60,50 +64,35 @@ class SharedRoomController extends Controller
         ));
     }
 
-    public function updatePatientInfo(Request $request, $patient_id)
+    public function updatePatientInfo(UpdatePatientInfoRequest $request, $patient_id)
     {
-        $request->validate([
-            'date_of_birth' => 'nullable|date',
-            'problematique_principale' => 'nullable|string'
-        ]);
-
         $patient = Patient::findOrFail($patient_id);
-        $patient->update($request->only(['date_of_birth', 'problematique_principale']));
+        $patient->update($request->validated());
 
         return back()->with('success', 'Informations patient mises à jour.');
     }
 
-    public function storePrivateNote(Request $request, $patient_id)
+    public function storePrivateNote(StorePrivateNoteRequest $request, $patient_id)
     {
-        $request->validate([
-            'content' => 'required|string'
-        ]);
-
         $psychologist = Auth::user()->psychologist;
 
-        PrivateNote::create([
+        PrivateNote::create(array_merge($request->validated(), [
             'psychologist_id' => $psychologist->id,
-            'patient_id' => $patient_id,
-            'content' => $request->content
-        ]);
+            'patient_id' => $patient_id
+        ]));
 
         return back()->with('success', 'Note clinique ajoutée (visible uniquement par vous).');
     }
 
-    public function storeObjective(Request $request, $patient_id)
+    public function storeObjective(StoreObjectiveRequest $request, $patient_id)
     {
-        $request->validate([
-            'description' => 'required|string'
-        ]);
-
         $psychologist = Auth::user()->psychologist;
 
-        TherapeuticObjective::create([
+        TherapeuticObjective::create(array_merge($request->validated(), [
             'psychologist_id' => $psychologist->id,
             'patient_id' => $patient_id,
-            'description' => $request->description,
             'status' => 'en cours'
-        ]);
+        ]));
 
         return back()->with('success', 'Objectif thérapeutique ajouté.');
     }
@@ -120,19 +109,14 @@ class SharedRoomController extends Controller
         return back()->with('success', 'Statut de l\'objectif mis à jour.');
     }
 
-    public function storeRecommendation(Request $request, $patient_id)
+    public function storeRecommendation(StoreRecommendationRequest $request, $patient_id)
     {
-        $request->validate([
-            'content' => 'required|string'
-        ]);
-
         $psychologist = Auth::user()->psychologist;
 
-        Recommendation::create([
+        Recommendation::create(array_merge($request->validated(), [
             'psychologist_id' => $psychologist->id,
-            'patient_id' => $patient_id,
-            'content' => $request->content
-        ]);
+            'patient_id' => $patient_id
+        ]));
 
         return back()->with('success', 'Recommandation envoyée au patient.');
     }
@@ -158,13 +142,8 @@ class SharedRoomController extends Controller
         return back()->with('success', 'Recommandation supprimée.');
     }
 
-    public function storeAppointment(Request $request, $patient_id)
+    public function storeAppointment(StoreAppointmentRequest $request, $patient_id)
     {
-        $request->validate([
-            'appointmentDate' => 'required|date|after_or_equal:today',
-            'appointmentTime' => 'required'
-        ]);
-
         $psychologist = Auth::user()->psychologist;
 
         $isBlocked = \App\Models\Unavailability::where('psychologist_id', $psychologist->id)
@@ -190,14 +169,12 @@ class SharedRoomController extends Controller
             return back()->with('error', 'Ce créneau est déjà réservé pour un autre rendez-vous.');
         }
 
-        Appointment::create([
+        Appointment::create(array_merge($request->validated(), [
             'patient_id' => $patient_id,
             'psychologist_id' => $psychologist->id,
-            'appointmentDate' => $request->appointmentDate,
-            'appointmentTime' => $request->appointmentTime,
             'status' => 'confirmed',
             'consultation_status' => 'pending'
-        ]);
+        ]));
 
         return back()->with('success', 'Nouveau rendez-vous planifié avec succès.');
     }

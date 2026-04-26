@@ -10,13 +10,6 @@
             <p class="text-slate-400 text-xs mt-1 font-medium">Gérez vos informations personnelles et vos préférences de sécurité.</p>
         </div>
 
-        @if(session('success'))
-            <div class="mb-6 p-4 bg-green-50 border border-green-100 text-green-600 text-xs font-bold rounded-sm flex items-center gap-3">
-                <i class="fas fa-check-circle"></i>
-                {{ session('success') }}
-            </div>
-        @endif
-
         <form action="{{ route('patient.updateProfil') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             <div class="bg-white border border-slate-200 rounded-sm p-6 shadow-sm">

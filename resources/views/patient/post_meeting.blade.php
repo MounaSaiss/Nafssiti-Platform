@@ -6,22 +6,6 @@
 @section('content')
     <div class="max-w-2xl mx-auto mt-6">
 
-        @if (session('success'))
-            <div
-                class="mb-4 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-sm flex items-center gap-3">
-                <i class="fas fa-check-circle"></i>
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div
-                class="mb-4 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-sm flex items-center gap-3">
-                <i class="fas fa-exclamation-circle"></i>
-                {{ session('error') }}
-            </div>
-        @endif
-
         @if (!$appointment)
             {{-- Aucune séance --}}
             <div class="bg-white rounded-sm shadow-sm border border-slate-200 p-8 text-center text-slate-500">
@@ -44,6 +28,19 @@
                         <h2 class="text-lg font-bold text-slate-800 mb-1">Consultation en attente</h2>
                         <p class="text-sm text-slate-600">Vous n'avez pas encore terminé votre première consultation.
                             Revenez ici une fois la séance achevée pour donner votre avis.</p>
+                        <div class="mt-6">
+                            @if($followRequest && $followRequest->status === 'accepted')
+                                <a href="{{ route('patient.shared_room.index', $appointment->psychologist_id) }}" 
+                                   class="inline-flex items-center gap-2 bg-nafssiti-primary text-white border border-nafssiti-primary px-6 py-2.5 rounded-sm font-bold shadow-sm transition-all hover:bg-teal-500 text-xs uppercase tracking-widest">
+                                    <i class="fas fa-folder-open"></i> Accéder à mon dossier partagé
+                                </a>
+                            @else
+                                <a href="{{ route('patient.dashboard') }}" 
+                                   class="inline-flex items-center gap-2 bg-white border border-blue-200 text-blue-600 px-6 py-2.5 rounded-sm font-bold shadow-sm transition-all hover:bg-blue-50 text-xs uppercase tracking-widest">
+                                    <i class="fas fa-arrow-left"></i> Retour au Dashboard
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 @else
                     {{-- ETAT: COMPLETED (A EVALUER) --}}
@@ -60,6 +57,14 @@
                             {{ \Carbon\Carbon::parse($appointment->appointmentTime)->format('H:i') }}) est à présent
                             terminée.
                         </p>
+                        @if($followRequest && $followRequest->status === 'accepted')
+                            <div class="mt-4 pt-4 border-t border-teal-100/50">
+                                <a href="{{ route('patient.shared_room.index', $appointment->psychologist_id) }}" 
+                                   class="inline-flex items-center gap-2 bg-nafssiti-primary hover:bg-teal-500 text-white px-6 py-2.5 rounded-sm font-bold shadow-sm transition-all transform hover:-translate-y-0.5 text-xs">
+                                    <i class="fas fa-folder-open"></i> Accéder à mon dossier partagé
+                                </a>
+                            </div>
+                        @endif
                     </div>
 
                     {{-- Section to hide completely on 'Non Satisfait' --}}

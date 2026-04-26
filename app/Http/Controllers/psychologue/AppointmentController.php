@@ -40,7 +40,6 @@ class AppointmentController extends Controller
         if ($request->filled('status') && $request->status != 'all') {
             $query->where('status', $request->status);
         }
-
         $appointments = $query->latest('appointmentDate')
             ->latest('appointmentTime')
             ->get();
@@ -81,27 +80,22 @@ class AppointmentController extends Controller
             'rejection_reason' => $request->input('rejection_reason', $defaultMessage)
         ]);
 
-        // Logic Remboursement Stripe
-        $payment = Payment::where('appointment_id', $appointment->id)
-            ->where('status', 'completed')
-            ->first();
+        // Gérer le remboursement automatique via Stripe
+        $payment = Payment::where('appointment_id', $appointment->id)->where('status', 'completed')->first();
 
         if ($payment && $payment->stripe_id) {
             try {
                 Stripe::setApiKey(env('STRIPE_SECRET'));
-                Refund::create([
-                    'payment_intent' => $payment->stripe_id,
-                ]);
-                
+                Refund::create(['payment_intent' => $payment->stripe_id]);
                 $payment->update(['status' => 'refunded']);
+                
+                return back()->with('success', 'Rendez-vous refusé et remboursé au patient.');
             } catch (\Exception $e) {
-                // Log l'erreur mais ne bloque pas le refus
-                \Log::error('Erreur Remboursement Stripe: ' . $e->getMessage());
-                return back()->with('success', 'Rendez-vous refusé, mais erreur lors du remboursement automatique. Veuillez vérifier sur votre interface Stripe.');
+                return back()->with('error', 'Rendez-vous refusé, mais erreur lors du remboursement Stripe.');
             }
         }
 
-        return back()->with('success', 'Rendez-vous refusé' . ($payment ? ' et remboursé au patient.' : '.'));
+        return back()->with('success', 'Rendez-vous refusé.');
     }
 
     public function complete(Appointment $appointment)
@@ -120,7 +114,7 @@ class AppointmentController extends Controller
     private function authorizeOwnership(Appointment $appointment)
     {
         if ($appointment->psychologist_id !== Auth::user()->psychologist->id) {
-            abort(403, 'Action non autorisée.');
+            return redirect()->back()->with('error', 'Action non autorisée.')->send();
         }
     }
 }

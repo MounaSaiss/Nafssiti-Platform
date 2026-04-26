@@ -23,12 +23,6 @@
 @section('content')
     <div class="max-w-5xl">
         <div class="bg-white border border-slate-200 rounded-sm shadow-sm overflow-hidden">
-            @if (session('error'))
-                <div class="bg-red-50 border-l-4 border-red-400 p-4 m-8 mb-0">
-                    <p class="text-xs text-red-700 font-bold uppercase tracking-widest">{{ session('error') }}</p>
-                </div>
-            @endif
-
             @if ($errors->any())
                 <div class="bg-red-50 border-l-4 border-red-400 p-4 m-8 mb-0">
                     <ul class="list-disc pl-5">
@@ -39,7 +33,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('patient.storeReservation') }}" method="POST" class="p-8 space-y-12" id="reservation-form">
+            <form action="{{ route('patient.payment') }}" method="POST" class="p-8 space-y-12" id="reservation-form">
                 @csrf
                 {{-- Hidden inputs for final submission --}}
                 <input type="hidden" name="psychologist_id" value="{{ $selectedPsychologistId }}">

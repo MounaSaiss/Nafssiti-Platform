@@ -9,17 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
+    // Handle an incoming request.
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role_id == 3) {
+        if(Auth::check() && Auth::user()->role_id == 3){
             return $next($request);
         }
-
         return redirect()->route('home')->with('error', 'Accès réservé aux administrateurs.');
     }
 }

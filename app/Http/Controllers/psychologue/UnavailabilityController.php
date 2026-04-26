@@ -6,7 +6,6 @@ use App\Http\Requests\psychologue\StoreUnavailabilityRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Unavailability;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class UnavailabilityController extends Controller
 {

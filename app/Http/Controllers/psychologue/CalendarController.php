@@ -27,8 +27,8 @@ class CalendarController extends Controller
                 'start' => $appointment->appointmentDate . 'T' . $appointment->appointmentTime,
                 // On estime une durée de 1h par défaut si non spécifiée
                 'end' => date('Y-m-d\TH:i:s', strtotime($appointment->appointmentDate . ' ' . $appointment->appointmentTime . ' +1 hour')),
-                'backgroundColor' => $appointment->status === 'confirmed' ? '#4dbfbf' : '#f43f5e',
-                'borderColor' => $appointment->status === 'confirmed' ? '#4dbfbf' : '#f43f5e',
+                'backgroundColor' => $appointment->status === 'confirmed' ? '#3da903ff' : '#f1092fff',
+                'borderColor' => $appointment->status === 'confirmed' ? '#3da903ff' : '#f1092fff',
                 'extendedProps' => [
                     'type' => 'appointment',
                     'status' => $appointment->status,
@@ -53,7 +53,6 @@ class CalendarController extends Controller
                 ]
             ];
         }
-
         return response()->json($events);
     }
 

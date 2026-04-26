@@ -5,22 +5,10 @@
 
 @section('content')
     {{-- Messages de retour (Ajout / Suppression) --}}
-    @if(session('success'))
-        <div class="mb-6 bg-green-50 border border-green-100 text-nafssiti-secondary text-xs font-bold p-4 rounded-sm flex items-center gap-3 shadow-sm">
-            <i class="fas fa-check-circle"></i>
-            {{ session('success') }}
-        </div>
-    @endif
     @if(session('delete_success'))
         <div class="mb-6 bg-red-50 border border-red-100 text-red-500 text-xs font-bold p-4 rounded-sm flex items-center gap-3 shadow-sm">
             <i class="fas fa-trash-alt"></i>
             {{ session('delete_success') }}
-        </div>
-    @endif
-    @if(session('error'))
-        <div class="mb-6 bg-red-50 border border-red-100 text-red-500 text-xs font-bold p-4 rounded-sm flex items-center gap-3 shadow-sm">
-            <i class="fas fa-exclamation-circle"></i>
-            {{ session('error') }}
         </div>
     @endif
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">

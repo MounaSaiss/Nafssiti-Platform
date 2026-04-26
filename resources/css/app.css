@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,22 +6,82 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans:
+        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
 }
-        .text-nafssiti-blue {
-            color: #4dbfbf;
-        }
+.text-nafssiti-blue {
+    color: #4dbfbf;
+}
 
-        .bg-nafssiti-blue {
-            background-color: #4dbfbf;
-        }
+.bg-nafssiti-blue {
+    background-color: #4dbfbf;
+}
 
-        .text-nafssiti-green {
-            color: #96d14b;
-        }
+.text-nafssiti-green {
+    color: #96d14b;
+}
 
-        .bg-nafssiti-green {
-            background-color: #96d14b;
-        }
- 
+.bg-nafssiti-green {
+    background-color: #96d14b;
+}
+
+/* --- Psychologist Dashboard Styles --- */
+
+.nav-item-active {
+    background: #ffffff10;
+    color: #4dbfbf;
+    border-right: 4px solid #4dbfbf;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #4dbfbf;
+    border-radius: 10px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Shared Room Specific Styles */
+.shared-room-body {
+    background-color: #f8fafc;
+}
+
+.custom-scrollbar-thin::-webkit-scrollbar {
+    width: 2px;
+}
+
+.custom-scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+}
+
+* {
+    font-family: "Rubik", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}

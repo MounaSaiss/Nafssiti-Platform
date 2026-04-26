@@ -25,43 +25,7 @@
             }
         }
     </script>
-    <style>
-        .nav-item-active {
-            background: #ffffff10;
-            color: #4dbfbf;
-            border-right: 4px solid #4dbfbf;
-        }
-
-        /* Custom scrollbar for pro usage */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #4dbfbf;
-            border-radius: 10px;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-    </style>
+    @vite(['resources/css/app.css'])
     @yield('styles')
 </head>
 
@@ -162,8 +126,6 @@
         </main>
     </div>
 
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/fr.global.min.js"></script>
     @yield('scripts')
     @stack('scripts')
 </body>
