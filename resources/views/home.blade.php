@@ -77,7 +77,7 @@
                     </div>
 
                     <div class="lg:hidden flex items-center">
-                        <button class="text-nafssiti-blue focus:outline-none">
+                        <button id="mobile-menu-button" class="text-nafssiti-blue focus:outline-none">
                             <i class="fas fa-bars text-2xl"></i>
                         </button>
                     </div>
@@ -85,6 +85,59 @@
             </div>
         </div>
     </nav>
+
+    <!-- Mobile menu overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-white transform translate-x-full transition-transform duration-300 lg:hidden overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-10">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo Nafssiti" class="h-12 w-auto">
+                <button id="close-menu-button" class="text-nafssiti-blue focus:outline-none hover:rotate-90 transition-transform duration-300">
+                    <i class="fas fa-times text-3xl"></i>
+                </button>
+            </div>
+            
+            <div class="flex flex-col space-y-8">
+                <div class="flex flex-col space-y-6 text-xl font-bold text-gray-800">
+                    <a href="/" class="flex items-center space-x-4 hover:text-nafssiti-blue transition">
+                        <i class="fas fa-home w-8 text-nafssiti-blue text-center"></i>
+                        <span>Accueil</span>
+                    </a>
+                    <a href="{{ route('psychologue.allPsychologues') }}" class="flex items-center space-x-4 hover:text-nafssiti-blue transition">
+                        <i class="fas fa-user-md w-8 text-nafssiti-blue text-center"></i>
+                        <span>Psychologues</span>
+                    </a>
+                </div>
+
+                <div class="pt-8 border-t border-gray-100">
+                    <h3 class="text-xs font-black uppercase tracking-widest text-gray-400 mb-6">Compte</h3>
+                    <div class="flex flex-col space-y-6">
+                        <a href="{{ route('login') }}" class="flex items-center space-x-4 text-lg font-bold text-gray-700 hover:text-nafssiti-blue transition">
+                            <i class="fas fa-sign-in-alt w-8 text-center"></i>
+                            <span>Connexion</span>
+                        </a>
+                        <a href="{{ route('show.register.patient') }}" class="flex items-center space-x-4 p-4 bg-nafssiti-blue/5 rounded-2xl text-nafssiti-blue font-bold hover:bg-nafssiti-blue hover:text-white transition-all group">
+                            <div class="w-10 h-10 rounded-xl bg-nafssiti-blue/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                                <i class="fas fa-user-circle text-lg"></i>
+                            </div>
+                            <span>Je suis un Patient</span>
+                        </a>
+                        <a href="{{ route('register.psychologue') }}" class="flex items-center space-x-4 p-4 bg-green-50 rounded-2xl text-green-600 font-bold hover:bg-green-600 hover:text-white transition-all group">
+                            <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                                <i class="fas fa-certificate text-lg"></i>
+                            </div>
+                            <span>Je suis Spécialiste</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="pt-8 flex justify-center space-x-6 text-gray-400">
+                    <a href="#" class="text-2xl hover:text-nafssiti-blue transition-colors"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-2xl hover:text-nafssiti-blue transition-colors"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-2xl hover:text-nafssiti-blue transition-colors"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <header class="relative bg-white overflow-hidden py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center">
@@ -273,6 +326,34 @@
         </div>
     </footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const closeMenuButton = document.getElementById('close-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            function toggleMenu() {
+                mobileMenu.classList.toggle('translate-x-full');
+                document.body.classList.toggle('overflow-hidden');
+            }
+
+            if (mobileMenuButton && mobileMenu && closeMenuButton) {
+                mobileMenuButton.addEventListener('click', toggleMenu);
+                closeMenuButton.addEventListener('click', toggleMenu);
+
+                // Close menu when clicking on a link
+                const menuLinks = mobileMenu.querySelectorAll('a');
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        // Only close if it's not a dummy link (#)
+                        if (link.getAttribute('href') !== '#') {
+                            toggleMenu();
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
