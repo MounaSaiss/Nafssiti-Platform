@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. Rename availabilities to unavailabilities
         Schema::rename('availabilities', 'unavailabilities');
 
-        // 2. Update appointments table
         Schema::table('appointments', function (Blueprint $table) {
-            // Drop foreign key and column for availability_id
             $table->dropForeign(['availability_id']);
             $table->dropColumn('availability_id');
         });

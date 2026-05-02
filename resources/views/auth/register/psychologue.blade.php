@@ -114,15 +114,8 @@
                 <div>
                     <label
                         class="block text-xs font-bold text-gray-600 dark:text-gray-400 uppercase mb-1">Spécialité</label>
-                    <select name="specialization" required
+                    <input type="text" name="specialization" value="{{ old('specialization') }}"
                         class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg dark:text-white outline-none">
-                        <option value="" disabled selected>Choisir une spécialité</option>
-                        @foreach ($specialities as $speciality)
-                            <option value="{{ $speciality->name }}"
-                                {{ old('specialization') == $speciality->name ? 'selected' : '' }}>
-                                {{ $speciality->name }}</option>
-                        @endforeach
-                    </select>
                     @error('specialization')
                         <span class="text-xs text-red-500 font-bold mt-1 block">{{ $message }}</span>
                     @enderror

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Patient;
 use App\Models\Psychologist;
-use App\Models\Speciality;
 use App\Models\User;
 use App\Models\Certificate;
 use App\Http\Requests\patient\PatientRegisterRequest;
@@ -23,8 +22,7 @@ class AuthController extends Controller
 
     public function showPsychologueRegistrationForm()
     {
-        $specialities = Speciality::all();
-        return view('auth.register.psychologue',compact('specialities'));
+        return view('auth.register.psychologue');
     }
 
     public function showLoginForm()

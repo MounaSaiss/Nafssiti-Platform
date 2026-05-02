@@ -23,4 +23,14 @@ class FollowRequest extends Model
     {
         return $this->belongsTo(Psychologist::class);
     }
+
+    public function recommendations()
+    {
+        return $this->hasMany(Recommendation::class);
+    }
+
+    public function therapeuticObjectives()
+    {
+        return $this->hasMany(TherapeuticObjective::class);
+    }
 }

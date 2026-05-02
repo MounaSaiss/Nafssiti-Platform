@@ -26,7 +26,9 @@ class PsychologueController extends Controller
             ->distinct()
             ->pluck('city');
             
-        $specialties = Speciality::all()->pluck('name');
+        $specialties = Psychologist::where('validationStatus', 'approved')
+            ->distinct()
+            ->pluck('specialization');
 
         return view('psychologue.allPsychologues', compact('psychologues', 'specialties', 'cities'));
     }
