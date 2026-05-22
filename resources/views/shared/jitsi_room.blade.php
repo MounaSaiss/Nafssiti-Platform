@@ -56,7 +56,7 @@
 
     <script>
         window.onload = () => {
-            const domain = "meet.jit.si";
+            const domain = "meet.jit.si"; //Domain Name for the jitsi server
             const options = {
                 roomName: "{{ $appointment->jitsi_room_id }}",
                 width: "100%",
