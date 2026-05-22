@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\admin\AppointmentManagementController;
 use App\Http\Controllers\admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\admin\SpecialityController;
 use App\Http\Controllers\admin\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,8 +17,4 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/appointmentManagement', [AppointmentManagementController::class, 'index'])->name('admin.appointments.index');
     Route::post('/admin/appointments/{appointment}/accept', [AppointmentManagementController::class, 'accept'])->name('admin.appointments.accept');
     Route::post('/admin/appointments/{appointment}/refuse', [AppointmentManagementController::class, 'refuse'])->name('admin.appointments.refuse');
-    // speciality management 
-    Route::get('/admin/specialities', [SpecialityController::class, 'index'])->name('admin.speciality.index');
-    Route::post('/admin/specialities', [SpecialityController::class, 'store'])->name('admin.speciality.store');
-    Route::delete('/admin/specialities/{id}', [SpecialityController::class, 'destroy'])->name('admin.speciality.destroy');
 });

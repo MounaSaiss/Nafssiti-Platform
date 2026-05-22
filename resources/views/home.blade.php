@@ -9,6 +9,7 @@
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body class="bg-gray-50 font-sans">
 
     <nav class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 transition-colors duration-300">
@@ -18,91 +19,66 @@
                 <div class="flex items-center space-x-3">
                     <img src="{{ asset('images/logo.png') }}" alt="Logo Nafssiti" class="h-12 w-auto">
                 </div>
+                <div class="hidden md:block h-6 border-l border-gray-200 dark:border-gray-700 mx-2"></div>
 
-                <div
-                    class="hidden lg:flex items-center space-x-6 text-sm font-semibold text-gray-700 dark:text-gray-200">
-                    <a href="/"
-                        class="hover:text-nafssiti-blue transition border-b-2 border-transparent hover:border-nafssiti-blue py-1">Accueil</a>
-                    <a href="{{ route('psychologue.allPsychologues') }}"
-                        class="hover:text-nafssiti-blue transition border-b-2 border-transparent hover:border-nafssiti-blue py-1">Psychologues</a>
-                </div>
+                <div class="hidden md:flex items-center space-x-3">
+                    <a href="{{ route('login') }}"
+                        class="text-gray-600 dark:text-gray-300 hover:text-nafssiti-blue font-bold px-3 py-2 transition">
+                        Connexion
+                    </a>
 
-                <div class="flex items-center space-x-4">
                     <div class="relative group">
                         <button
-                            class="flex items-center text-gray-600 dark:text-gray-300 hover:text-nafssiti-blue transition focus:outline-none">
-                            <i class="fas fa-globe mr-1"></i>
-                            <span class="text-xs font-bold uppercase">FR</span>
-                            <i class="fas fa-chevron-down ml-1 text-[10px]"></i>
+                            class="bg-nafssiti-blue text-white px-5 py-2.5 rounded-full font-bold shadow-md hover:bg-opacity-90 flex items-center transition">
+                            Inscription
+                            <i class="fas fa-chevron-down ml-2 text-xs"></i>
                         </button>
+
                         <div
-                            class="absolute right-0 mt-2 w-24 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-lg shadow-lg hidden group-hover:block transition-all">
-                            <a href="?lang=fr"
-                                class="block px-4 py-2 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Français</a>
-                            <a href="?lang=ar"
-                                class="block px-4 py-2 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 text-right">العربية</a>
-                            <a href="?lang=en"
-                                class="block px-4 py-2 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">English</a>
+                            class="absolute right-0 w-48 mt-2 py-2 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 hidden group-hover:block animate-fade-in">
+                            <a href="{{ route('show.register.patient') }}"
+                                class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-user-circle mr-2 text-nafssiti-blue"></i> Je suis un Patient
+                            </a>
+                            <div class="border-t border-gray-100 dark:border-gray-700"></div>
+                            <a href="{{ route('register.psychologue') }}"
+                                class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="fas fa-user-md mr-2 text-green-500"></i> Je suis Spécialiste
+                            </a>
                         </div>
-                    </div>
-
-                    <div class="hidden md:block h-6 border-l border-gray-200 dark:border-gray-700 mx-2"></div>
-
-                    <div class="hidden md:flex items-center space-x-3">
-                        <a href="{{ route('login') }}"
-                            class="text-gray-600 dark:text-gray-300 hover:text-nafssiti-blue font-bold px-3 py-2 transition">
-                            Connexion
-                        </a>
-
-                        <div class="relative group">
-                            <button
-                                class="bg-nafssiti-blue text-white px-5 py-2.5 rounded-full font-bold shadow-md hover:bg-opacity-90 flex items-center transition">
-                                Inscription
-                                <i class="fas fa-chevron-down ml-2 text-xs"></i>
-                            </button>
-
-                            <div
-                                class="absolute right-0 w-48 mt-2 py-2 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 hidden group-hover:block animate-fade-in">
-                                <a href="{{ route('show.register.patient') }}"
-                                    class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <i class="fas fa-user-circle mr-2 text-nafssiti-blue"></i> Je suis un Patient
-                                </a>
-                                <div class="border-t border-gray-100 dark:border-gray-700"></div>
-                                <a href="{{ route('register.psychologue') }}"
-                                    class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <i class="fas fa-user-md mr-2 text-green-500"></i> Je suis Spécialiste
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="lg:hidden flex items-center">
-                        <button id="mobile-menu-button" class="text-nafssiti-blue focus:outline-none">
-                            <i class="fas fa-bars text-2xl"></i>
-                        </button>
                     </div>
                 </div>
+
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-nafssiti-blue focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
             </div>
+        </div>
         </div>
     </nav>
 
     <!-- Mobile menu overlay -->
-    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-white transform translate-x-full transition-transform duration-300 lg:hidden overflow-y-auto">
+    <div id="mobile-menu"
+        class="fixed inset-0 z-[60] bg-white transform translate-x-full transition-transform duration-300 lg:hidden overflow-y-auto">
         <div class="p-6">
             <div class="flex justify-between items-center mb-10">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo Nafssiti" class="h-12 w-auto">
-                <button id="close-menu-button" class="text-nafssiti-blue focus:outline-none hover:rotate-90 transition-transform duration-300">
+                <button id="close-menu-button"
+                    class="text-nafssiti-blue focus:outline-none hover:rotate-90 transition-transform duration-300">
                     <i class="fas fa-times text-3xl"></i>
                 </button>
             </div>
-            
+
             <div class="flex flex-col space-y-8">
                 <div class="flex flex-col space-y-6 text-xl font-bold text-gray-800">
                     <a href="/" class="flex items-center space-x-4 hover:text-nafssiti-blue transition">
                         <i class="fas fa-home w-8 text-nafssiti-blue text-center"></i>
                         <span>Accueil</span>
                     </a>
-                    <a href="{{ route('psychologue.allPsychologues') }}" class="flex items-center space-x-4 hover:text-nafssiti-blue transition">
+                    <a href="{{ route('psychologue.allPsychologues') }}"
+                        class="flex items-center space-x-4 hover:text-nafssiti-blue transition">
                         <i class="fas fa-user-md w-8 text-nafssiti-blue text-center"></i>
                         <span>Psychologues</span>
                     </a>
@@ -111,18 +87,23 @@
                 <div class="pt-8 border-t border-gray-100">
                     <h3 class="text-xs font-black uppercase tracking-widest text-gray-400 mb-6">Compte</h3>
                     <div class="flex flex-col space-y-6">
-                        <a href="{{ route('login') }}" class="flex items-center space-x-4 text-lg font-bold text-gray-700 hover:text-nafssiti-blue transition">
+                        <a href="{{ route('login') }}"
+                            class="flex items-center space-x-4 text-lg font-bold text-gray-700 hover:text-nafssiti-blue transition">
                             <i class="fas fa-sign-in-alt w-8 text-center"></i>
                             <span>Connexion</span>
                         </a>
-                        <a href="{{ route('show.register.patient') }}" class="flex items-center space-x-4 p-4 bg-nafssiti-blue/5 rounded-2xl text-nafssiti-blue font-bold hover:bg-nafssiti-blue hover:text-white transition-all group">
-                            <div class="w-10 h-10 rounded-xl bg-nafssiti-blue/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                        <a href="{{ route('show.register.patient') }}"
+                            class="flex items-center space-x-4 p-4 bg-nafssiti-blue/5 rounded-2xl text-nafssiti-blue font-bold hover:bg-nafssiti-blue hover:text-white transition-all group">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-nafssiti-blue/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
                                 <i class="fas fa-user-circle text-lg"></i>
                             </div>
                             <span>Je suis un Patient</span>
                         </a>
-                        <a href="{{ route('register.psychologue') }}" class="flex items-center space-x-4 p-4 bg-green-50 rounded-2xl text-green-600 font-bold hover:bg-green-600 hover:text-white transition-all group">
-                            <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                        <a href="{{ route('register.psychologue') }}"
+                            class="flex items-center space-x-4 p-4 bg-green-50 rounded-2xl text-green-600 font-bold hover:bg-green-600 hover:text-white transition-all group">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center group-hover:bg-white/20 transition-colors">
                                 <i class="fas fa-certificate text-lg"></i>
                             </div>
                             <span>Je suis Spécialiste</span>
@@ -131,9 +112,12 @@
                 </div>
 
                 <div class="pt-8 flex justify-center space-x-6 text-gray-400">
-                    <a href="#" class="text-2xl hover:text-nafssiti-blue transition-colors"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="text-2xl hover:text-nafssiti-blue transition-colors"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-2xl hover:text-nafssiti-blue transition-colors"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-2xl hover:text-nafssiti-blue transition-colors"><i
+                            class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-2xl hover:text-nafssiti-blue transition-colors"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-2xl hover:text-nafssiti-blue transition-colors"><i
+                            class="fab fa-linkedin"></i></a>
                 </div>
             </div>
         </div>

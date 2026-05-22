@@ -30,8 +30,7 @@ class FollowRequestController extends Controller
 
         $followRequest->update(['status' => 'accepted']);
 
-        return redirect()->route('psychologue.follow_requests.index')
-            ->with('success', 'Demande de suivi acceptée avec succès.');
+        return redirect()->route('psychologue.follow_requests.index');
     }
 
     public function reject(FollowRequest $followRequest)

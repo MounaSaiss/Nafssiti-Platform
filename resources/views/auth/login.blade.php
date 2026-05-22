@@ -28,7 +28,7 @@
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             Ou
-            <a href="/register/user" class="font-medium text-nafssiti-blue hover:text-opacity-80">
+            <a href="{{ route('show.register.patient') }}" class="font-medium text-nafssiti-blue hover:text-opacity-80">
                 créez un compte gratuitement
             </a>
         </p>

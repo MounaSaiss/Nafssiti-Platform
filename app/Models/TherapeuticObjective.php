@@ -7,19 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class TherapeuticObjective extends Model
 {
     protected $fillable = [
-        'psychologist_id',
-        'patient_id',
+        'follow_request_id',
         'description',
         'status'
     ];
 
-    public function psychologist()
+    public function followRequest()
     {
-        return $this->belongsTo(Psychologist::class);
-    }
-
-    public function patient()
-    {
-        return $this->belongsTo(Patient::class);
+        return $this->belongsTo(FollowRequest::class);
     }
 }

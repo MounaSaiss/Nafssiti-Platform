@@ -14,7 +14,6 @@ class Psychologist extends Model
         'experienceYears',
         'pricePerSession',
         'consultationType',
-        'photo',
         'description',
         'education',
         'validationStatus',
@@ -40,18 +39,4 @@ class Psychologist extends Model
         return $this->hasMany(Unavailability::class);
     }
 
-    public function privateNotes()
-    {
-        return $this->hasMany(PrivateNote::class);
-    }
-
-    public function therapeuticObjectives()
-    {
-        return $this->hasMany(TherapeuticObjective::class);
-    }
-
-    public function recommendations()
-    {
-        return $this->hasMany(Recommendation::class);
-    }
 }

@@ -30,18 +30,19 @@ class SharedRoomController extends Controller
             ->where('status', 'completed')
             ->orderBy('appointmentDate', 'desc')
             ->get();
-        // recupération des objectifs thérapeutiques 
-        $objectives = TherapeuticObjective::where('patient_id', $patient->id)
+        $followRequest = \App\Models\FollowRequest::where('patient_id', $patient->id)
             ->where('psychologist_id', $psychologist_id)
-            ->orderBy('status', 'asc')
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->first();
+
+        // recupération des objectifs thérapeutiques 
+        $objectives = $followRequest 
+            ? $followRequest->therapeuticObjectives()->orderBy('status', 'asc')->orderBy('created_at', 'desc')->get() 
+            : collect();
 
         // recupération des recommandations du psychologue
-        $recommendations = Recommendation::where('patient_id', $patient->id)
-            ->where('psychologist_id', $psychologist_id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $recommendations = $followRequest 
+            ? $followRequest->recommendations()->orderBy('created_at', 'desc')->get() 
+            : collect();
 
         return view('patient.shared_room.index', compact(
             'psychologist', 

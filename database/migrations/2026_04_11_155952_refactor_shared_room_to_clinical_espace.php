@@ -11,18 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. Remove old clinical space features
         Schema::dropIfExists('mood_logs');
         Schema::dropIfExists('to_do_tasks');
         Schema::dropIfExists('shared_notes');
 
-        // 2. Enhance patient profile
         Schema::table('patients', function (Blueprint $table) {
             $table->date('date_of_birth')->nullable()->after('user_id');
             $table->text('problematique_principale')->nullable()->after('date_of_birth');
         });
 
-        // 3. Create Private Notes (Visible only to psychologists)
         Schema::create('private_notes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('psychologist_id')->constrained()->cascadeOnDelete();
@@ -31,7 +28,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // 4. Create Therapeutic Objectives
         Schema::create('therapeutic_objectives', function (Blueprint $table) {
             $table->id();
             $table->foreignId('psychologist_id')->constrained()->cascadeOnDelete();
@@ -41,7 +37,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // 5. Create Recommendations
         Schema::create('recommendations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('psychologist_id')->constrained()->cascadeOnDelete();

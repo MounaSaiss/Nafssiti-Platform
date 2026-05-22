@@ -72,7 +72,6 @@ class StripePaymentController extends Controller
         // cree le paiement
         Payment::create([
             'appointment_id' => $appointment->id,
-            'user_id' => Auth::id(),
             'stripe_id' => $session->payment_intent,
             'totalPrice' => $session->amount_total / 100,
             'paymentDate' => now(),

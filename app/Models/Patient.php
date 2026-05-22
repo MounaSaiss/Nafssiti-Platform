@@ -22,20 +22,6 @@ class Patient extends Model
         return $this->hasMany(Appointment::class);
     }
 
-    public function privateNotes()
-    {
-        return $this->hasMany(PrivateNote::class);
-    }
-
-    public function therapeuticObjectives()
-    {
-        return $this->hasMany(TherapeuticObjective::class);
-    }
-
-    public function recommendations()
-    {
-        return $this->hasMany(Recommendation::class);
-    }
 
     // Calcule l'âge à partir de la date de naissance
     public function getAgeAttribute()

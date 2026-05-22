@@ -14,7 +14,7 @@ class BilanSeanceController extends Controller
     {
         $user = Auth::user();
         if (!$user || !$user->patient) {
-            return view('patient.post_meeting', ['appointment' => null, 'followRequest' => null]);
+            return view('patient.post_meeting', ['appointment' => null, 'followRequests' => collect()]);
         }
 
         $appointment = Appointment::with('psychologist.user')
@@ -24,12 +24,13 @@ class BilanSeanceController extends Controller
             ->orderBy('appointmentTime', 'desc')
             ->first();
 
-        $followRequest = null;
-        if ($appointment) {
-            $followRequest = FollowRequest::where('patient_id', $user->patient->id)
-                ->where('psychologist_id', $appointment->psychologist_id)
-                ->first();
-        }
-        return view('patient.post_meeting', compact('appointment', 'followRequest'));
+        $followRequests = FollowRequest::with('psychologist.user')
+        ->where('patient_id', $user->patient->id)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+        // dd($followRequests);
+        
+        return view('patient.post_meeting', compact('appointment', 'followRequests'));
     }
 }

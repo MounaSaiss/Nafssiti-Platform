@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Psychologist;
-use App\Models\Speciality;
 use Illuminate\Http\Request;
 
 class PsychologueController extends Controller
@@ -26,7 +25,9 @@ class PsychologueController extends Controller
             ->distinct()
             ->pluck('city');
             
-        $specialties = Speciality::all()->pluck('name');
+        $specialties = Psychologist::where('validationStatus', 'approved')
+            ->distinct()
+            ->pluck('specialization');
 
         return view('psychologue.allPsychologues', compact('psychologues', 'specialties', 'cities'));
     }

@@ -4,14 +4,14 @@ namespace App\Http\Controllers\psychologue;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\psychologue\UpdatePatientInfoRequest;
-use App\Http\Requests\psychologue\StorePrivateNoteRequest;
+
 use App\Http\Requests\psychologue\StoreObjectiveRequest;
 use App\Http\Requests\psychologue\StoreRecommendationRequest;
 use App\Http\Requests\psychologue\StoreAppointmentRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Patient;
 use App\Models\Appointment;
-use App\Models\PrivateNote;
+
 use App\Models\TherapeuticObjective;
 use App\Models\Recommendation;
 
@@ -38,27 +38,22 @@ class SharedRoomController extends Controller
             ->orderBy('appointmentDate', 'desc')
             ->get();
 
-        $privateNotes = PrivateNote::where('psychologist_id', $psychologist->id)
+        $followRequest = \App\Models\FollowRequest::where('psychologist_id', $psychologist->id)
             ->where('patient_id', $patient_id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->first();
 
-        $objectives = TherapeuticObjective::where('psychologist_id', $psychologist->id)
-            ->where('patient_id', $patient_id)
-            ->orderBy('status', 'asc') // 'en cours' avant 'atteint'
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $objectives = $followRequest 
+            ? $followRequest->therapeuticObjectives()->orderBy('status', 'asc')->orderBy('created_at', 'desc')->get() 
+            : collect();
 
-        $recommendations = Recommendation::where('psychologist_id', $psychologist->id)
-            ->where('patient_id', $patient_id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $recommendations = $followRequest 
+            ? $followRequest->recommendations()->orderBy('created_at', 'desc')->get() 
+            : collect();
 
         return view('psychologue.shared_room.index', compact(
             'patient',
             'upcomingAppointments',
             'pastAppointments',
-            'privateNotes',
             'objectives',
             'recommendations'
         ));
@@ -72,25 +67,15 @@ class SharedRoomController extends Controller
         return back()->with('success', 'Informations patient mises à jour.');
     }
 
-    public function storePrivateNote(StorePrivateNoteRequest $request, $patient_id)
-    {
-        $psychologist = Auth::user()->psychologist;
-
-        PrivateNote::create(array_merge($request->validated(), [
-            'psychologist_id' => $psychologist->id,
-            'patient_id' => $patient_id
-        ]));
-
-        return back()->with('success', 'Note clinique ajoutée (visible uniquement par vous).');
-    }
-
     public function storeObjective(StoreObjectiveRequest $request, $patient_id)
     {
         $psychologist = Auth::user()->psychologist;
+        $followRequest = \App\Models\FollowRequest::where('psychologist_id', $psychologist->id)
+            ->where('patient_id', $patient_id)
+            ->firstOrFail();
 
         TherapeuticObjective::create(array_merge($request->validated(), [
-            'psychologist_id' => $psychologist->id,
-            'patient_id' => $patient_id,
+            'follow_request_id' => $followRequest->id,
             'status' => 'en cours'
         ]));
 
@@ -100,7 +85,9 @@ class SharedRoomController extends Controller
     public function updateObjectiveStatus($objective_id)
     {
         $psychologist = Auth::user()->psychologist;
-        $objective = TherapeuticObjective::where('psychologist_id', $psychologist->id)->findOrFail($objective_id);
+        $objective = TherapeuticObjective::whereHas('followRequest', function($q) use ($psychologist) {
+            $q->where('psychologist_id', $psychologist->id);
+        })->findOrFail($objective_id);
 
         $objective->update([
             'status' => $objective->status === 'en cours' ? 'atteint' : 'en cours'
@@ -112,33 +99,34 @@ class SharedRoomController extends Controller
     public function storeRecommendation(StoreRecommendationRequest $request, $patient_id)
     {
         $psychologist = Auth::user()->psychologist;
+        $followRequest = \App\Models\FollowRequest::where('psychologist_id', $psychologist->id)
+            ->where('patient_id', $patient_id)
+            ->firstOrFail();
 
         Recommendation::create(array_merge($request->validated(), [
-            'psychologist_id' => $psychologist->id,
-            'patient_id' => $patient_id
+            'follow_request_id' => $followRequest->id,
         ]));
 
         return back()->with('success', 'Recommandation envoyée au patient.');
     }
 
-    public function destroyPrivateNote($id)
-    {
-        $psychologist = Auth::user()->psychologist;
-        PrivateNote::where('psychologist_id', $psychologist->id)->findOrFail($id)->delete();
-        return back()->with('success', 'Note supprimée.');
-    }
-
     public function destroyObjective($id)
     {
         $psychologist = Auth::user()->psychologist;
-        TherapeuticObjective::where('psychologist_id', $psychologist->id)->findOrFail($id)->delete();
+        $objective = TherapeuticObjective::whereHas('followRequest', function($q) use ($psychologist) {
+            $q->where('psychologist_id', $psychologist->id);
+        })->findOrFail($id);
+        $objective->delete();
         return back()->with('success', 'Objectif supprimé.');
     }
 
     public function destroyRecommendation($id)
     {
         $psychologist = Auth::user()->psychologist;
-        Recommendation::where('psychologist_id', $psychologist->id)->findOrFail($id)->delete();
+        $recommendation = Recommendation::whereHas('followRequest', function($q) use ($psychologist) {
+            $q->where('psychologist_id', $psychologist->id);
+        })->findOrFail($id);
+        $recommendation->delete();
         return back()->with('success', 'Recommandation supprimée.');
     }
 

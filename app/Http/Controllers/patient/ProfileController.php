@@ -25,7 +25,6 @@ class ProfileController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
-            'city' => $validated['city'],
         ];
 
         if ($request->hasFile('avatar')) {

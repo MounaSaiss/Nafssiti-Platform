@@ -8,7 +8,6 @@ class Payment extends Model
 {
     protected $fillable = [
         'appointment_id',
-        'user_id',
         'stripe_id',
         'totalPrice',
         'paymentDate',
@@ -18,10 +17,5 @@ class Payment extends Model
     public function appointment()
     {
         return $this->belongsTo(Appointment::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
     }
 }
